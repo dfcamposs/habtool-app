@@ -26,7 +26,7 @@ const AuthRoutes = () => {
                 },
                 style: {
                     paddingHorizontal: 10,
-                    paddingVertical: Platform.OS === 'ios' ? 20 : 0,
+                    paddingVertical: Platform.OS === 'ios' ? 10 : 0,
                     height: Platform.OS === 'ios' ? 80 : 60
                 }
             }}
