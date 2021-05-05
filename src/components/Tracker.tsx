@@ -13,16 +13,17 @@ interface TrackerProps extends RectButtonProps {
 
 export function Tracker({ legend, disabled = false, checked = false, ...rest }: TrackerProps) {
     return (
-        <RectButton style={styles.container} {...rest}>
+        <View style={styles.container}>
             <RectButton
                 style={[
                     styles.dayCicle,
                     disabled && { backgroundColor: colors.grayDark },
                     checked && { backgroundColor: colors.green },
                 ]}
+                {...rest}
             />
             <Text style={styles.dayLegend}>{legend}</Text>
-        </RectButton>
+        </View>
     )
 }
 

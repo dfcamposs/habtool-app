@@ -1,5 +1,5 @@
-import React from 'react';
-import { StyleSheet, TouchableOpacity, Text, TouchableOpacityProps, View } from 'react-native';
+import React, { useState } from 'react';
+import { StyleSheet, Text, View } from 'react-native';
 
 import { Tracker } from './Tracker';
 
@@ -14,6 +14,8 @@ interface HabitProps {
 }
 
 export function Habit({ data: habit }: HabitProps) {
+    const [trackerChecked, setTrackerChecked] = useState(false);
+
     return (
         <View style={styles.container}>
             <Text style={styles.text}>
@@ -27,7 +29,7 @@ export function Habit({ data: habit }: HabitProps) {
                 <Tracker legend="Q" checked />
                 <Tracker legend="Q" checked />
                 <Tracker legend="S" />
-                <Tracker legend="S" checked />
+                <Tracker legend="S" checked={trackerChecked} onPress={() => setTrackerChecked((oldValue) => !oldValue)} />
             </View>
         </View >
     )
@@ -42,7 +44,8 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         paddingTop: 15,
         paddingLeft: 15,
-        paddingRight: 10
+        paddingRight: 10,
+        justifyContent: 'space-around'
     },
     text: {
         color: colors.textDark,
@@ -51,7 +54,8 @@ const styles = StyleSheet.create({
     },
     tracker: {
         flexDirection: 'row',
+        alignItems: 'flex-end',
         justifyContent: 'flex-end',
-        paddingTop: 10
+        paddingVertical: 10
     }
 })

@@ -33,12 +33,12 @@ const AuthRoutes = () => {
         >
 
             <AppTab.Screen
-                name="adicionar"
-                component={HabitManager}
+                name="hábitos"
+                component={MyHabits}
                 options={{
                     tabBarIcon: (({ size, color }) => (
                         <MaterialIcons
-                            name="add-circle"
+                            name="calendar-view-day"
                             size={size}
                             color={color}
                         />
@@ -47,12 +47,12 @@ const AuthRoutes = () => {
             />
 
             <AppTab.Screen
-                name="hábitos"
-                component={MyHabits}
+                name="adicionar"
+                component={HabitManager}
                 options={{
                     tabBarIcon: (({ size, color }) => (
                         <MaterialIcons
-                            name="calendar-view-day"
+                            name="add-circle"
                             size={size}
                             color={color}
                         />

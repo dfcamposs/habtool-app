@@ -16,6 +16,7 @@ export function WeekDayButton({ title, active = false, ...rest }: WeekDayButton)
                 styles.container,
                 active && { backgroundColor: colors.blue }
             ]}
+            activeOpacity={0.7}
             {...rest}
         >
             <Text style={[styles.text, active && { color: colors.textLight }]}>

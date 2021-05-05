@@ -52,7 +52,7 @@ const styles = StyleSheet.create({
         width: '100%',
         fontSize: 18,
         marginVertical: 15,
-        padding: 10,
+        paddingVertical: 10,
         fontFamily: fonts.content
     }
 })

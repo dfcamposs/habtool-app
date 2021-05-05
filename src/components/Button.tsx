@@ -21,13 +21,13 @@ export function Button({ title, ...rest }: ButtonProps) {
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.blue,
-        height: 45,
+        height: 60,
         borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center'
     },
     text: {
-        fontSize: 16,
+        fontSize: 18,
         color: colors.white,
         fontFamily: fonts.contentBold
     }

@@ -6,6 +6,7 @@ import {
   Inter_700Bold
 } from '@expo-google-fonts/inter';
 import AppLoading from 'expo-app-loading';
+import { StatusBar } from 'expo-status-bar';
 
 import Routes from './src/routes';
 
@@ -21,6 +22,9 @@ export default function App() {
   }
 
   return (
-    <Routes />
+    <>
+      <StatusBar style="dark" />
+      <Routes />
+    </>
   )
 }
