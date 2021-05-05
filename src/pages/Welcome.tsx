@@ -4,7 +4,6 @@ import {
     StyleSheet,
     SafeAreaView,
     Text,
-    TextInput,
     Image,
     KeyboardAvoidingView,
     Platform,
@@ -14,31 +13,14 @@ import {
 import { useNavigation } from '@react-navigation/native';
 
 import { Button } from '../components/Button';
+import { Input } from '../components/Input';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import logo from '../assets/logo.png';
 
 export function Welcome() {
-    const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(false);
-    const [name, setName] = useState<string>();
-
     const navigation = useNavigation();
-
-    function handleInputFocus() {
-        setIsFocused(true);
-        setIsFilled(!!name);
-    }
-
-    function handleInputBlur() {
-        setIsFocused(false);
-    }
-
-    function handleInputChange(value: string) {
-        setIsFilled(!!value);
-        setName(value);
-    }
 
     function handleSubmit() {
         navigation.navigate('MyHabits');
@@ -57,19 +39,11 @@ export function Welcome() {
                                 <Image style={styles.logo} source={logo} />
                                 <Text style={styles.title}>
                                     como você deseja ser chamado?
-                        </Text>
+                                </Text>
                             </View>
 
-                            <TextInput
-                                style={[
-                                    styles.input,
-                                    (isFocused || isFilled) && { borderColor: colors.blue }
-                                ]}
-                                placeholder="Digite o nome"
-                                onFocus={handleInputFocus}
-                                onBlur={handleInputBlur}
-                                onChangeText={handleInputChange}
-                            />
+                            <Input name="username" placeholder="digite o nome" center />
+
                             <View style={styles.footer}>
                                 <Button title="começar" onPress={handleSubmit} />
                             </View>

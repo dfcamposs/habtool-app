@@ -5,7 +5,6 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
 
-import avatar from '../assets/avatar.png';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
@@ -13,13 +12,10 @@ export function MyHabits() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <View style={styles.headerContent}>
-                    <Text style={styles.title}>Olá, David</Text>
-                    <Text style={styles.subtitle}>seja 1% melhor todos os dias</Text>
+                <Text style={styles.title}>Olá, David</Text>
+                <Text style={styles.subtitle}>seja 1% melhor todos os dias</Text>
 
-                    <Stars />
-                </View>
-                <Image source={avatar} style={styles.avatar} />
+                <Stars />
             </View>
             <View style={styles.content}>
                 <FlatList
@@ -62,11 +58,9 @@ const styles = StyleSheet.create({
         backgroundColor: colors.grayLight,
     },
     header: {
-        flexDirection: 'row',
-        backgroundColor: colors.grayLight,
         height: 170,
         alignItems: 'center',
-        justifyContent: 'space-between',
+        justifyContent: 'center',
         paddingHorizontal: 30,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },
