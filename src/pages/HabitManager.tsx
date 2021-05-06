@@ -1,6 +1,21 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Platform, Switch, KeyboardAvoidingView, TouchableWithoutFeedback, Keyboard } from 'react-native';
+import {
+    View,
+    Text,
+    StyleSheet,
+    SafeAreaView,
+    Platform,
+    Switch,
+    KeyboardAvoidingView,
+    TouchableWithoutFeedback,
+    Keyboard,
+    ScrollView,
+    Alert,
+    TouchableOpacity
+} from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
+import { format, isBefore } from 'date-fns';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -11,6 +26,8 @@ import fonts from '../styles/fonts';
 
 export function HabitManager() {
     const [scheduleEnabled, setScheduleEnabled] = useState(false);
+    const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+    const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
 
     const [sundayEnabled, setSundayEnabled] = useState(false);
     const [mondayEnabled, setMondayEnabled] = useState(true);
@@ -24,57 +41,104 @@ export function HabitManager() {
         setScheduleEnabled((oldValue) => !oldValue);
     }
 
+    function handleChangeTime(event: Event, dateTime: Date | undefined) {
+        if (Platform.OS === 'android') {
+            setShowDatePicker(oldState => !oldState);
+        }
+
+        if (dateTime && isBefore(dateTime, new Date())) {
+            setSelectedDateTime(new Date());
+            return Alert.alert('Escolha uma hora no futuro! ⏱');
+        }
+
+        if (dateTime) {
+            setSelectedDateTime(dateTime);
+        }
+    }
+
+    function handleOpenDatetimePickerForAndroid() {
+        setShowDatePicker(oldState => !oldState);
+    }
+
     return (
-        <SafeAreaView style={styles.container}>
-            <KeyboardAvoidingView
-                style={styles.container}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.header}>
-                        <Text style={styles.title}>
-                            criar um hábito
+        <ScrollView
+            showsVerticalScrollIndicator={false}
+            contentContainerStyle={styles.container}
+        >
+            <SafeAreaView style={styles.container}>
+                <KeyboardAvoidingView
+                    style={styles.container}
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                >
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <View style={styles.header}>
+                            <Text style={styles.title}>
+                                criar um hábito
                         </Text>
 
-                        <Input name="habitName" placeholder="digite o nome do hábito" />
-                    </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.form}>
-                        <Text style={styles.subtitle}>Frequencia</Text>
-
-                        <View style={styles.week}>
-                            <WeekDayButton title="Dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
-                            <WeekDayButton title="Seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
-                            <WeekDayButton title="Ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
-                            <WeekDayButton title="Qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
-                            <WeekDayButton title="Qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
-                            <WeekDayButton title="Sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
-                            <WeekDayButton title="Sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
+                            <Input name="habitName" placeholder="digite o nome do hábito" />
                         </View>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <View style={styles.form}>
+                            <Text style={styles.subtitle}>frequencia</Text>
 
-                        <Input name="habitMotivation" placeholder="digite sua motivação" />
-                        <Input name="habitStartDate" placeholder="selecionar data início" />
-                        <Input name="habitEndDate" placeholder="selecionar data fim" />
+                            <View style={styles.week}>
+                                <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
+                            </View>
 
-                        <View style={styles.schedule}>
-                            <Text style={styles.subtitle}> Lembrete </Text>
-                            <Switch
-                                thumbColor={colors.white}
-                                trackColor={{ true: colors.blue, false: colors.grayLight }}
-                                ios_backgroundColor={colors.grayLight}
-                                onValueChange={changeScheduleSwitch}
-                                value={scheduleEnabled}
-                            />
+                            <Input name="habitMotivation" icon="flag" placeholder="digite sua motivação" />
+                            <Input name="habitStartDate" icon="event" placeholder="selecionar data início" />
+                            <Input name="habitEndDate" icon="event" placeholder="selecionar data fim" />
+
+                            <View style={styles.scheduleLabel}>
+                                <Text style={styles.subtitle}> lembrete </Text>
+                                <Switch
+                                    thumbColor={colors.white}
+                                    trackColor={{ true: colors.blue, false: colors.grayLight }}
+                                    ios_backgroundColor={colors.grayLight}
+                                    onValueChange={changeScheduleSwitch}
+                                    value={scheduleEnabled}
+                                />
+                            </View>
+
+                            {scheduleEnabled && showDatePicker && (
+                                <DateTimePicker
+                                    value={selectedDateTime}
+                                    mode="time"
+                                    display="spinner"
+                                    onChange={handleChangeTime}
+                                    style={styles.dateTimePickerIos}
+                                />
+                            )}
+
+                            {
+                                scheduleEnabled && Platform.OS === 'android' && (
+                                    <TouchableOpacity
+                                        style={styles.dateTimePickerButton}
+                                        onPress={handleOpenDatetimePickerForAndroid}
+                                    >
+                                        <Text style={styles.dateTimePickerText}>
+                                            {`alterar ${format(selectedDateTime, 'HH:mm')}`}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )
+                            }
+
+                            <View style={styles.footer}>
+                                <Button title="cadastrar" />
+                            </View>
                         </View>
-
-                        <View style={styles.footer}>
-                            <Button title="cadastrar" />
-                        </View>
-                    </View>
-                </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
-        </SafeAreaView>
+                    </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
+            </SafeAreaView>
+        </ScrollView>
     )
 }
 
@@ -114,10 +178,25 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
         paddingVertical: 20
     },
-    schedule: {
+    scheduleLabel: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingTop: 20
+    },
+    dateTimePickerIos: {
+        width: '100%',
+        height: 100,
+        marginVertical: 10
+    },
+    dateTimePickerButton: {
+        width: '100%',
+        alignItems: 'center',
+        paddingVertical: 40
+    },
+    dateTimePickerText: {
+        color: colors.textDark,
+        fontSize: 20,
+        fontFamily: fonts.content,
     },
     footer: {
         flex: 1,

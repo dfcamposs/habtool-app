@@ -1,12 +1,13 @@
 import React, { useState } from 'react';
-import { StyleSheet, TextInput, TextInputProps } from 'react-native';
+import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 interface InputProps extends TextInputProps {
     name: string;
-    icon?: string;
+    icon?: 'flag' | 'event';
     center?: boolean;
 }
 
@@ -30,29 +31,45 @@ export function Input({ name, icon, center = false, ...rest }: InputProps) {
     }
 
     return (
-        <TextInput
-            style={[
-                styles.container,
-                (isFocused || isFilled) && { borderColor: colors.blue },
-                center && { textAlign: 'center' }
-            ]}
-            onFocus={handleInputFocus}
-            onBlur={handleInputBlur}
-            onChangeText={handleInputChange}
-            {...rest}
-        />
+        <View style={[
+            styles.container,
+            (isFocused || isFilled) && { borderColor: colors.blue }
+        ]}>
+            {icon &&
+                <MaterialIcons
+                    style={styles.icon}
+                    name={icon}
+                    size={28}
+                    color={(isFocused || isFilled) ? colors.blue : colors.textUnfocus}
+                />}
+            <TextInput
+                style={[styles.input, center && { textAlign: 'center' }]}
+                onFocus={handleInputFocus}
+                onBlur={handleInputBlur}
+                onChangeText={handleInputChange}
+                {...rest}
+            />
+        </View>
     )
 }
 
 const styles = StyleSheet.create({
     container: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
         borderBottomWidth: 1,
         borderColor: colors.textUnfocus,
-        color: colors.textDark,
-        width: '100%',
-        fontSize: 18,
         marginVertical: 15,
         paddingVertical: 10,
-        fontFamily: fonts.content
+    },
+    icon: {
+        paddingRight: 10
+    },
+    input: {
+        width: '100%',
+        fontSize: 18,
+        fontFamily: fonts.content,
+        color: colors.textDark
     }
 })
