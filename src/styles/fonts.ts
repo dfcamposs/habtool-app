@@ -1,8 +1,8 @@
 export default {
-    title: 'Inter_500Medium',
-    subtitle: 'Inter_500Medium',
-    content: 'Inter_400Regular',
-    contentBold: 'Inter_700Bold',
-    complement: 'Inter_400Regular',
-    legend: 'Inter_400Regular'
+    title: 'Nunito_600SemiBold',
+    subtitle: 'Nunito_600SemiBold',
+    content: 'Nunito_400Regular',
+    contentBold: 'Nunito_700Bold',
+    complement: 'Nunito_400Regular',
+    legend: 'Nunito_400Regular'
 }

@@ -11,14 +11,14 @@ interface InputProps extends TextInputProps {
     center?: boolean;
 }
 
-export function Input({ name, icon, center = false, ...rest }: InputProps) {
+export function Input({ name, icon, center = false, value, ...rest }: InputProps) {
     const [isFocused, setIsFocused] = useState(false);
     const [isFilled, setIsFilled] = useState(false);
-    const [value, setValue] = useState<string>();
+    const [valueType, setValueType] = useState<string>();
 
     function handleInputFocus() {
         setIsFocused(true);
-        setIsFilled(!!value);
+        setIsFilled(!!valueType);
     }
 
     function handleInputBlur() {
@@ -27,26 +27,27 @@ export function Input({ name, icon, center = false, ...rest }: InputProps) {
 
     function handleInputChange(text: string) {
         setIsFilled(!!text);
-        setValue(text);
+        setValueType(text);
     }
 
     return (
         <View style={[
             styles.container,
-            (isFocused || isFilled) && { borderColor: colors.blue }
+            (isFocused || isFilled || !!value) && { borderColor: colors.blue }
         ]}>
             {icon &&
                 <MaterialIcons
                     style={styles.icon}
                     name={icon}
                     size={28}
-                    color={(isFocused || isFilled) ? colors.blue : colors.textUnfocus}
+                    color={(isFocused || isFilled || !!value) ? colors.blue : colors.textUnfocus}
                 />}
             <TextInput
                 style={[styles.input, center && { textAlign: 'center' }]}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
                 onChangeText={handleInputChange}
+                value={value}
                 {...rest}
             />
         </View>

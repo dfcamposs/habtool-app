@@ -21,11 +21,10 @@ const AuthRoutes = () => {
                 inactiveTintColor: colors.textUnfocus,
                 labelPosition: 'beside-icon',
                 labelStyle: {
-                    fontSize: 14,
-                    fontFamily: fonts.content
+                    fontSize: 16,
+                    fontFamily: fonts.contentBold
                 },
                 style: {
-                    paddingHorizontal: 10,
                     paddingVertical: Platform.OS === 'ios' ? 10 : 0,
                     height: Platform.OS === 'ios' ? 80 : 60
                 }

@@ -16,6 +16,7 @@ import {
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { format, isBefore } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -26,8 +27,12 @@ import fonts from '../styles/fonts';
 
 export function HabitManager() {
     const [scheduleEnabled, setScheduleEnabled] = useState(false);
-    const [selectedDateTime, setSelectedDateTime] = useState(new Date());
+    const [selectedScheduleDateTime, setSelectedScheduleDateTime] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
+    const [showStartDate, setShowStartDate] = useState(false);
+    const [selectedStartDateTime, setSelectedStartDateTime] = useState(new Date());
+    const [showEndDate, setShowEndDate] = useState(false);
+    const [selectedEndDateTime, setSelectedEndDateTime] = useState(new Date());
 
     const [sundayEnabled, setSundayEnabled] = useState(false);
     const [mondayEnabled, setMondayEnabled] = useState(true);
@@ -41,22 +46,44 @@ export function HabitManager() {
         setScheduleEnabled((oldValue) => !oldValue);
     }
 
-    function handleChangeTime(event: Event, dateTime: Date | undefined) {
+    function handleChangeTimeSchedule(event: Event, dateTime: Date | undefined) {
         if (Platform.OS === 'android') {
             setShowDatePicker(oldState => !oldState);
         }
 
         if (dateTime && isBefore(dateTime, new Date())) {
-            setSelectedDateTime(new Date());
+            setSelectedScheduleDateTime(new Date());
             return Alert.alert('Escolha uma hora no futuro! ⏱');
         }
 
         if (dateTime) {
-            setSelectedDateTime(dateTime);
+            setSelectedScheduleDateTime(dateTime);
         }
     }
 
-    function handleOpenDatetimePickerForAndroid() {
+    function handleChangeStartDate(event: Event, dateTime: Date | undefined) {
+        if (dateTime && isBefore(dateTime, new Date())) {
+            setSelectedStartDateTime(new Date());
+            return Alert.alert('Escolha uma data no futuro! ⏱');
+        }
+
+        if (dateTime) {
+            setSelectedStartDateTime(dateTime);
+        }
+    }
+
+    function handleChangeEndDate(event: Event, dateTime: Date | undefined) {
+        if (dateTime && isBefore(dateTime, new Date())) {
+            setSelectedEndDateTime(new Date());
+            return Alert.alert('Escolha uma data no futuro! ⏱');
+        }
+
+        if (dateTime) {
+            setSelectedEndDateTime(dateTime);
+        }
+    }
+
+    function handleOpenDatetimePickerScheduleForAndroid() {
         setShowDatePicker(oldState => !oldState);
     }
 
@@ -94,8 +121,40 @@ export function HabitManager() {
                             </View>
 
                             <Input name="habitMotivation" icon="flag" placeholder="digite sua motivação" />
-                            <Input name="habitStartDate" icon="event" placeholder="selecionar data início" />
-                            <Input name="habitEndDate" icon="event" placeholder="selecionar data fim" />
+                            <Input
+                                name="habitStartDate"
+                                icon="event"
+                                placeholder="selecionar data início"
+                                editable={false}
+                                value={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                onResponderStart={() => setShowStartDate((oldvalue) => !oldvalue)}
+                            />
+                            {showStartDate && (
+                                <DateTimePicker
+                                    value={selectedStartDateTime}
+                                    mode="date"
+                                    display="spinner"
+                                    onChange={handleChangeStartDate}
+                                    style={styles.dateTimePickerIos}
+                                />
+                            )}
+
+                            <Input
+                                name="habitEndDate"
+                                icon="event"
+                                placeholder="selecionar data fim"
+                                editable={false}
+                                onResponderStart={() => setShowEndDate((oldvalue) => !oldvalue)}
+                            />
+                            {showEndDate && (
+                                <DateTimePicker
+                                    value={selectedEndDateTime}
+                                    mode="date"
+                                    display="spinner"
+                                    onChange={handleChangeEndDate}
+                                    style={styles.dateTimePickerIos}
+                                />
+                            )}
 
                             <View style={styles.scheduleLabel}>
                                 <Text style={styles.subtitle}> lembrete </Text>
@@ -110,10 +169,10 @@ export function HabitManager() {
 
                             {scheduleEnabled && showDatePicker && (
                                 <DateTimePicker
-                                    value={selectedDateTime}
+                                    value={selectedScheduleDateTime}
                                     mode="time"
                                     display="spinner"
-                                    onChange={handleChangeTime}
+                                    onChange={handleChangeTimeSchedule}
                                     style={styles.dateTimePickerIos}
                                 />
                             )}
@@ -122,10 +181,10 @@ export function HabitManager() {
                                 scheduleEnabled && Platform.OS === 'android' && (
                                     <TouchableOpacity
                                         style={styles.dateTimePickerButton}
-                                        onPress={handleOpenDatetimePickerForAndroid}
+                                        onPress={handleOpenDatetimePickerScheduleForAndroid}
                                     >
                                         <Text style={styles.dateTimePickerText}>
-                                            {`alterar ${format(selectedDateTime, 'HH:mm')}`}
+                                            {`alterar ${format(selectedScheduleDateTime, 'HH:mm')}`}
                                         </Text>
                                     </TouchableOpacity>
                                 )
