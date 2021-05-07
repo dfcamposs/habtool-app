@@ -17,6 +17,7 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { format, isBefore } from 'date-fns';
 import pt from 'date-fns/locale/pt';
+import { Formik } from 'formik';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -26,6 +27,10 @@ import { DateButton } from '../components/DateButton';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
+const FormInitialValues = {
+    name: '',
+    motivation: ''
+}
 
 export function HabitManager() {
     const [scheduleEnabled, setScheduleEnabled] = useState(false);
@@ -88,6 +93,11 @@ export function HabitManager() {
             return Alert.alert('Escolha uma data no futuro! ⏱');
         }
 
+        if (dateTime && isBefore(dateTime, selectedStartDateTime)) {
+            setSelectedEndDateTime(selectedStartDateTime);
+            return Alert.alert('Escolha uma data maior que a de início! 📅')
+        }
+
         if (dateTime) {
             setSelectedEndDateTime(dateTime);
         }
@@ -103,106 +113,122 @@ export function HabitManager() {
             contentContainerStyle={styles.container}
         >
             <SafeAreaView style={styles.container}>
-                <KeyboardAvoidingView
-                    style={styles.container}
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                >
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <View style={styles.header}>
-                            <Text style={styles.title}>
-                                criar um hábito
-                        </Text>
+                <Formik initialValues={FormInitialValues} onSubmit={values => console.log(values)}>
+                    {({ handleChange, handleSubmit, values }) => (
+                        <KeyboardAvoidingView
+                            style={styles.container}
+                            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                        >
+                            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                                <View style={styles.header}>
+                                    <Text style={styles.title}>
+                                        criar um hábito
+                                    </Text>
 
-                            <Input name="habitName" icon="loop" placeholder="digite o nome do hábito" />
-                        </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <View style={styles.form}>
-                            <Text style={styles.subtitle}>frequencia</Text>
+                                    <Input
+                                        name="habitName"
+                                        icon="loop"
+                                        placeholder="digite o nome do hábito"
+                                        value={values.name}
+                                        onChangeText={handleChange('name')}
+                                    />
+                                </View>
+                            </TouchableWithoutFeedback>
+                            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                                <View style={styles.form}>
+                                    <Text style={styles.subtitle}>frequencia</Text>
 
-                            <View style={styles.week}>
-                                <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
-                            </View>
+                                    <View style={styles.week}>
+                                        <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
+                                        <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
+                                        <WeekDayButton title="ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
+                                        <WeekDayButton title="qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
+                                        <WeekDayButton title="qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
+                                        <WeekDayButton title="sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
+                                        <WeekDayButton title="sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
+                                    </View>
 
-                            <Input name="habitMotivation" icon="flag" placeholder="digite sua motivação" />
+                                    <Input
+                                        name="habitMotivation"
+                                        icon="flag"
+                                        placeholder="digite sua motivação"
+                                        value={values.motivation}
+                                        onChangeText={handleChange('motivation')}
+                                    />
 
-                            <DateButton
-                                name="habitStartDate"
-                                date={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
-                                onPress={() => setShowStartDate((oldValue) => !oldValue)}
-                            />
-                            {showStartDate && (
-                                <DateTimePicker
-                                    value={selectedStartDateTime}
-                                    mode="date"
-                                    display="spinner"
-                                    onChange={handleChangeStartDate}
-                                    style={styles.dateTimePickerIos}
-                                />
-                            )}
+                                    <DateButton
+                                        name="habitStartDate"
+                                        date={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                        onPress={() => setShowStartDate((oldValue) => !oldValue)}
+                                    />
+                                    {showStartDate && (
+                                        <DateTimePicker
+                                            value={selectedStartDateTime}
+                                            mode="date"
+                                            display="spinner"
+                                            onChange={handleChangeStartDate}
+                                            style={styles.dateTimePickerIos}
+                                        />
+                                    )}
 
-                            <DateButton
-                                name="habitStartDate"
-                                date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
-                                onPress={() => setShowEndDate((oldValue) => !oldValue)}
-                                clear={() => setSelectedEndDateTime(undefined)}
-                            />
-                            {showEndDate && (
-                                <DateTimePicker
-                                    value={selectedEndDateTime ?? new Date()}
-                                    mode="date"
-                                    display="spinner"
-                                    onChange={handleChangeEndDate}
-                                    style={styles.dateTimePickerIos}
-                                />
-                            )}
+                                    <DateButton
+                                        name="habitStartDate"
+                                        date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                        onPress={() => setShowEndDate((oldValue) => !oldValue)}
+                                        clear={() => setSelectedEndDateTime(undefined)}
+                                    />
+                                    {showEndDate && (
+                                        <DateTimePicker
+                                            value={selectedEndDateTime ?? new Date()}
+                                            mode="date"
+                                            display="spinner"
+                                            onChange={handleChangeEndDate}
+                                            style={styles.dateTimePickerIos}
+                                        />
+                                    )}
 
-                            <View style={styles.scheduleLabel}>
-                                <Text style={styles.subtitle}> lembrete </Text>
-                                <Switch
-                                    thumbColor={colors.white}
-                                    trackColor={{ true: colors.blue, false: colors.grayLight }}
-                                    ios_backgroundColor={colors.grayLight}
-                                    onValueChange={changeScheduleSwitch}
-                                    value={scheduleEnabled}
-                                />
-                            </View>
+                                    <View style={styles.scheduleLabel}>
+                                        <Text style={styles.subtitle}> lembrete </Text>
+                                        <Switch
+                                            thumbColor={colors.white}
+                                            trackColor={{ true: colors.blue, false: colors.grayLight }}
+                                            ios_backgroundColor={colors.grayLight}
+                                            onValueChange={changeScheduleSwitch}
+                                            value={scheduleEnabled}
+                                        />
+                                    </View>
 
-                            {scheduleEnabled && showDatePicker && (
-                                <DateTimePicker
-                                    value={selectedScheduleDateTime}
-                                    mode="time"
-                                    display="spinner"
-                                    onChange={handleChangeTimeSchedule}
-                                    style={styles.dateTimePickerIos}
-                                />
-                            )}
+                                    {scheduleEnabled && showDatePicker && (
+                                        <DateTimePicker
+                                            value={selectedScheduleDateTime}
+                                            mode="time"
+                                            display="spinner"
+                                            onChange={handleChangeTimeSchedule}
+                                            style={styles.dateTimePickerIos}
+                                        />
+                                    )}
 
-                            {
-                                scheduleEnabled && Platform.OS === 'android' && (
-                                    <TouchableOpacity
-                                        style={styles.dateTimePickerButton}
-                                        onPress={handleOpenDatetimePickerScheduleForAndroid}
-                                    >
-                                        <Text style={styles.dateTimePickerText}>
-                                            {`alterar ${format(selectedScheduleDateTime, 'HH:mm')}`}
-                                        </Text>
-                                    </TouchableOpacity>
-                                )
-                            }
+                                    {
+                                        scheduleEnabled && Platform.OS === 'android' && (
+                                            <TouchableOpacity
+                                                style={styles.dateTimePickerButton}
+                                                onPress={handleOpenDatetimePickerScheduleForAndroid}
+                                            >
+                                                <Text style={styles.dateTimePickerText}>
+                                                    {`alterar ${format(selectedScheduleDateTime, 'HH:mm')}`}
+                                                </Text>
+                                            </TouchableOpacity>
+                                        )
+                                    }
 
-                            <View style={styles.footer}>
-                                <Button title="cadastrar" />
-                            </View>
-                        </View>
-                    </TouchableWithoutFeedback>
-                </KeyboardAvoidingView>
+                                    <View style={styles.footer}>
+                                        <Button title="cadastrar" onPress={handleSubmit} />
+                                    </View>
+                                </View>
+                            </TouchableWithoutFeedback>
+                        </KeyboardAvoidingView>
+                    )}
+                </Formik>
             </SafeAreaView>
         </ScrollView>
     )

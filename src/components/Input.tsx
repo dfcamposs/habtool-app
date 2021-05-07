@@ -14,20 +14,13 @@ interface InputProps extends TextInputProps {
 export function Input({ name, icon, center = false, value, ...rest }: InputProps) {
     const [isFocused, setIsFocused] = useState(false);
     const [isFilled, setIsFilled] = useState(false);
-    const [valueType, setValueType] = useState<string>();
 
     function handleInputFocus() {
         setIsFocused(true);
-        setIsFilled(!!valueType);
     }
 
     function handleInputBlur() {
         setIsFocused(false);
-    }
-
-    function handleInputChange(text: string) {
-        setIsFilled(!!text);
-        setValueType(text);
     }
 
     return (
@@ -40,14 +33,12 @@ export function Input({ name, icon, center = false, value, ...rest }: InputProps
                     style={styles.icon}
                     name={icon}
                     size={28}
-                    color={(isFocused || isFilled) ? colors.blue : colors.textUnfocus}
+                    color={(isFocused || !!value) ? colors.blue : colors.textUnfocus}
                 />}
             <TextInput
                 style={[styles.input, center && { textAlign: 'center' }]}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
-                onChangeText={handleInputChange}
-                value={value}
                 {...rest}
             />
         </View>
