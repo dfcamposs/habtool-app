@@ -7,7 +7,7 @@ import fonts from '../styles/fonts';
 
 interface InputProps extends TextInputProps {
     name: string;
-    icon?: 'flag' | 'event';
+    icon?: 'flag' | 'event' | 'loop';
     center?: boolean;
 }
 
@@ -33,14 +33,14 @@ export function Input({ name, icon, center = false, value, ...rest }: InputProps
     return (
         <View style={[
             styles.container,
-            (isFocused || isFilled || !!value) && { borderColor: colors.blue }
+            (isFocused) && { borderColor: colors.blue }
         ]}>
             {icon &&
                 <MaterialIcons
                     style={styles.icon}
                     name={icon}
                     size={28}
-                    color={(isFocused || isFilled || !!value) ? colors.blue : colors.textUnfocus}
+                    color={(isFocused || isFilled) ? colors.blue : colors.textUnfocus}
                 />}
             <TextInput
                 style={[styles.input, center && { textAlign: 'center' }]}

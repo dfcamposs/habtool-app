@@ -21,9 +21,11 @@ import pt from 'date-fns/locale/pt';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { WeekDayButton } from '../components/WeekDayButton';
+import { DateButton } from '../components/DateButton';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
+
 
 export function HabitManager() {
     const [scheduleEnabled, setScheduleEnabled] = useState(false);
@@ -32,7 +34,7 @@ export function HabitManager() {
     const [showStartDate, setShowStartDate] = useState(false);
     const [selectedStartDateTime, setSelectedStartDateTime] = useState(new Date());
     const [showEndDate, setShowEndDate] = useState(false);
-    const [selectedEndDateTime, setSelectedEndDateTime] = useState(new Date());
+    const [selectedEndDateTime, setSelectedEndDateTime] = useState<Date>();
 
     const [sundayEnabled, setSundayEnabled] = useState(false);
     const [mondayEnabled, setMondayEnabled] = useState(true);
@@ -62,6 +64,10 @@ export function HabitManager() {
     }
 
     function handleChangeStartDate(event: Event, dateTime: Date | undefined) {
+        if (Platform.OS === 'android') {
+            setShowStartDate(oldState => !oldState);
+        }
+
         if (dateTime && isBefore(dateTime, new Date())) {
             setSelectedStartDateTime(new Date());
             return Alert.alert('Escolha uma data no futuro! ⏱');
@@ -73,6 +79,10 @@ export function HabitManager() {
     }
 
     function handleChangeEndDate(event: Event, dateTime: Date | undefined) {
+        if (Platform.OS === 'android') {
+            setShowEndDate(oldState => !oldState);
+        }
+
         if (dateTime && isBefore(dateTime, new Date())) {
             setSelectedEndDateTime(new Date());
             return Alert.alert('Escolha uma data no futuro! ⏱');
@@ -103,7 +113,7 @@ export function HabitManager() {
                                 criar um hábito
                         </Text>
 
-                            <Input name="habitName" placeholder="digite o nome do hábito" />
+                            <Input name="habitName" icon="loop" placeholder="digite o nome do hábito" />
                         </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -121,13 +131,11 @@ export function HabitManager() {
                             </View>
 
                             <Input name="habitMotivation" icon="flag" placeholder="digite sua motivação" />
-                            <Input
+
+                            <DateButton
                                 name="habitStartDate"
-                                icon="event"
-                                placeholder="selecionar data início"
-                                editable={false}
-                                value={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
-                                onResponderStart={() => setShowStartDate((oldvalue) => !oldvalue)}
+                                date={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                onPress={() => setShowStartDate((oldValue) => !oldValue)}
                             />
                             {showStartDate && (
                                 <DateTimePicker
@@ -139,16 +147,15 @@ export function HabitManager() {
                                 />
                             )}
 
-                            <Input
-                                name="habitEndDate"
-                                icon="event"
-                                placeholder="selecionar data fim"
-                                editable={false}
-                                onResponderStart={() => setShowEndDate((oldvalue) => !oldvalue)}
+                            <DateButton
+                                name="habitStartDate"
+                                date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                onPress={() => setShowEndDate((oldValue) => !oldValue)}
+                                clear={() => setSelectedEndDateTime(undefined)}
                             />
                             {showEndDate && (
                                 <DateTimePicker
-                                    value={selectedEndDateTime}
+                                    value={selectedEndDateTime ?? new Date()}
                                     mode="date"
                                     display="spinner"
                                     onChange={handleChangeEndDate}
