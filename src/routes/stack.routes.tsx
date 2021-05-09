@@ -3,10 +3,10 @@ import { createStackNavigator } from '@react-navigation/stack';
 
 import { Welcome } from '../pages/Welcome';
 import { HabitManager } from '../pages/HabitManager';
+import { Confirmation } from '../pages/Confirmation';
 import AuthRoutes from './tab.routes';
 
 import colors from '../styles/colors';
-
 
 const stackRoutes = createStackNavigator();
 
@@ -37,6 +37,11 @@ const AppRoutes: React.FC = () => (
         <stackRoutes.Screen
             name="MyHabits"
             component={AuthRoutes}
+        />
+
+        <stackRoutes.Screen
+            name="Confirmation"
+            component={Confirmation}
         />
 
         <stackRoutes.Screen

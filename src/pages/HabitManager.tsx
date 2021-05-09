@@ -18,14 +18,19 @@ import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { format, isBefore } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { Formik } from 'formik';
+import { v4 as uuid } from 'uuid';
+import { useNavigation } from '@react-navigation/native';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { WeekDayButton } from '../components/WeekDayButton';
 import { DateButton } from '../components/DateButton';
 
+import { getHabitByName, HabitProps, saveHabit } from '../libs/storage';
+
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
+
 
 const FormInitialValues = {
     name: '',
@@ -49,11 +54,13 @@ export function HabitManager() {
     const [fridayEnabled, setFridayEnabled] = useState(true);
     const [saturdayEnabled, setSaturdayEnabled] = useState(false);
 
-    function changeScheduleSwitch() {
+    const navigation = useNavigation();
+
+    function changeScheduleSwitch(): void {
         setScheduleEnabled((oldValue) => !oldValue);
     }
 
-    function handleChangeTimeSchedule(event: Event, dateTime: Date | undefined) {
+    function handleChangeTimeSchedule(event: Event, dateTime: Date | undefined): void {
         if (Platform.OS === 'android') {
             setShowDatePicker(oldState => !oldState);
         }
@@ -68,7 +75,7 @@ export function HabitManager() {
         }
     }
 
-    function handleChangeStartDate(event: Event, dateTime: Date | undefined) {
+    function handleChangeStartDate(event: Event, dateTime: Date | undefined): void {
         if (Platform.OS === 'android') {
             setShowStartDate(oldState => !oldState);
         }
@@ -83,7 +90,7 @@ export function HabitManager() {
         }
     }
 
-    function handleChangeEndDate(event: Event, dateTime: Date | undefined) {
+    function handleChangeEndDate(event: Event, dateTime: Date | undefined): void {
         if (Platform.OS === 'android') {
             setShowEndDate(oldState => !oldState);
         }
@@ -103,8 +110,47 @@ export function HabitManager() {
         }
     }
 
-    function handleOpenDatetimePickerScheduleForAndroid() {
+    function handleOpenDatetimePickerScheduleForAndroid(): void {
         setShowDatePicker(oldState => !oldState);
+    }
+
+    async function handleSave(valuesForm: Partial<HabitProps>): Promise<void> {
+        try {
+
+            if (!valuesForm.name) {
+                return Alert.alert('Não é possível criar um hábito sem nome!');
+            }
+
+            const verifyHabitExists = await getHabitByName(valuesForm.name);
+
+            if (verifyHabitExists) {
+                return Alert.alert('Hábito com este nome já cadastrado!');
+            }
+
+            const habit: HabitProps = {
+                id: uuid(),
+                name: valuesForm.name,
+                motivation: valuesForm.motivation,
+                frequency: {
+                    sun: sundayEnabled,
+                    mon: mondayEnabled,
+                    tue: tuesdayEnabled,
+                    wed: wednesdayEnabled,
+                    thu: thrusdayEnabled,
+                    fri: fridayEnabled,
+                    sat: saturdayEnabled
+                },
+                startDate: selectedStartDateTime,
+                endDate: selectedEndDateTime,
+                notificationHour: selectedScheduleDateTime
+            }
+
+            await saveHabit(habit);
+
+            navigation.navigate('Confirmation');
+        } catch {
+            Alert.alert('Não foi possível salvar!');
+        }
     }
 
     return (
@@ -113,7 +159,7 @@ export function HabitManager() {
             contentContainerStyle={styles.container}
         >
             <SafeAreaView style={styles.container}>
-                <Formik initialValues={FormInitialValues} onSubmit={values => console.log(values)}>
+                <Formik initialValues={FormInitialValues} onSubmit={(values) => handleSave(values)}>
                     {({ handleChange, handleSubmit, values }) => (
                         <KeyboardAvoidingView
                             style={styles.container}

@@ -1,14 +1,28 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, Platform } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
 
+import { HabitProps, loadHabits } from '../libs/storage';
+
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 export function MyHabits() {
+    const [myHabits, setMyHabits] = useState<HabitProps[]>([]);
+
+    useEffect(() => {
+        async function getMyHabits() {
+            const habitsStoraged = await loadHabits();
+            setMyHabits(habitsStoraged);
+        }
+
+        getMyHabits();
+
+    }, [])
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -19,26 +33,7 @@ export function MyHabits() {
             </View>
             <View style={styles.content}>
                 <FlatList
-                    data={[
-                        { id: "1", name: "habit 1" },
-                        { id: "2", name: "habit 2" },
-                        { id: "3", name: "habit 3" },
-                        { id: "4", name: "habit 4" },
-                        { id: "5", name: "habit 5" },
-                        { id: "6", name: "habit 6" },
-                        { id: "7", name: "habit 7" },
-                        { id: "8", name: "habit 8" },
-                        { id: "9", name: "habit 9" },
-                        { id: "10", name: "habit 10" },
-                        { id: "11", name: "habit 11" },
-                        { id: "12", name: "habit 12" },
-                        { id: "13", name: "habit 13" },
-                        { id: "14", name: "habit 14" },
-                        { id: "15", name: "habit 15" },
-                        { id: "16", name: "habit 16" },
-                        { id: "17", name: "habit 17" },
-                        { id: "18", name: "habit 18" },
-                    ]}
+                    data={myHabits}
                     keyExtractor={(item) => String(item.id)}
                     renderItem={({ item }) => (
                         <Habit data={item} />

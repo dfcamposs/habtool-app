@@ -7,19 +7,20 @@ import fonts from '../styles/fonts';
 
 interface TrackerProps extends RectButtonProps {
     legend: string;
-    disabled?: boolean;
+    enabled?: boolean;
     checked?: boolean;
 }
 
-export function Tracker({ legend, disabled = false, checked = false, ...rest }: TrackerProps) {
+export function Tracker({ legend, enabled = true, checked = false, ...rest }: TrackerProps) {
     return (
         <View style={styles.container}>
             <RectButton
                 style={[
                     styles.dayCicle,
-                    disabled && { backgroundColor: colors.grayDark },
+                    enabled && { backgroundColor: colors.white },
                     checked && { backgroundColor: colors.green },
                 ]}
+                enabled={enabled}
                 {...rest}
             />
             <Text style={styles.dayLegend}>{legend}</Text>
@@ -38,7 +39,7 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         borderRadius: 15,
-        backgroundColor: colors.white
+        backgroundColor: colors.grayDark
     },
     dayLegend: {
         color: colors.textDark,
