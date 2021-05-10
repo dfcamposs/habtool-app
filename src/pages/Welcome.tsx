@@ -95,22 +95,23 @@ const styles = StyleSheet.create({
     form: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingHorizontal: 50
+        paddingHorizontal: 50,
+        paddingVertical: 100
     },
     header: {
         alignItems: 'center'
     },
     logo: {
         width: 100,
-        height: 60,
+        height: 80,
         marginBottom: 30
     },
     title: {
         fontFamily: fonts.title,
         fontSize: 28,
         color: colors.textDark,
-        textAlign: 'center'
+        textAlign: 'center',
+        paddingBottom: 50
     },
     input: {
         borderBottomWidth: 1,
@@ -118,7 +119,6 @@ const styles = StyleSheet.create({
         color: colors.textDark,
         width: '100%',
         fontSize: 16,
-        marginTop: 50,
         padding: 10,
         textAlign: 'center'
     },
