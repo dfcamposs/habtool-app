@@ -4,10 +4,10 @@ import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
 import { updateHabitHistory } from '../libs/storage';
 
+import colors from '../styles/colors';
+import fonts from '../styles/fonts';
 
 interface TrackerProps extends RectButtonProps {
     data: {
@@ -46,7 +46,10 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
                 onPress={handleTrackerChecked}
                 {...rest}
             />
-            <Text style={styles.dayLegend}>{getLegendDayTracker(data.position)}</Text>
+            <Text style={[
+                styles.dayLegend,
+                data.position === 0 && { fontFamily: fonts.legendBold }
+            ]}>{getLegendDayTracker(data.position)}</Text>
         </View>
     )
 }

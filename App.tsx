@@ -3,7 +3,8 @@ import {
   useFonts,
   Nunito_400Regular,
   Nunito_600SemiBold,
-  Nunito_700Bold
+  Nunito_700Bold,
+  Nunito_900Black
 } from '@expo-google-fonts/nunito';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
@@ -14,7 +15,8 @@ export default function App() {
   const [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_600SemiBold,
-    Nunito_700Bold
+    Nunito_700Bold,
+    Nunito_900Black
   });
 
   if (!fontsLoaded) {

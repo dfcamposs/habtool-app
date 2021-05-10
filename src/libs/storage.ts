@@ -91,7 +91,7 @@ export async function getHabitWeekHistory(habitId: string): Promise<number[] | [
 
         if (habitsHistory && habitsHistory[habitId]) {
             const currentDate = new Date();
-            const limitDateHistory = currentDate.setDate(currentDate.getDate() - 6);
+            const limitDateHistory = currentDate.setDate(currentDate.getDate() - 7);
 
             return Object.values(habitsHistory[habitId]).filter(item => isAfter(Number(item), limitDateHistory));
         }

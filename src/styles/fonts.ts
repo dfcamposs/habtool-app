@@ -4,5 +4,6 @@ export default {
     content: 'Nunito_400Regular',
     contentBold: 'Nunito_700Bold',
     complement: 'Nunito_400Regular',
-    legend: 'Nunito_400Regular'
+    legend: 'Nunito_400Regular',
+    legendBold: 'Nunito_900Black'
 }

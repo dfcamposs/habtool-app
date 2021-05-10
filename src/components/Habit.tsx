@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
 import format from 'date-fns/format';
-import pt from 'date-fns/locale/pt';
 
 import { Tracker } from './Tracker';
 
@@ -18,11 +17,40 @@ interface HabitProps {
     }
 }
 
+interface TrackerListProps {
+    position: number;
+    checked: boolean;
+}
+
 export function Habit({ data: habit }: HabitProps) {
+    const [trackerListProps, setTrackerListProps] = useState<TrackerListProps[]>();
+
     useEffect(() => {
         async function getWeekHistory() {
-            const result = await getHabitWeekHistory(habit.id);
-            console.log(result);
+            const initialTrackerList: TrackerListProps[] = [
+                { position: 6, checked: false },
+                { position: 5, checked: false },
+                { position: 4, checked: false },
+                { position: 3, checked: false },
+                { position: 2, checked: false },
+                { position: 1, checked: false },
+                { position: 0, checked: false },
+            ]
+
+            const history = await getHabitWeekHistory(habit.id);
+
+            const historyFormatted = history.map((item: number) => format(item, 'dd-MM-yyyy'));
+
+            for (const item of initialTrackerList) {
+                const currentDate = new Date();
+                const date = format(currentDate.setDate(currentDate.getDate() - item.position), 'dd-MM-yyyy');
+
+                if (historyFormatted.includes(date)) {
+                    item.checked = true
+                }
+            }
+
+            setTrackerListProps(initialTrackerList);
         }
 
         getWeekHistory();
@@ -42,12 +70,13 @@ export function Habit({ data: habit }: HabitProps) {
 
 
             <FlatList
-                data={[6, 5, 4, 3, 2, 1, 0]}
-                keyExtractor={(item) => String(item)}
-                renderItem={({ item: position }) => (
+                data={trackerListProps}
+                keyExtractor={(item) => String(item.position)}
+                renderItem={({ item }) => (
                     <Tracker
-                        data={{ habitId: habit.id, position }}
-                        enabled={verifyEnabledTracker(position)}
+                        data={{ habitId: habit.id, position: item.position }}
+                        enabled={verifyEnabledTracker(item.position)}
+                        checked={item.checked}
                     />
                 )}
                 showsHorizontalScrollIndicator={false}
