@@ -187,3 +187,30 @@ export async function updateHabitHistory(habitId: string, date: number): Promise
         throw new Error(error);
     }
 }
+
+export async function getProgressStars(): Promise<number> {
+    try {
+        const dataHabits = await AsyncStorage.getItem('@habto:habits');
+        const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
+
+        const dataHistory = await AsyncStorage.getItem('@habto:habitsHistory');
+        const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
+
+        const currentDate = new Date();
+        const weekDay = format(currentDate.setDate(currentDate.getDate()), 'E').toLocaleLowerCase();
+
+        const countHabitsToday = Object.values(habits).filter(item => item.data.frequency[weekDay]).length;
+
+        const countHabitsCheckedToday = Object
+            .values(habitsHistory)
+            .map(item => item.map(item2 => format(Number(item2), 'dd-MM-yyyy')))
+            .filter(item => item.includes(format(currentDate.setDate(currentDate.getDate()), 'dd-MM-yyyy')))
+            .length;
+
+        return (countHabitsCheckedToday * 100) / countHabitsToday;
+
+        return 0;
+    } catch (error) {
+        throw new Error();
+    }
+}
