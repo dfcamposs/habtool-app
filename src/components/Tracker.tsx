@@ -1,29 +1,52 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { View, Text, StyleSheet } from 'react-native';
 import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
+import { format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
+import { updateHabitHistory } from '../libs/storage';
+
 
 interface TrackerProps extends RectButtonProps {
-    legend: string;
+    data: {
+        habitId: string;
+        position: number;
+    };
     enabled?: boolean;
     checked?: boolean;
 }
 
-export function Tracker({ legend, enabled = true, checked = false, ...rest }: TrackerProps) {
+export function Tracker({ data, checked = false, enabled = true, ...rest }: TrackerProps) {
+    const [trackerChecked, setTrackerChecked] = useState(checked);
+
+    function getLegendDayTracker(position: number): string {
+        const currentDate = new Date();
+        return format(currentDate.setDate(currentDate.getDate() - position), 'EEEEE', { locale: pt }).toUpperCase();
+    }
+
+    async function handleTrackerChecked() {
+        const currentDate = new Date();
+        const habitDate = currentDate.setDate(currentDate.getDate() - data.position);
+
+        await updateHabitHistory(data.habitId, habitDate);
+        setTrackerChecked((oldValue) => !oldValue);
+    }
+
     return (
         <View style={styles.container}>
             <RectButton
                 style={[
                     styles.dayCicle,
                     enabled && { backgroundColor: colors.white },
-                    checked && { backgroundColor: colors.green },
+                    trackerChecked && { backgroundColor: colors.green },
                 ]}
                 enabled={enabled}
+                onPress={handleTrackerChecked}
                 {...rest}
             />
-            <Text style={styles.dayLegend}>{legend}</Text>
+            <Text style={styles.dayLegend}>{getLegendDayTracker(data.position)}</Text>
         </View>
     )
 }
