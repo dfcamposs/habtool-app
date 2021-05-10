@@ -13,7 +13,6 @@ interface InputProps extends TextInputProps {
 
 export function Input({ name, icon, center = false, value, ...rest }: InputProps) {
     const [isFocused, setIsFocused] = useState(false);
-    const [isFilled, setIsFilled] = useState(false);
 
     function handleInputFocus() {
         setIsFocused(true);

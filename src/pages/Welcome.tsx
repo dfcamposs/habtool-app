@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -8,22 +8,48 @@ import {
     KeyboardAvoidingView,
     Platform,
     TouchableWithoutFeedback,
-    Keyboard
+    Keyboard,
+    Alert
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 
+import { getUserName, saveUserName } from '../libs/storage';
+
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import logo from '../assets/logo.png';
 
+
 export function Welcome() {
+    const [name, setName] = useState<string>();
+
     const navigation = useNavigation();
 
-    function handleSubmit() {
-        navigation.navigate('MyHabits');
+    useEffect(() => {
+        async function findUserName() {
+            const userName = await getUserName();
+
+            if (userName)
+                navigation.navigate('MyHabits');
+
+        }
+
+        findUserName();
+    }, []);
+
+    async function handleSubmit() {
+        if (!name)
+            return Alert.alert('Me diz como chamar você 😢');
+
+        await saveUserName(name);
+        navigation.navigate('CreateHabit');
+    }
+
+    function handleInputChange(value: string) {
+        setName(value);
     }
 
     return (
@@ -42,7 +68,7 @@ export function Welcome() {
                                 </Text>
                             </View>
 
-                            <Input name="username" placeholder="digite o nome" center />
+                            <Input name="username" placeholder="digite o nome" onChangeText={handleInputChange} center />
 
                             <View style={styles.footer}>
                                 <Button title="começar" onPress={handleSubmit} />

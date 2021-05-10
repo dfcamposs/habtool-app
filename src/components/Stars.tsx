@@ -7,11 +7,11 @@ import colors from '../styles/colors';
 export function Stars() {
     return (
         <View style={styles.container}>
-            <MaterialIcons style={styles.star} name="star" size={28} color={colors.blue} />
-            <MaterialIcons style={styles.star} name="star" size={28} color={colors.blue} />
-            <MaterialIcons style={styles.star} name="star" size={28} color={colors.blue} />
-            <MaterialIcons style={styles.star} name="star" size={28} color={colors.white} />
-            <MaterialIcons style={styles.star} name="star" size={28} color={colors.white} />
+            <MaterialIcons style={styles.star} name="star" size={30} color={colors.blue} />
+            <MaterialIcons style={styles.star} name="star" size={30} color={colors.blue} />
+            <MaterialIcons style={styles.star} name="star" size={30} color={colors.blue} />
+            <MaterialIcons style={styles.star} name="star" size={30} color={colors.white} />
+            <MaterialIcons style={styles.star} name="star" size={30} color={colors.white} />
         </View>
     )
 }

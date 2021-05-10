@@ -5,20 +5,27 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
 
-import { HabitProps, loadHabits } from '../libs/storage';
+import { getUserName, HabitProps, loadHabits } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 export function MyHabits() {
+    const [userName, setUserName] = useState<string>();
     const [myHabits, setMyHabits] = useState<HabitProps[]>([]);
 
     useEffect(() => {
+        async function getUser() {
+            const user = await getUserName();
+            setUserName(user);
+        }
+
         async function getMyHabits() {
             const habitsStoraged = await loadHabits();
             setMyHabits(habitsStoraged);
         }
 
+        getUser();
         getMyHabits();
 
     }, [])
@@ -26,7 +33,7 @@ export function MyHabits() {
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Olá, David</Text>
+                <Text style={styles.title}>Olá, {userName}</Text>
                 <Text style={styles.subtitle}>seja 1% melhor todos os dias</Text>
 
                 <Stars />

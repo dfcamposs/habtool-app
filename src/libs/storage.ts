@@ -27,6 +27,40 @@ export interface StorageHistoryHabitProps {
     [id: string]: number[]
 }
 
+export interface StorageUserProps {
+    [name: string]: string;
+}
+
+export async function saveUserName(name: string): Promise<void> {
+    try {
+        await AsyncStorage
+            .setItem('@habto:user',
+                JSON.stringify({
+                    name: name
+                })
+            );
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function getUserName(): Promise<string> {
+    try {
+        const data = await AsyncStorage.getItem('@habto:user');
+        const user = data ? (JSON.parse(data) as StorageUserProps) : {};
+
+        if (user) {
+            return user.name;
+        } else {
+            throw new Error("Nome do usuário não encontrado");
+        }
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
 export async function saveHabit(habit: HabitProps): Promise<void> {
     try {
         const data = await AsyncStorage.getItem('@habto:habits');
