@@ -10,9 +10,9 @@ export interface HabitProps {
     name: string;
     motivation?: string;
     frequency: FrequencyProps;
-    startDate: Date;
-    endDate?: Date;
-    notificationHour?: Date
+    startDate: number;
+    endDate?: number;
+    notificationHour?: number
 }
 
 export interface StorageHabitProps {
@@ -199,7 +199,7 @@ export async function getProgressStars(): Promise<number> {
         const currentDate = new Date();
         const weekDay = format(currentDate.setDate(currentDate.getDate()), 'E').toLocaleLowerCase();
 
-        const countHabitsToday = Object.values(habits).filter(item => item.data.frequency[weekDay]).length;
+        const countHabitsToday = Object.values(habits).filter(item => item.data.frequency[weekDay] && !item.data.endDate).length;
 
         const countHabitsCheckedToday = Object
             .values(habitsHistory)

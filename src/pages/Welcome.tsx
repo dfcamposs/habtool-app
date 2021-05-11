@@ -45,7 +45,7 @@ export function Welcome() {
             return Alert.alert('Me diz como chamar você 😢');
 
         await saveUserName(name);
-        navigation.navigate('CreateHabit');
+        navigation.navigate('MyHabits');
     }
 
     function handleInputChange(value: string) {

@@ -3,6 +3,7 @@ import { SafeAreaView, Text, StyleSheet } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
+import { TabActions } from '@react-navigation/native';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -12,7 +13,7 @@ export function Confirmation() {
     const navigation = useNavigation();
 
     function handleNavigateToMyHabits() {
-        navigation.navigate('MyHabits');
+        navigation.navigate('hábitos');
     }
 
     return (

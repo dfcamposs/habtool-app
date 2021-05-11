@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { StyleSheet, Text, View, FlatList } from 'react-native';
-import format from 'date-fns/format';
+import { format, isAfter } from 'date-fns';
 
 import { Tracker } from './Tracker';
 
@@ -13,7 +13,8 @@ interface HabitProps {
     data: {
         id: string;
         name: string,
-        frequency: FrequencyProps
+        frequency: FrequencyProps,
+        endDate?: number;
     }
 }
 
@@ -24,6 +25,7 @@ interface TrackerListProps {
 
 export function Habit({ data: habit }: HabitProps) {
     const [trackerListProps, setTrackerListProps] = useState<TrackerListProps[]>();
+    const [habitIsActive, setHabitIsActive] = useState(true);
 
     useEffect(() => {
         async function getWeekHistory() {
@@ -53,10 +55,20 @@ export function Habit({ data: habit }: HabitProps) {
             setTrackerListProps(initialTrackerList);
         }
 
+        function verifyEndDate() {
+            if (habit.endDate && habit.endDate < Date.now())
+                setHabitIsActive(false);
+        }
+
         getWeekHistory();
+        verifyEndDate();
     }, [])
 
     function verifyEnabledTracker(position: number): boolean {
+        if (!habitIsActive) {
+            return false;
+        }
+
         const currentDate = new Date();
         const weekDay = format(currentDate.setDate(currentDate.getDate() - position), 'E').toLocaleLowerCase();
         return habit.frequency[weekDay];
@@ -64,7 +76,7 @@ export function Habit({ data: habit }: HabitProps) {
 
     return (
         <View style={styles.container}>
-            <Text style={styles.text}>
+            <Text style={[styles.text, habitIsActive && { color: colors.textDark }]}>
                 {habit.name}
             </Text>
 
@@ -100,7 +112,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     text: {
-        color: colors.textDark,
+        color: colors.textUnfocus,
         fontFamily: fonts.content,
         fontSize: 18
     },

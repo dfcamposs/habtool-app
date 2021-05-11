@@ -32,18 +32,8 @@ const AppRoutes: React.FC = () => {
             />
 
             <stackRoutes.Screen
-                name="CreateHabit"
-                component={AuthRoutes}
-            />
-
-            <stackRoutes.Screen
                 name="EditHabit"
                 component={HabitManager}
-            />
-
-            <stackRoutes.Screen
-                name="Progress"
-                component={AuthRoutes}
             />
 
             <stackRoutes.Screen

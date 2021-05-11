@@ -48,7 +48,8 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
             />
             <Text style={[
                 styles.dayLegend,
-                data.position === 0 && { fontFamily: fonts.legendBold }
+                data.position === 0 && { fontFamily: fonts.legendBold },
+                enabled && { color: colors.textDark }
             ]}>{getLegendDayTracker(data.position)}</Text>
         </View>
     )
@@ -68,7 +69,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.grayDark
     },
     dayLegend: {
-        color: colors.textDark,
+        color: colors.textUnfocus,
         fontSize: 6,
         fontFamily: fonts.legend,
         marginTop: 5

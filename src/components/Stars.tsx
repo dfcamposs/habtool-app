@@ -18,8 +18,8 @@ export function Stars() {
         getProgress();
     }, []);
 
-    function handleCheckStar(maxPercentage: number): string {
-        if (percentageChecked >= maxPercentage) {
+    function handleCheckStar(minPercentage: number): string {
+        if (percentageChecked >= minPercentage) {
             return colors.blue;
         }
 

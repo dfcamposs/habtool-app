@@ -17,6 +17,7 @@ const AuthRoutes = () => {
     return (
         <AppTab.Navigator
             initialRouteName="hábitos"
+            backBehavior="initialRoute"
             tabBarOptions={{
                 activeTintColor: colors.blue,
                 inactiveTintColor: colors.textUnfocus,

@@ -80,11 +80,6 @@ export function HabitManager() {
             setShowStartDate(oldState => !oldState);
         }
 
-        if (dateTime && isBefore(dateTime, new Date())) {
-            setSelectedStartDateTime(new Date());
-            return Alert.alert('Escolha uma data no futuro! ⏱');
-        }
-
         if (dateTime) {
             setSelectedStartDateTime(dateTime);
         }
@@ -93,11 +88,6 @@ export function HabitManager() {
     function handleChangeEndDate(event: Event, dateTime: Date | undefined): void {
         if (Platform.OS === 'android') {
             setShowEndDate(oldState => !oldState);
-        }
-
-        if (dateTime && isBefore(dateTime, new Date())) {
-            setSelectedEndDateTime(new Date());
-            return Alert.alert('Escolha uma data no futuro! ⏱');
         }
 
         if (dateTime && isBefore(dateTime, selectedStartDateTime)) {
@@ -140,9 +130,9 @@ export function HabitManager() {
                     fri: fridayEnabled,
                     sat: saturdayEnabled
                 },
-                startDate: selectedStartDateTime,
-                endDate: selectedEndDateTime,
-                notificationHour: selectedScheduleDateTime
+                startDate: selectedStartDateTime.getTime(),
+                endDate: selectedEndDateTime?.getTime(),
+                notificationHour: selectedScheduleDateTime.getTime()
             }
 
             await saveHabit(habit);
