@@ -5,7 +5,6 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
 import { HabitsContext } from '../context/habits';
-import { HabitProps } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -22,16 +21,15 @@ export function MyHabits() {
                 <Stars />
             </View>
             <View style={styles.content}>
-                <View style={styles.habitsList}>
-                    <FlatList
-                        data={myHabits}
-                        keyExtractor={(item) => String(item.id)}
-                        renderItem={({ item }) => (
-                            <Habit data={item} />
-                        )}
-                        showsVerticalScrollIndicator={false}
-                    />
-                </View>
+                <FlatList
+                    data={myHabits}
+                    keyExtractor={(item) => String(item.id)}
+                    renderItem={({ item }) => (
+                        <Habit data={item} />
+                    )}
+                    showsVerticalScrollIndicator={false}
+                    style={styles.habitsList}
+                />
             </View>
         </SafeAreaView>
     )
@@ -55,7 +53,6 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        width: '100%',
         backgroundColor: colors.background,
         paddingBottom: 20
     },

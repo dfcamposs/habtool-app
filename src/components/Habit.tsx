@@ -1,6 +1,8 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, FlatList, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
-import { format, isAfter } from 'date-fns';
+import { StyleSheet, Text, FlatList, View, Animated } from 'react-native';
+import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { format } from 'date-fns';
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { Tracker } from './Tracker';
 
@@ -9,7 +11,7 @@ import { FrequencyProps, getHabitWeekHistory } from '../libs/storage';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-interface HabitProps extends TouchableOpacityProps {
+interface HabitProps {
     data: {
         id: string;
         name: string,
@@ -23,7 +25,7 @@ interface TrackerListProps {
     checked: boolean;
 }
 
-export function Habit({ data: habit, ...rest }: HabitProps) {
+export function Habit({ data: habit }: HabitProps) {
     const [trackerListProps, setTrackerListProps] = useState<TrackerListProps[]>();
     const [habitIsActive, setHabitIsActive] = useState(true);
 
@@ -75,12 +77,31 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
     }
 
     return (
-        <TouchableOpacity activeOpacity={0.8} {...rest}>
+        <Swipeable
+            overshootRight={false}
+            renderRightActions={() => (
+                <Animated.View>
+                    <View style={{ flexDirection: 'row' }}>
+                        <RectButton
+                            style={styles.editButton}
+                            onPress={() => { }}
+                        >
+                            <MaterialIcons name="edit" size={20} color={colors.white} />
+                        </RectButton>
+                        <RectButton
+                            style={styles.removeButton}
+                            onPress={() => { }}
+                        >
+                            <MaterialIcons name="delete" size={20} color={colors.white} />
+                        </RectButton>
+                    </View>
+                </Animated.View>
+            )}
+        >
             <View style={styles.container}>
                 <Text style={[styles.text, habitIsActive && { color: colors.textDark }]}>
                     {habit.name}
                 </Text>
-
 
                 <FlatList
                     data={trackerListProps}
@@ -96,7 +117,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                     style={styles.tracker}
                 />
             </View>
-        </TouchableOpacity>
+        </Swipeable>
     )
 }
 
@@ -111,6 +132,26 @@ const styles = StyleSheet.create({
         paddingLeft: 15,
         paddingRight: 10,
         justifyContent: 'space-around'
+    },
+    editButton: {
+        width: 60,
+        height: 100,
+        backgroundColor: colors.blue,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+        right: 20,
+    },
+    removeButton: {
+        width: 60,
+        height: 100,
+        backgroundColor: colors.red,
+        borderRadius: 10,
+        justifyContent: 'center',
+        alignItems: 'center',
+        position: 'relative',
+        right: 20,
     },
     text: {
         color: colors.textUnfocus,
