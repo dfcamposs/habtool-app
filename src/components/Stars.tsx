@@ -1,22 +1,13 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { getProgressStars } from '../libs/storage';
+import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
 
 export function Stars() {
-    const [percentageChecked, setPercentageChecked] = useState<number>(0);
-
-    useEffect(() => {
-        async function getProgress(): Promise<void> {
-            const percentage = await getProgressStars();
-            setPercentageChecked(percentage);
-        }
-
-        getProgress();
-    }, []);
+    const { percentageChecked } = useContext(HabitsContext);
 
     function handleCheckStar(minPercentage: number): string {
         if (percentageChecked >= minPercentage) {

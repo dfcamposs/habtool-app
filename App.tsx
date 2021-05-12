@@ -10,6 +10,7 @@ import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
 
 import Routes from './src/routes';
+import { HabitsProvider } from './src/context/habits';
 
 export default function App() {
   const [fontsLoaded] = useFonts({
@@ -24,9 +25,9 @@ export default function App() {
   }
 
   return (
-    <>
+    <HabitsProvider>
       <StatusBar style="dark" />
       <Routes />
-    </>
+    </HabitsProvider>
   )
 }

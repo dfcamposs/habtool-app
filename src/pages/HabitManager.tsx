@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -27,17 +27,23 @@ import { WeekDayButton } from '../components/WeekDayButton';
 import { DateButton } from '../components/DateButton';
 
 import { getHabitByName, HabitProps, saveHabit } from '../libs/storage';
+import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
+interface FormValues {
+    name?: string;
+    motivation?: string;
+}
 
-const FormInitialValues = {
+const initialFormValues: FormValues = {
     name: '',
     motivation: ''
 }
 
 export function HabitManager() {
+    const { myHabits, handleUpdateMyHabits } = useContext(HabitsContext);
     const [scheduleEnabled, setScheduleEnabled] = useState(false);
     const [selectedScheduleDateTime, setSelectedScheduleDateTime] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
@@ -104,7 +110,7 @@ export function HabitManager() {
         setShowDatePicker(oldState => !oldState);
     }
 
-    async function handleSave(valuesForm: Partial<HabitProps>): Promise<void> {
+    async function handleSave(valuesForm: FormValues): Promise<void> {
         try {
 
             if (!valuesForm.name) {
@@ -135,12 +141,34 @@ export function HabitManager() {
                 notificationHour: selectedScheduleDateTime.getTime()
             }
 
-            await saveHabit(habit);
+            const orderHabit = myHabits.length + 1;
+            await saveHabit(habit, orderHabit);
+
+            const habitsUpdated = [{ ...habit, order: orderHabit }, ...myHabits];
+            handleUpdateMyHabits(habitsUpdated);
 
             navigation.navigate('Confirmation');
+
         } catch {
             Alert.alert('Não foi possível salvar!');
         }
+    }
+
+    function handleResetComponents() {
+        setSundayEnabled(false);
+        setMondayEnabled(true);
+        setTuesdayEnabled(true);
+        setWednesdayEnabled(true);
+        setThursdayEnabled(true);
+        setFridayEnabled(true);
+        setSaturdayEnabled(false);
+        setScheduleEnabled(false);
+        setSelectedScheduleDateTime(new Date());
+        setShowDatePicker(Platform.OS === 'ios');
+        setShowStartDate(false);
+        setShowEndDate(false);
+        setSelectedStartDateTime(new Date());
+        setSelectedEndDateTime(undefined);
     }
 
     return (
@@ -149,7 +177,7 @@ export function HabitManager() {
             contentContainerStyle={styles.container}
         >
             <SafeAreaView style={styles.container}>
-                <Formik initialValues={FormInitialValues} onSubmit={(values) => handleSave(values)}>
+                <Formik initialValues={initialFormValues} onSubmit={handleSave}>
                     {({ handleChange, handleSubmit, values }) => (
                         <KeyboardAvoidingView
                             style={styles.container}

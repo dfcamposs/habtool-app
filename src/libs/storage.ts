@@ -61,14 +61,15 @@ export async function getUserName(): Promise<string> {
     }
 }
 
-export async function saveHabit(habit: HabitProps): Promise<void> {
+export async function saveHabit(habit: HabitProps, order: number): Promise<void> {
     try {
         const data = await AsyncStorage.getItem('@habto:habits');
         const oldHabits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
         const newHabit = {
             [habit.id]: {
-                data: habit
+                data: habit,
+                order
             }
         };
 
@@ -110,7 +111,8 @@ export async function loadHabits(): Promise<HabitProps[]> {
             .keys(habits)
             .map((habit) => {
                 return {
-                    ...habits[habit].data
+                    ...habits[habit].data,
+                    order: habits[habit].order
                 }
             });
     } catch (error) {

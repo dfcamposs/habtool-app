@@ -50,7 +50,11 @@ const AuthRoutes = () => {
             <AppTab.Screen
                 name="adicionar"
                 component={HabitManager}
+                listeners={({ navigation }) => ({
+                    blur: () => navigation.setParams({ screen: undefined }),
+                })}
                 options={{
+                    unmountOnBlur: true,
                     tabBarIcon: (({ size, color }) => (
                         <MaterialIcons
                             name="add-circle"

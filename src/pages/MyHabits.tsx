@@ -1,34 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Image, FlatList, Platform } from 'react-native';
+import React, { useContext } from 'react';
+import { View, Text, StyleSheet, SafeAreaView, Platform, FlatList } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
-
-import { getUserName, HabitProps, loadHabits } from '../libs/storage';
+import { HabitsContext } from '../context/habits';
+import { HabitProps } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 export function MyHabits() {
-    const [userName, setUserName] = useState<string>();
-    const [myHabits, setMyHabits] = useState<HabitProps[]>([]);
-
-    useEffect(() => {
-        async function getUser() {
-            const user = await getUserName();
-            setUserName(user);
-        }
-
-        async function getMyHabits() {
-            const habitsStoraged = await loadHabits();
-            setMyHabits(habitsStoraged);
-        }
-
-        getUser();
-        getMyHabits();
-
-    }, [])
+    const { myHabits, userName } = useContext(HabitsContext);
 
     return (
         <SafeAreaView style={styles.container}>
@@ -39,15 +22,16 @@ export function MyHabits() {
                 <Stars />
             </View>
             <View style={styles.content}>
-                <FlatList
-                    data={myHabits}
-                    keyExtractor={(item) => String(item.id)}
-                    renderItem={({ item }) => (
-                        <Habit data={item} />
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    style={styles.habitsList}
-                />
+                <View style={styles.habitsList}>
+                    <FlatList
+                        data={myHabits}
+                        keyExtractor={(item) => String(item.id)}
+                        renderItem={({ item }) => (
+                            <Habit data={item} />
+                        )}
+                        showsVerticalScrollIndicator={false}
+                    />
+                </View>
             </View>
         </SafeAreaView>
     )
@@ -76,6 +60,7 @@ const styles = StyleSheet.create({
         paddingBottom: 20
     },
     habitsList: {
+        flex: 1,
         paddingTop: 20
     },
     title: {

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, View, FlatList } from 'react-native';
+import { StyleSheet, Text, FlatList, TouchableOpacity, TouchableOpacityProps, View } from 'react-native';
 import { format, isAfter } from 'date-fns';
 
 import { Tracker } from './Tracker';
@@ -9,7 +9,7 @@ import { FrequencyProps, getHabitWeekHistory } from '../libs/storage';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-interface HabitProps {
+interface HabitProps extends TouchableOpacityProps {
     data: {
         id: string;
         name: string,
@@ -23,7 +23,7 @@ interface TrackerListProps {
     checked: boolean;
 }
 
-export function Habit({ data: habit }: HabitProps) {
+export function Habit({ data: habit, ...rest }: HabitProps) {
     const [trackerListProps, setTrackerListProps] = useState<TrackerListProps[]>();
     const [habitIsActive, setHabitIsActive] = useState(true);
 
@@ -75,27 +75,28 @@ export function Habit({ data: habit }: HabitProps) {
     }
 
     return (
-        <View style={styles.container}>
-            <Text style={[styles.text, habitIsActive && { color: colors.textDark }]}>
-                {habit.name}
-            </Text>
+        <TouchableOpacity activeOpacity={0.8} {...rest}>
+            <View style={styles.container}>
+                <Text style={[styles.text, habitIsActive && { color: colors.textDark }]}>
+                    {habit.name}
+                </Text>
 
 
-            <FlatList
-                data={trackerListProps}
-                keyExtractor={(item) => String(item.position)}
-                renderItem={({ item }) => (
-                    <Tracker
-                        data={{ habitId: habit.id, position: item.position }}
-                        enabled={verifyEnabledTracker(item.position)}
-                        checked={item.checked}
-                    />
-                )}
-                showsHorizontalScrollIndicator={false}
-                style={styles.tracker}
-            />
-
-        </View >
+                <FlatList
+                    data={trackerListProps}
+                    keyExtractor={(item) => String(item.position)}
+                    renderItem={({ item }) => (
+                        <Tracker
+                            data={{ habitId: habit.id, position: item.position }}
+                            enabled={verifyEnabledTracker(item.position)}
+                            checked={item.checked}
+                        />
+                    )}
+                    showsHorizontalScrollIndicator={false}
+                    style={styles.tracker}
+                />
+            </View>
+        </TouchableOpacity>
     )
 }
 
