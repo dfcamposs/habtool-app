@@ -11,8 +11,11 @@ import { StatusBar } from 'expo-status-bar';
 
 import Routes from './src/routes';
 import { HabitsProvider } from './src/context/habits';
+import { LogBox } from 'react-native';
 
 export default function App() {
+  LogBox.ignoreAllLogs();
+
   const [fontsLoaded] = useFonts({
     Nunito_400Regular,
     Nunito_600SemiBold,

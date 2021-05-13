@@ -12,8 +12,7 @@ export interface HabitProps {
     frequency: FrequencyProps;
     startDate: number;
     endDate?: number;
-    notificationHour?: number,
-    order?: number;
+    notificationHour?: number;
 }
 
 export interface StorageHabitProps {
@@ -29,6 +28,10 @@ export interface StorageHistoryHabitProps {
 
 export interface StorageUserProps {
     [name: string]: string;
+}
+
+export interface StorageHabitSortProps {
+    [id: string]: number;
 }
 
 export async function saveUserName(name: string): Promise<void> {
@@ -83,6 +86,8 @@ export async function saveHabit(habit: HabitProps): Promise<void> {
             );
 
         await createHabitHistory(habit.id);
+        await createHabitSort(habit.id);
+
     } catch (error) {
         throw new Error(error);
     }
@@ -115,6 +120,7 @@ export async function loadHabits(): Promise<HabitProps[]> {
                     ...habits[habit].data
                 }
             });
+
     } catch (error) {
         throw new Error(error);
     }
@@ -195,6 +201,10 @@ export async function getProgressStars(): Promise<number> {
         const dataHabits = await AsyncStorage.getItem('@habto:habits');
         const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
 
+        if (!Object.values(habits).length) {
+            return 0;
+        }
+
         const dataHistory = await AsyncStorage.getItem('@habto:habitsHistory');
         const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
 
@@ -215,7 +225,6 @@ export async function getProgressStars(): Promise<number> {
 
         return (countHabitsCheckedToday * 100) / countHabitsToday;
 
-        return 0;
     } catch (error) {
         throw new Error();
     }
@@ -250,6 +259,40 @@ export async function deleteHabitHistory(habitId: string): Promise<void> {
         await AsyncStorage
             .setItem('@habto:habitsHistory',
                 JSON.stringify(habitsHistory)
+            );
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function createHabitSort(habitId: string): Promise<void> {
+    try {
+        const data = await AsyncStorage.getItem('@habto:habitsSorted');
+        const habitsSorted = data ? (JSON.parse(data) as StorageHabitSortProps) : {};
+
+        const newSort = {
+            [habitId]: habitsSorted ? Object.values(habitsSorted).length + 1 : 1
+        };
+
+        await AsyncStorage
+            .setItem('@habto:habitsSorted',
+                JSON.stringify({
+                    ...newSort,
+                    ...habitsSorted
+                })
+            );
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function updateHabitsSorted(order: StorageHabitSortProps): Promise<void> {
+    try {
+        await AsyncStorage
+            .setItem('@habto:habitsSorted',
+                JSON.stringify(order)
             );
 
     } catch (error) {

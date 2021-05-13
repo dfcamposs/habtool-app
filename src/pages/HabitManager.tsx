@@ -150,7 +150,7 @@ export function HabitManager() {
                 startDate: selectedStartDateTime.getTime(),
                 endDate: selectedEndDateTime?.getTime(),
                 notificationHour: scheduleEnabled ? selectedScheduleDateTime.getTime() : undefined,
-                order: habit?.order ?? myHabits.length + 1
+
             }
 
             await saveHabit(newHabit);
