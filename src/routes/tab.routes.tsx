@@ -50,6 +50,7 @@ const AuthRoutes = () => {
             <AppTab.Screen
                 name="adicionar"
                 component={HabitManager}
+                initialParams={{}}
                 listeners={({ navigation }) => ({
                     blur: () => navigation.setParams({ screen: undefined }),
                 })}

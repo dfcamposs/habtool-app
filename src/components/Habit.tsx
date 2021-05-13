@@ -1,12 +1,14 @@
-import React, { useEffect, useState } from 'react';
-import { StyleSheet, Text, FlatList, View, Animated } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { StyleSheet, Text, FlatList, View, Animated, Alert } from 'react-native';
 import { RectButton, Swipeable } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
 import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/core';
 
 import { Tracker } from './Tracker';
 
-import { FrequencyProps, getHabitWeekHistory } from '../libs/storage';
+import { deleteHabit, FrequencyProps, getHabitWeekHistory } from '../libs/storage';
+import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -28,6 +30,9 @@ interface TrackerListProps {
 export function Habit({ data: habit }: HabitProps) {
     const [trackerListProps, setTrackerListProps] = useState<TrackerListProps[]>();
     const [habitIsActive, setHabitIsActive] = useState(true);
+
+    const { handleUpdateMyHabits, myHabits } = useContext(HabitsContext);
+    const navigation = useNavigation();
 
     useEffect(() => {
         async function getWeekHistory() {
@@ -64,7 +69,34 @@ export function Habit({ data: habit }: HabitProps) {
 
         getWeekHistory();
         verifyEndDate();
-    }, [])
+    }, []);
+
+    function handleRemoveHabit() {
+        Alert.alert('Remover', `Deseja remover a ${habit.name}?`, [
+            {
+                text: 'Não 🙏🏼',
+                style: 'cancel'
+            },
+            {
+                text: 'Sim 😢',
+                onPress: async () => {
+                    try {
+                        await deleteHabit(habit.id);
+
+                        const habitsUpdated = myHabits.filter(item => item.id !== habit.id);
+                        handleUpdateMyHabits(habitsUpdated);
+
+                    } catch (error) {
+                        Alert.alert('Não foi possível remover! 😢');
+                    }
+                }
+            }
+        ])
+    }
+
+    function handleUpdateHabit() {
+        navigation.navigate('EditHabit', { habit })
+    }
 
     function verifyEnabledTracker(position: number): boolean {
         if (!habitIsActive) {
@@ -84,13 +116,13 @@ export function Habit({ data: habit }: HabitProps) {
                     <View style={{ flexDirection: 'row' }}>
                         <RectButton
                             style={styles.editButton}
-                            onPress={() => { }}
+                            onPress={handleUpdateHabit}
                         >
                             <MaterialIcons name="edit" size={20} color={colors.white} />
                         </RectButton>
                         <RectButton
                             style={styles.removeButton}
-                            onPress={() => { }}
+                            onPress={handleRemoveHabit}
                         >
                             <MaterialIcons name="delete" size={20} color={colors.white} />
                         </RectButton>
@@ -137,7 +169,6 @@ const styles = StyleSheet.create({
         width: 60,
         height: 100,
         backgroundColor: colors.blue,
-        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
@@ -147,7 +178,6 @@ const styles = StyleSheet.create({
         width: 60,
         height: 100,
         backgroundColor: colors.red,
-        borderRadius: 10,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',

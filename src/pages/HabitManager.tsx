@@ -17,9 +17,8 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { format, isBefore } from 'date-fns';
 import pt from 'date-fns/locale/pt';
-import { Formik } from 'formik';
 import { v4 as uuid } from 'uuid';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -32,18 +31,14 @@ import { HabitsContext } from '../context/habits';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-interface FormValues {
-    name?: string;
-    motivation?: string;
-}
-
-const initialFormValues: FormValues = {
-    name: '',
-    motivation: ''
+interface Params {
+    habit?: HabitProps
 }
 
 export function HabitManager() {
     const { myHabits, handleUpdateMyHabits } = useContext(HabitsContext);
+    const [habitName, setHabitName] = useState<string>();
+    const [habitMotivation, setHabitMotivation] = useState<string>();
     const [scheduleEnabled, setScheduleEnabled] = useState(false);
     const [selectedScheduleDateTime, setSelectedScheduleDateTime] = useState(new Date());
     const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
@@ -61,6 +56,27 @@ export function HabitManager() {
     const [saturdayEnabled, setSaturdayEnabled] = useState(false);
 
     const navigation = useNavigation();
+    const route = useRoute();
+    const { habit } = route.params as Params;
+
+    useEffect(() => {
+        if (habit) {
+            setHabitName(habit.name);
+            setHabitMotivation(habit.motivation);
+            setSundayEnabled(habit.frequency["sun"]);
+            setMondayEnabled(habit.frequency["mon"]);
+            setTuesdayEnabled(habit.frequency["tue"]);
+            setWednesdayEnabled(habit.frequency["wed"]);
+            setThursdayEnabled(habit.frequency["thu"]);
+            setFridayEnabled(habit.frequency["fri"]);
+            setSaturdayEnabled(habit.frequency["sat"]);
+            setSelectedStartDateTime(new Date(habit.startDate));
+            setSelectedEndDateTime(habit.endDate ? new Date(habit.endDate) : undefined);
+            setSelectedScheduleDateTime(!!habit.notificationHour ? new Date(habit.notificationHour) : new Date());
+            setScheduleEnabled(!!habit.notificationHour);
+            setShowDatePicker(true);
+        }
+    }, [habit]);
 
     function changeScheduleSwitch(): void {
         setScheduleEnabled((oldValue) => !oldValue);
@@ -69,11 +85,6 @@ export function HabitManager() {
     function handleChangeTimeSchedule(event: Event, dateTime: Date | undefined): void {
         if (Platform.OS === 'android') {
             setShowDatePicker(oldState => !oldState);
-        }
-
-        if (dateTime && isBefore(dateTime, new Date())) {
-            setSelectedScheduleDateTime(new Date());
-            return Alert.alert('Escolha uma hora no futuro! ⏱');
         }
 
         if (dateTime) {
@@ -110,23 +121,23 @@ export function HabitManager() {
         setShowDatePicker(oldState => !oldState);
     }
 
-    async function handleSave(valuesForm: FormValues): Promise<void> {
+    async function handleSaveHabit(): Promise<void> {
         try {
 
-            if (!valuesForm.name) {
+            if (!habitName) {
                 return Alert.alert('Não é possível criar um hábito sem nome!');
             }
 
-            const verifyHabitExists = await getHabitByName(valuesForm.name);
+            const verifyHabitExists = await getHabitByName(habitName);
 
-            if (verifyHabitExists) {
+            if (verifyHabitExists && (habit && verifyHabitExists.id !== habit.id)) {
                 return Alert.alert('Hábito com este nome já cadastrado!');
             }
 
-            const habit: HabitProps = {
-                id: uuid(),
-                name: valuesForm.name,
-                motivation: valuesForm.motivation,
+            const newHabit: HabitProps = {
+                id: habit?.id ?? uuid(),
+                name: habitName,
+                motivation: habitMotivation,
                 frequency: {
                     sun: sundayEnabled,
                     mon: mondayEnabled,
@@ -138,37 +149,22 @@ export function HabitManager() {
                 },
                 startDate: selectedStartDateTime.getTime(),
                 endDate: selectedEndDateTime?.getTime(),
-                notificationHour: selectedScheduleDateTime.getTime()
+                notificationHour: scheduleEnabled ? selectedScheduleDateTime.getTime() : undefined,
+                order: habit?.order ?? myHabits.length + 1
             }
 
-            const orderHabit = myHabits.length + 1;
-            await saveHabit(habit, orderHabit);
+            await saveHabit(newHabit);
 
-            const habitsUpdated = [{ ...habit, order: orderHabit }, ...myHabits];
+            let habitsUpdated = habit
+                ? [{ ...newHabit }, ...myHabits.filter(item => item.id !== habit.id)]
+                : [{ ...newHabit }, ...myHabits]
+
             handleUpdateMyHabits(habitsUpdated);
-
             navigation.navigate('Confirmation');
 
         } catch {
             Alert.alert('Não foi possível salvar!');
         }
-    }
-
-    function handleResetComponents() {
-        setSundayEnabled(false);
-        setMondayEnabled(true);
-        setTuesdayEnabled(true);
-        setWednesdayEnabled(true);
-        setThursdayEnabled(true);
-        setFridayEnabled(true);
-        setSaturdayEnabled(false);
-        setScheduleEnabled(false);
-        setSelectedScheduleDateTime(new Date());
-        setShowDatePicker(Platform.OS === 'ios');
-        setShowStartDate(false);
-        setShowEndDate(false);
-        setSelectedStartDateTime(new Date());
-        setSelectedEndDateTime(undefined);
     }
 
     return (
@@ -177,122 +173,118 @@ export function HabitManager() {
             contentContainerStyle={styles.container}
         >
             <SafeAreaView style={styles.container}>
-                <Formik initialValues={initialFormValues} onSubmit={handleSave}>
-                    {({ handleChange, handleSubmit, values }) => (
-                        <KeyboardAvoidingView
-                            style={styles.container}
-                            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                        >
-                            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                                <View style={styles.header}>
-                                    <Text style={styles.title}>
-                                        criar um hábito
+                <KeyboardAvoidingView
+                    style={styles.container}
+                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+                >
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <View style={styles.header}>
+                            <Text style={styles.title}>
+                                criar um hábito
                                     </Text>
 
-                                    <Input
-                                        name="habitName"
-                                        icon="loop"
-                                        placeholder="digite o nome do hábito"
-                                        value={values.name}
-                                        onChangeText={handleChange('name')}
-                                    />
-                                </View>
-                            </TouchableWithoutFeedback>
-                            <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                                <View style={styles.form}>
-                                    <Text style={styles.subtitle}>frequencia</Text>
+                            <Input
+                                name="habitName"
+                                icon="loop"
+                                placeholder="digite o nome do hábito"
+                                defaultValue={habitName}
+                                onChangeText={(text: string) => setHabitName(text)}
+                            />
+                        </View>
+                    </TouchableWithoutFeedback>
+                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                        <View style={styles.form}>
+                            <Text style={styles.subtitle}>frequencia</Text>
 
-                                    <View style={styles.week}>
-                                        <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
-                                        <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
-                                        <WeekDayButton title="ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
-                                        <WeekDayButton title="qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
-                                        <WeekDayButton title="qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
-                                        <WeekDayButton title="sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
-                                        <WeekDayButton title="sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
-                                    </View>
+                            <View style={styles.week}>
+                                <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
+                            </View>
 
-                                    <Input
-                                        name="habitMotivation"
-                                        icon="flag"
-                                        placeholder="digite sua motivação"
-                                        value={values.motivation}
-                                        onChangeText={handleChange('motivation')}
-                                    />
+                            <Input
+                                name="habitMotivation"
+                                icon="flag"
+                                placeholder="digite sua motivação"
+                                defaultValue={habitMotivation}
+                                onChangeText={(text: string) => setHabitMotivation(text)}
+                            />
 
-                                    <DateButton
-                                        name="habitStartDate"
-                                        date={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
-                                        onPress={() => setShowStartDate((oldValue) => !oldValue)}
-                                    />
-                                    {showStartDate && (
-                                        <DateTimePicker
-                                            value={selectedStartDateTime}
-                                            mode="date"
-                                            display="spinner"
-                                            onChange={handleChangeStartDate}
-                                            style={styles.dateTimePickerIos}
-                                        />
-                                    )}
+                            <DateButton
+                                name="habitStartDate"
+                                date={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                onPress={() => setShowStartDate((oldValue) => !oldValue)}
+                            />
+                            {showStartDate && (
+                                <DateTimePicker
+                                    value={selectedStartDateTime}
+                                    mode="date"
+                                    display="spinner"
+                                    onChange={handleChangeStartDate}
+                                    style={styles.dateTimePickerIos}
+                                />
+                            )}
 
-                                    <DateButton
-                                        name="habitStartDate"
-                                        date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
-                                        onPress={() => setShowEndDate((oldValue) => !oldValue)}
-                                        clear={() => setSelectedEndDateTime(undefined)}
-                                    />
-                                    {showEndDate && (
-                                        <DateTimePicker
-                                            value={selectedEndDateTime ?? new Date()}
-                                            mode="date"
-                                            display="spinner"
-                                            onChange={handleChangeEndDate}
-                                            style={styles.dateTimePickerIos}
-                                        />
-                                    )}
+                            <DateButton
+                                name="habitStartDate"
+                                date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                onPress={() => setShowEndDate((oldValue) => !oldValue)}
+                                clear={() => setSelectedEndDateTime(undefined)}
+                            />
+                            {showEndDate && (
+                                <DateTimePicker
+                                    value={selectedEndDateTime ?? new Date()}
+                                    mode="date"
+                                    display="spinner"
+                                    onChange={handleChangeEndDate}
+                                    style={styles.dateTimePickerIos}
+                                />
+                            )}
 
-                                    <View style={styles.scheduleLabel}>
-                                        <Text style={styles.subtitle}> lembrete </Text>
-                                        <Switch
-                                            thumbColor={colors.white}
-                                            trackColor={{ true: colors.blue, false: colors.grayLight }}
-                                            ios_backgroundColor={colors.grayLight}
-                                            onValueChange={changeScheduleSwitch}
-                                            value={scheduleEnabled}
-                                        />
-                                    </View>
+                            <View style={styles.scheduleLabel}>
+                                <Text style={styles.subtitle}> lembrete </Text>
+                                <Switch
+                                    thumbColor={colors.white}
+                                    trackColor={{ true: colors.blue, false: colors.grayLight }}
+                                    ios_backgroundColor={colors.grayLight}
+                                    onValueChange={changeScheduleSwitch}
+                                    value={scheduleEnabled}
+                                />
+                            </View>
 
-                                    {scheduleEnabled && showDatePicker && (
-                                        <DateTimePicker
-                                            value={selectedScheduleDateTime}
-                                            mode="time"
-                                            display="spinner"
-                                            onChange={handleChangeTimeSchedule}
-                                            style={styles.dateTimePickerIos}
-                                        />
-                                    )}
+                            {scheduleEnabled && showDatePicker && (
+                                <DateTimePicker
+                                    value={selectedScheduleDateTime}
+                                    mode="time"
+                                    display="spinner"
+                                    onChange={handleChangeTimeSchedule}
+                                    style={styles.dateTimePickerIos}
+                                />
+                            )}
 
-                                    {
-                                        scheduleEnabled && Platform.OS === 'android' && (
-                                            <TouchableOpacity
-                                                style={styles.dateTimePickerButton}
-                                                onPress={handleOpenDatetimePickerScheduleForAndroid}
-                                            >
-                                                <Text style={styles.dateTimePickerText}>
-                                                    {`alterar ${format(selectedScheduleDateTime, 'HH:mm')}`}
-                                                </Text>
-                                            </TouchableOpacity>
-                                        )
-                                    }
+                            {
+                                scheduleEnabled && Platform.OS === 'android' && (
+                                    <TouchableOpacity
+                                        style={styles.dateTimePickerButton}
+                                        onPress={handleOpenDatetimePickerScheduleForAndroid}
+                                    >
+                                        <Text style={styles.dateTimePickerText}>
+                                            {`alterar ${format(selectedScheduleDateTime, 'HH:mm')}`}
+                                        </Text>
+                                    </TouchableOpacity>
+                                )
+                            }
 
-                                    <View style={styles.footer}>
-                                        <Button title="cadastrar" onPress={handleSubmit} />
-                                    </View>
-                                </View>
-                            </TouchableWithoutFeedback>
-                        </KeyboardAvoidingView>
-                    )}
-                </Formik>
+                            <View style={styles.footer}>
+                                <Button title="salvar" onPress={handleSaveHabit} />
+                            </View>
+                        </View>
+                    </TouchableWithoutFeedback>
+                </KeyboardAvoidingView>
             </SafeAreaView>
         </ScrollView>
     )

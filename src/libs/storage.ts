@@ -12,14 +12,14 @@ export interface HabitProps {
     frequency: FrequencyProps;
     startDate: number;
     endDate?: number;
-    notificationHour?: number
+    notificationHour?: number,
+    order?: number;
 }
 
 export interface StorageHabitProps {
     [id: string]: {
         data: HabitProps
         notificationId?: string;
-        order?: number;
     }
 }
 
@@ -61,15 +61,16 @@ export async function getUserName(): Promise<string> {
     }
 }
 
-export async function saveHabit(habit: HabitProps, order: number): Promise<void> {
+export async function saveHabit(habit: HabitProps): Promise<void> {
     try {
         const data = await AsyncStorage.getItem('@habto:habits');
         const oldHabits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
+        delete oldHabits[habit.id];
+
         const newHabit = {
             [habit.id]: {
-                data: habit,
-                order
+                data: habit
             }
         };
 
@@ -111,8 +112,7 @@ export async function loadHabits(): Promise<HabitProps[]> {
             .keys(habits)
             .map((habit) => {
                 return {
-                    ...habits[habit].data,
-                    order: habits[habit].order
+                    ...habits[habit].data
                 }
             });
     } catch (error) {
@@ -214,5 +214,41 @@ export async function getProgressStars(): Promise<number> {
         return 0;
     } catch (error) {
         throw new Error();
+    }
+}
+
+export async function deleteHabit(habitId: string): Promise<void> {
+    try {
+        const data = await AsyncStorage.getItem('@habto:habits');
+        const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
+
+        delete habits[habitId];
+
+        await AsyncStorage
+            .setItem('@habto:habits',
+                JSON.stringify(habits)
+            );
+
+        await deleteHabitHistory(habitId);
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function deleteHabitHistory(habitId: string): Promise<void> {
+    try {
+        const data = await AsyncStorage.getItem('@habto:habitsHistory');
+        const habitsHistory = data ? (JSON.parse(data) as StorageHistoryHabitProps) : {};
+
+        delete habitsHistory[habitId];
+
+        await AsyncStorage
+            .setItem('@habto:habitsHistory',
+                JSON.stringify(habitsHistory)
+            );
+
+    } catch (error) {
+        throw new Error(error);
     }
 }
