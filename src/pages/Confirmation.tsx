@@ -3,7 +3,6 @@ import { SafeAreaView, Text, StyleSheet } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
-import { TabActions } from '@react-navigation/native';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -18,7 +17,7 @@ export function Confirmation() {
 
     return (
         <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>hábito cadastrado com sucesso!</Text>
+            <Text style={styles.title}>hábito salvo com sucesso!</Text>
             <RectButton style={styles.button} onPress={handleNavigateToMyHabits}>
                 <MaterialIcons name="done" size={40} color={colors.white} />
             </RectButton>

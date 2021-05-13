@@ -28,24 +28,12 @@ export function Welcome() {
 
     const navigation = useNavigation();
 
-    useEffect(() => {
-        async function findUserName() {
-            const userName = await getUserName();
-
-            if (userName)
-                navigation.navigate('MyHabits');
-
-        }
-
-        findUserName();
-    }, []);
-
     async function handleSubmit() {
         if (!name)
             return Alert.alert('Me diz como chamar você 😢');
 
         await saveUserName(name);
-        navigation.navigate('MyHabits');
+        navigation.navigate('AppRoutes');
     }
 
     function handleInputChange(value: string) {

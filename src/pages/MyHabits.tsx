@@ -1,16 +1,28 @@
-import React, { useContext } from 'react';
+import { useNavigation } from '@react-navigation/core';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Platform, FlatList } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
 import { HabitsContext } from '../context/habits';
+import { getUserName } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 export function MyHabits() {
-    const { myHabits, userName } = useContext(HabitsContext);
+    const [userName, setUserName] = useState<string>();
+    const { myHabits } = useContext(HabitsContext);
+
+    useEffect(() => {
+        async function verifyUserName() {
+            const user = await getUserName();
+            setUserName(user)
+        }
+
+        verifyUserName();
+    }, [])
 
     return (
         <SafeAreaView style={styles.container}>

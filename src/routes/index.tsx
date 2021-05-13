@@ -1,12 +1,21 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
 import StackRoutes from './stack.routes';
+import { HabitsContext } from '../context/habits';
 
-const Routes = () => (
-    <NavigationContainer>
-        <StackRoutes />
-    </NavigationContainer>
-)
+const Routes = () => {
+    const { userName } = useContext(HabitsContext);
+
+    return (
+        <NavigationContainer>
+            {userName
+                ? <StackRoutes.AppRoutes />
+                : <StackRoutes.InitialRoutes />
+            }
+        </NavigationContainer>
+    )
+}
+
 
 export default Routes;
