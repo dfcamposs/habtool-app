@@ -38,8 +38,9 @@ export const HabitsProvider: React.FC = ({ children }) => {
     }, [])
 
     function handleUpdateMyHabits(habits: HabitProps[]) {
-        setMyHabits([])
-        setMyHabits(habits)
+        setMyHabits([]);
+        setMyHabits(habits);
+        handleUpdatePercentageCheck();
     }
 
     function handleUpdatePercentageCheck() {

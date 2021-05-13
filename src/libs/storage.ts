@@ -203,6 +203,10 @@ export async function getProgressStars(): Promise<number> {
 
         const countHabitsToday = Object.values(habits).filter(item => item.data.frequency[weekDay] && !item.data.endDate).length;
 
+        if (countHabitsToday === 0) {
+            return 100;
+        }
+
         const countHabitsCheckedToday = Object
             .values(habitsHistory)
             .map(item => item.map(item2 => format(Number(item2), 'dd-MM-yyyy')))
