@@ -1,5 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format, isAfter } from 'date-fns';
+import * as Notifications from "expo-notifications";
 
 export interface FrequencyProps {
     [weekDay: string]: boolean
@@ -16,10 +17,7 @@ export interface HabitProps {
 }
 
 export interface StorageHabitProps {
-    [id: string]: {
-        data: HabitProps
-        notificationId?: string;
-    }
+    [id: string]: HabitProps
 }
 
 export interface StorageHistoryHabitProps {
@@ -32,6 +30,53 @@ export interface StorageUserProps {
 
 export interface StorageHabitSortProps {
     [id: string]: number;
+}
+
+export function formatWeekDay(weekDay: number): string | undefined {
+    if (weekDay === 0) return "sun";
+    if (weekDay === 1) return "mon";
+    if (weekDay === 2) return "tue";
+    if (weekDay === 3) return "wed";
+    if (weekDay === 4) return "thu";
+    if (weekDay === 5) return "fri";
+    if (weekDay === 6) return "sat";
+}
+
+export async function addSchedulePushNotification(habit: HabitProps): Promise<void> {
+    const schedule = habit.notificationHour;
+
+    if (!schedule) return;
+
+    for (let i = 0; i < 7; i++) {
+        const weekDay = formatWeekDay(i);
+        if (!weekDay) continue;
+
+        if (habit.frequency[weekDay]) {
+            const notification = await Notifications.scheduleNotificationAsync({
+                identifier: habit.id,
+                content: {
+                    title: habit.name,
+                    body: habit.motivation ?? 'Já executou este hábito hoje?',
+                    sound: true,
+                    priority: Notifications.AndroidNotificationPriority.HIGH,
+                    data: {
+                        habit
+                    }
+                },
+                trigger: {
+                    hour: Number(format(schedule, "HH")),
+                    minute: Number(format(schedule, "mm")),
+                    repeats: true,
+                    weekday: i
+                },
+            });
+            console.log("push notification: ", notification);
+        }
+    }
+}
+
+export async function cancelSchedulePushNotification(habitId: string) {
+    await Notifications.dismissNotificationAsync(habitId);
 }
 
 export async function saveUserName(name: string): Promise<void> {
@@ -70,11 +115,10 @@ export async function saveHabit(habit: HabitProps): Promise<void> {
         const oldHabits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
         delete oldHabits[habit.id];
+        cancelSchedulePushNotification(habit.id);
 
         const newHabit = {
-            [habit.id]: {
-                data: habit
-            }
+            [habit.id]: habit
         };
 
         await AsyncStorage
@@ -87,6 +131,7 @@ export async function saveHabit(habit: HabitProps): Promise<void> {
 
         await createHabitHistory(habit.id);
         await createHabitSort(habit.id);
+        await addSchedulePushNotification(habit);
 
     } catch (error) {
         throw new Error(error);
@@ -98,10 +143,10 @@ export async function getHabitByName(name: string): Promise<HabitProps | undefin
         const data = await AsyncStorage.getItem('@habto:habits');
         const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
-        const result = Object.values(habits).find((item) => item.data.name === name);
+        const result = Object.values(habits).find((item) => item.name === name);
 
         if (result) {
-            return result.data;
+            return result;
         }
     } catch (error) {
         throw new Error(error);
@@ -117,7 +162,7 @@ export async function loadHabits(): Promise<HabitProps[]> {
             .keys(habits)
             .map((habit) => {
                 return {
-                    ...habits[habit].data
+                    ...habits[habit]
                 }
             });
 
@@ -149,6 +194,8 @@ export async function createHabitHistory(habitId: string): Promise<void> {
     try {
         const data = await AsyncStorage.getItem('@habto:habitsHistory');
         const habitsHistory = data ? (JSON.parse(data) as StorageHistoryHabitProps) : {};
+
+        if (habitsHistory[habitId]) return;
 
         await AsyncStorage
             .setItem('@habto:habitsHistory',
@@ -211,7 +258,7 @@ export async function getProgressStars(): Promise<number> {
         const currentDate = new Date();
         const weekDay = format(currentDate.setDate(currentDate.getDate()), 'E').toLocaleLowerCase();
 
-        const countHabitsToday = Object.values(habits).filter(item => item.data.frequency[weekDay] && !item.data.endDate).length;
+        const countHabitsToday = Object.values(habits).filter(item => item.frequency[weekDay] && !item.endDate).length;
 
         if (countHabitsToday === 0) {
             return 100;

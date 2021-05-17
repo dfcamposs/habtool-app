@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
   useFonts,
   Nunito_400Regular,
@@ -8,13 +8,26 @@ import {
 } from '@expo-google-fonts/nunito';
 import AppLoading from 'expo-app-loading';
 import { StatusBar } from 'expo-status-bar';
+import * as Notifications from "expo-notifications";
+import { LogBox } from 'react-native';
 
 import Routes from './src/routes';
 import { HabitsProvider } from './src/context/habits';
-import { LogBox } from 'react-native';
+import { HabitProps } from './src/libs/storage';
 
 export default function App() {
   LogBox.ignoreAllLogs();
+
+  useEffect(() => {
+    const subscription = Notifications.addNotificationReceivedListener(
+      async notification => {
+        const data = notification.request.content.data.habit as HabitProps;
+        console.log(data);
+      }
+    );
+
+    return () => subscription.remove();
+  }, [])
 
   const [fontsLoaded] = useFonts({
     Nunito_400Regular,
