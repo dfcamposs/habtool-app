@@ -16,6 +16,11 @@ export interface HabitProps {
     notificationHour?: number;
 }
 
+export interface HabitHistoryProps {
+    habit: HabitProps,
+    history: number[]
+}
+
 export interface StorageHabitProps {
     [id: string]: HabitProps
 }
@@ -341,6 +346,50 @@ export async function updateHabitsSorted(order: StorageHabitSortProps): Promise<
             .setItem('@habto:habitsSorted',
                 JSON.stringify(order)
             );
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function loadHabitsHistory(): Promise<HabitHistoryProps[]> {
+    try {
+        const dataHabits = await AsyncStorage.getItem('@habto:habits');
+        const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
+
+        const dataHistory = await AsyncStorage.getItem('@habto:habitsHistory');
+        const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
+
+        return Object
+            .keys(habits)
+            .map((habit) => {
+                return {
+                    habit: { ...habits[habit] },
+                    history: [...habitsHistory[habit]]
+                }
+            });
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function loadHabitsHistoryCheckedByDay(day: number): Promise<HabitProps[]> {
+    try {
+        const dataHabits = await AsyncStorage.getItem('@habto:habits');
+        const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
+
+        const dataHistory = await AsyncStorage.getItem('@habto:habitsHistory');
+        const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
+
+        return Object
+            .keys(habits)
+            .filter(habit => habitsHistory[habit].includes(day))
+            .map((habit) => {
+                return {
+                    ...habits[habit]
+                }
+            });
 
     } catch (error) {
         throw new Error(error);

@@ -1,12 +1,16 @@
-import React from 'react';
-import { View, StyleSheet, SafeAreaView, Platform, Text, Alert } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import { View, StyleSheet, SafeAreaView, Platform, Text, Alert, FlatList } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
-import { Calendar } from 'react-native-calendars';
+import { Calendar, DateObject } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
+import { format } from 'date-fns';
+import { zonedTimeToUtc } from 'date-fns-tz';
+
+import { loadHabitsHistoryCheckedByDay } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
-import { FlatList } from 'react-native-gesture-handler';
+import { HabitsContext } from '../context/habits';
 
 LocaleConfig.locales['br'] = {
     monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
@@ -18,7 +22,38 @@ LocaleConfig.locales['br'] = {
 
 LocaleConfig.defaultLocale = 'br';
 
+interface HabitHistoryDayProps {
+    id: string;
+    name: string;
+    checked: boolean;
+}
+
 export function Progress() {
+    const { myHabits } = useContext(HabitsContext);
+    const [historyDay, setHistoryDay] = useState<HabitHistoryDayProps[]>();
+
+    useEffect(() => {
+
+    }, []);
+
+    async function handleHabitsHistoryDay(date: DateObject): Promise<HabitHistoryDayProps[]> {
+        const result: HabitHistoryDayProps[] = [];
+        const weekDay = format(zonedTimeToUtc(date.timestamp, 'America/Sao_Paulo'), 'EEE').toLowerCase();
+        // const history = await loadHabitsHistoryCheckedByDay(day);
+
+        // myHabits.forEach(habit => {
+        //     if (habit.frequency[weekDay]) {
+        //         result.push({
+        //             id: habit.id,
+        //             name: habit.name,
+        //             checked: !!history.find(item => item.id === habit.id)
+        //         })
+        //     }
+        // })
+        console.log(weekDay, zonedTimeToUtc(date.timestamp, 'America/Sao_Paulo'));
+        return result;
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -53,7 +88,7 @@ export function Progress() {
                         '2021-05-04': { disabled: true, startingDay: true, color: colors.blue, endingDay: true, textColor: colors.textLight }
                     }}
                     markingType={'period'}
-                    onDayPress={() => Alert.alert("Test")}
+                    onDayPress={(date) => handleHabitsHistoryDay(date)}
                     style={styles.calendar}
                     theme={{
                         calendarBackground: colors.background,

@@ -19,6 +19,7 @@
     "@types/react-native-calendars": "^1.505.3",
     "@types/uuid": "^8.3.0",
     "date-fns": "^2.21.2",
+    "date-fns-tz": "^1.1.4",
     "expo": "~41.0.1",
     "expo-app-loading": "^1.0.3",
     "expo-font": "~9.1.0",
