@@ -181,7 +181,7 @@ export function HabitManager() {
                         <View style={styles.header}>
                             <Text style={styles.title}>
                                 criar um hábito
-                                    </Text>
+                            </Text>
 
                             <Input
                                 name="habitName"

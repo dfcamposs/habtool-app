@@ -1,19 +1,18 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Platform, FlatList } from 'react-native';
-import DraggableFlatList, { DragEndParams } from 'react-native-draggable-flatlist';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
 import { HabitsContext } from '../context/habits';
-import { getUserName, HabitProps, StorageHabitSortProps, updateHabitsSorted } from '../libs/storage';
+import { getUserName } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 export function MyHabits() {
     const [userName, setUserName] = useState<string>();
-    const { myHabits, handleUpdateMyHabits } = useContext(HabitsContext);
+    const { myHabits } = useContext(HabitsContext);
 
     useEffect(() => {
         async function verifyUserName() {
@@ -23,17 +22,6 @@ export function MyHabits() {
 
         verifyUserName();
     }, [])
-
-    async function handleSortHabitsList({ data: habits }: DragEndParams<HabitProps>): Promise<void> {
-        let habitsSorted: StorageHabitSortProps = {};
-
-        habits.forEach((habit, index) => {
-            habitsSorted = { ...habitsSorted, [habit.id]: index + 1 }
-        });
-
-        handleUpdateMyHabits(habits);
-        await updateHabitsSorted(habitsSorted);
-    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -52,7 +40,6 @@ export function MyHabits() {
                     )}
                     showsVerticalScrollIndicator={false}
                     style={styles.habitsList}
-                // onDragEnd={(data: DragEndParams<HabitProps>) => handleSortHabitsList(data)}
                 />
             </View>
         </SafeAreaView>
@@ -94,7 +81,5 @@ const styles = StyleSheet.create({
         color: colors.textDark,
         fontFamily: fonts.complement,
         paddingVertical: 10
-    },
-    avatar: {
     }
 })
