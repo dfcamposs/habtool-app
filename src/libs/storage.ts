@@ -384,7 +384,8 @@ export async function loadHabitsHistoryCheckedByDay(day: number): Promise<HabitP
 
         return Object
             .keys(habits)
-            .filter(habit => habitsHistory[habit].includes(day))
+            .filter(habit =>
+                habitsHistory[habit].find(item => format(item, 'dd-MM-yyyy') === format(day, 'dd-MM-yyyy')))
             .map((habit) => {
                 return {
                     ...habits[habit]

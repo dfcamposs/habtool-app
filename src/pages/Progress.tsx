@@ -4,9 +4,8 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 import { Calendar, DateObject } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import { format } from 'date-fns';
-import { zonedTimeToUtc } from 'date-fns-tz';
 
-import { loadHabitsHistoryCheckedByDay } from '../libs/storage';
+import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -28,30 +27,87 @@ interface HabitHistoryDayProps {
     checked: boolean;
 }
 
+interface CalendarMarkedProps {
+    [date: string]: {
+        startingDay?: boolean;
+        endingDay?: boolean;
+        selected?: boolean;
+        color?: string;
+        textColor?: string;
+    }
+}
+
 export function Progress() {
     const { myHabits } = useContext(HabitsContext);
     const [historyDay, setHistoryDay] = useState<HabitHistoryDayProps[]>();
+    const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>({
+        [format(new Date(), 'yyyy-MM-dd')]: { selected: true, color: colors.blue, textColor: colors.textLight }
+    });
 
     useEffect(() => {
-
+        handleMarkedDate();
     }, []);
 
-    async function handleHabitsHistoryDay(date: DateObject): Promise<HabitHistoryDayProps[]> {
+    async function handleHabitsHistoryDay(date: DateObject): Promise<void> {
         const result: HabitHistoryDayProps[] = [];
-        const weekDay = format(zonedTimeToUtc(date.timestamp, 'America/Sao_Paulo'), 'EEE').toLowerCase();
-        // const history = await loadHabitsHistoryCheckedByDay(day);
+        const newDate = new Date(date.timestamp);
+        const dateFormatted = newDate.setDate(newDate.getDate() + 1);
+        const weekDay = format(dateFormatted, 'EEE').toLowerCase();
 
-        // myHabits.forEach(habit => {
-        //     if (habit.frequency[weekDay]) {
-        //         result.push({
-        //             id: habit.id,
-        //             name: habit.name,
-        //             checked: !!history.find(item => item.id === habit.id)
-        //         })
-        //     }
-        // })
-        console.log(weekDay, zonedTimeToUtc(date.timestamp, 'America/Sao_Paulo'));
-        return result;
+        const history = await loadHabitsHistoryCheckedByDay(dateFormatted);
+
+        myHabits.forEach(habit => {
+            if (habit.frequency[weekDay]) {
+                result.push({
+                    id: habit.id,
+                    name: habit.name,
+                    checked: !!history.find(item => item.id === habit.id)
+                })
+            }
+        });
+
+        setHistoryDay(result);
+    }
+
+    async function handleMarkedDate(): Promise<void> {
+        const history = await loadHabitsHistory();
+        const daysChecked: number[] = [];
+        let result: any = {}
+
+        history.forEach(item => {
+            daysChecked.push(...item.history);
+        });
+
+        daysChecked.sort().forEach((day, index) => {
+            const newDateLastDay = new Date(day);
+            const newDateLastDayFormatted = format(newDateLastDay.setDate(newDateLastDay.getDate() - 1), 'yyyy-MM-dd');
+
+            const newDateNextDay = new Date(day);
+            const newDateNextDayFormatted = format(newDateLastDay.setDate(newDateNextDay.getDate() + 1), 'yyyy-MM-dd');
+
+            const lastDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === newDateLastDayFormatted);
+            const nextDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === newDateNextDayFormatted);
+
+            let startingDate = false;
+            let endingDate = false;
+
+            if (index === 0 || !lastDay)
+                startingDate = true;
+            if (index === daysChecked.length - 1 || !nextDay)
+                endingDate = true;
+
+            result = {
+                ...result,
+                [format(day, 'yyyy-MM-dd')]: {
+                    startingDay: startingDate,
+                    endingDay: endingDate,
+                    color: colors.blue,
+                    textColor: colors.textLight
+                }
+            }
+        });
+
+        setCalendarMarked(result);
     }
 
     return (
@@ -78,15 +134,7 @@ export function Progress() {
             </View>
             <View style={styles.content}>
                 <Calendar
-                    markedDates={{
-                        '2021-05-12': { startingDay: true, color: colors.blue, textColor: colors.textLight },
-                        '2021-05-13': { selected: true, color: colors.blue, textColor: colors.textLight },
-                        '2021-05-14': { selected: true, color: colors.blue, textColor: colors.textLight },
-                        '2021-05-15': { selected: true, color: colors.blue, textColor: colors.textLight },
-                        '2021-05-16': { selected: true, color: colors.blue, textColor: colors.textLight },
-                        '2021-05-17': { selected: true, endingDay: true, color: colors.blue, textColor: colors.textLight },
-                        '2021-05-04': { disabled: true, startingDay: true, color: colors.blue, endingDay: true, textColor: colors.textLight }
-                    }}
+                    markedDates={calendarMarked}
                     markingType={'period'}
                     onDayPress={(date) => handleHabitsHistoryDay(date)}
                     style={styles.calendar}
@@ -109,33 +157,25 @@ export function Progress() {
                     }}
                 />
 
-                <Text style={styles.subtitle}>Histórico</Text>
-                <FlatList
-                    data={[{ id: 1 }]}
-                    keyExtractor={(item) => String(item.id)}
-                    renderItem={({ item }) => (
-                        <>
-                            <View style={styles.historyLine}>
-                                <View style={[styles.circle, { backgroundColor: colors.green }]} />
-                                <Text style={styles.historyLineText}>ler um livro</Text>
-                            </View>
-                            <View style={styles.historyLine}>
-                                <View style={[styles.circle, { backgroundColor: colors.white }]} />
-                                <Text style={styles.historyLineText}>fazer exercício fisico</Text>
-                            </View>
-                            <View style={styles.historyLine}>
-                                <View style={[styles.circle, { backgroundColor: colors.white }]} />
-                                <Text style={styles.historyLineText}>meditar</Text>
-                            </View>
-                            <View style={styles.historyLine}>
-                                <View style={[styles.circle, { backgroundColor: colors.green }]} />
-                                <Text style={styles.historyLineText}>cozinhar</Text>
-                            </View>
-                        </>
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    style={styles.history}
-                />
+                {historyDay?.length ?
+                    <>
+                        <Text style={styles.subtitle}>Histórico</Text>
+                        <FlatList
+                            data={historyDay}
+                            keyExtractor={(item) => String(item.id)}
+                            renderItem={({ item: habit }) => (
+                                <View style={styles.historyLine}>
+                                    <View style={[styles.circle, { backgroundColor: habit.checked ? colors.green : colors.white }]} />
+                                    <Text style={styles.historyLineText}>{habit.name}</Text>
+                                </View>
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            style={styles.history}
+                        />
+                    </>
+                    : <></>
+                }
+
             </View>
         </SafeAreaView>
     )
@@ -214,15 +254,15 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     circle: {
-        height: 30,
-        width: 30,
-        borderRadius: 15,
+        height: 20,
+        width: 20,
+        borderRadius: 10,
         backgroundColor: colors.grayDark,
         marginHorizontal: 10
     },
     historyLineText: {
         flex: 1,
-        fontSize: 18,
+        fontSize: 16,
         fontFamily: fonts.content,
         color: colors.textDark
     }
