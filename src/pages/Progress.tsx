@@ -12,11 +12,11 @@ import fonts from '../styles/fonts';
 import { HabitsContext } from '../context/habits';
 
 LocaleConfig.locales['br'] = {
-    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho', 'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dec'],
-    dayNames: ['Domingo', 'Segunda-Feira', 'Terça-Feira', 'Quarta-Feira', 'Quinta-Feira', 'Sexta-Feira', 'Sábado'],
-    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-    today: 'Hoje'
+    monthNames: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
+    monthNamesShort: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dec'],
+    dayNames: ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'],
+    dayNamesShort: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'],
+    today: 'hoje'
 };
 
 LocaleConfig.defaultLocale = 'br';
@@ -143,7 +143,7 @@ export function Progress() {
                     </View>
                     <View style={styles.card}>
                         <Text style={styles.score}>{currentSequenceCount}</Text>
-                        <Text style={styles.legend}>sequencia atual</Text>
+                        <Text style={styles.legend}>sequencia atual (dias)</Text>
                     </View>
                 </View>
             </View>
@@ -175,7 +175,7 @@ export function Progress() {
                 {historyDay?.length ?
                     <>
                         <View style={styles.historyHeader}>
-                            <Text style={styles.subtitle}>Histórico</Text>
+                            <Text style={styles.subtitle}>histórico</Text>
                             <Text style={styles.selectedDate}>{daySelected && format(daySelected, 'dd-MM-yyyy')}</Text>
                         </View>
                         <FlatList
@@ -191,7 +191,7 @@ export function Progress() {
                             style={styles.history}
                         />
                     </>
-                    : <></>
+                    : <Text style={styles.emptyText}>nenhum hábito nesta data.</Text>
                 }
             </View>
         </SafeAreaView>
@@ -242,7 +242,7 @@ const styles = StyleSheet.create({
         fontFamily: fonts.content
     },
     legend: {
-        fontSize: 11,
+        fontSize: 12,
         color: colors.textDark,
         fontFamily: fonts.legend
     },
@@ -292,5 +292,11 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: fonts.content,
         color: colors.textDark
+    },
+    emptyText: {
+        paddingLeft: 40,
+        fontSize: 16,
+        fontFamily: fonts.content,
+        color: colors.textUnfocus
     }
 })

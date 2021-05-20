@@ -142,7 +142,7 @@ export function Habit({ data: habit }: HabitProps) {
                         <Tracker
                             data={{ habitId: habit.id, position: item.position }}
                             enabled={verifyEnabledTracker(item.position)}
-                            checked={item.checked}
+                            checked={verifyEnabledTracker(item.position) && item.checked}
                         />
                     )}
                     showsHorizontalScrollIndicator={false}
