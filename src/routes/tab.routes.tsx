@@ -69,7 +69,11 @@ const AuthRoutes = () => {
             <AppTab.Screen
                 name="progresso"
                 component={Progress}
+                listeners={({ navigation }) => ({
+                    blur: () => navigation.setParams({ screen: undefined }),
+                })}
                 options={{
+                    unmountOnBlur: true,
                     tabBarIcon: (({ size, color }) => (
                         <MaterialIcons
                             name="poll"

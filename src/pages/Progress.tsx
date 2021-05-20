@@ -38,15 +38,24 @@ interface CalendarMarkedProps {
 }
 
 export function Progress() {
+    const initialCalendarMarked = {
+        [format(new Date(), 'yyyy-MM-dd')]: {
+            selected: true,
+            color: colors.blue,
+            textColor: colors.textLight
+        }
+    }
     const { myHabits } = useContext(HabitsContext);
     const [historyDay, setHistoryDay] = useState<HabitHistoryDayProps[]>();
-    const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>({
-        [format(new Date(), 'yyyy-MM-dd')]: { selected: true, color: colors.blue, textColor: colors.textLight }
-    });
+    const [daySelected, setDaySelected] = useState<number>();
+    const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>(initialCalendarMarked);
+    const [activeHabitsCount, setActiveHabitsCount] = useState<number>(0);
+    const [currentSequenceCount, setCurrentSequenceCount] = useState<number>(0);
 
     useEffect(() => {
         handleMarkedDate();
-    }, []);
+        setActiveHabitsCount(myHabits.filter(item => !item.endDate).length)
+    }, [myHabits]);
 
     async function handleHabitsHistoryDay(date: DateObject): Promise<void> {
         const result: HabitHistoryDayProps[] = [];
@@ -67,18 +76,23 @@ export function Progress() {
         });
 
         setHistoryDay(result);
+        setDaySelected(dateFormatted);
     }
 
     async function handleMarkedDate(): Promise<void> {
         const history = await loadHabitsHistory();
         const daysChecked: number[] = [];
-        let result: any = {}
+        let result: any = {};
+        let currentSequence = 0
 
         history.forEach(item => {
             daysChecked.push(...item.history);
         });
 
         daysChecked.sort().forEach((day, index) => {
+            if (result[format(day, 'yyyy-MM-dd')]) {
+                return;
+            }
             const newDateLastDay = new Date(day);
             const newDateLastDayFormatted = format(newDateLastDay.setDate(newDateLastDay.getDate() - 1), 'yyyy-MM-dd');
 
@@ -91,11 +105,15 @@ export function Progress() {
             let startingDate = false;
             let endingDate = false;
 
-            if (index === 0 || !lastDay)
+            if (index === 0 || !lastDay) {
                 startingDate = true;
-            if (index === daysChecked.length - 1 || !nextDay)
+                currentSequence = 0;
+            }
+            if (index === daysChecked.length - 1 || !nextDay) {
                 endingDate = true;
+            }
 
+            currentSequence++;
             result = {
                 ...result,
                 [format(day, 'yyyy-MM-dd')]: {
@@ -108,6 +126,7 @@ export function Progress() {
         });
 
         setCalendarMarked(result);
+        setCurrentSequenceCount(currentSequence);
     }
 
     return (
@@ -119,16 +138,12 @@ export function Progress() {
 
                 <View style={styles.cards}>
                     <View style={styles.card}>
-                        <Text style={styles.score}>10</Text>
+                        <Text style={styles.score}>{activeHabitsCount}</Text>
                         <Text style={styles.legend}>hábitos ativos</Text>
                     </View>
                     <View style={styles.card}>
-                        <Text style={styles.score}>4.5</Text>
-                        <Text style={styles.legend}>pontuação geral</Text>
-                    </View>
-                    <View style={styles.card}>
-                        <Text style={styles.score}>20</Text>
-                        <Text style={styles.legend}>dias sem falhas</Text>
+                        <Text style={styles.score}>{currentSequenceCount}</Text>
+                        <Text style={styles.legend}>sequencia atual</Text>
                     </View>
                 </View>
             </View>
@@ -159,7 +174,10 @@ export function Progress() {
 
                 {historyDay?.length ?
                     <>
-                        <Text style={styles.subtitle}>Histórico</Text>
+                        <View style={styles.historyHeader}>
+                            <Text style={styles.subtitle}>Histórico</Text>
+                            <Text style={styles.selectedDate}>{daySelected && format(daySelected, 'dd-MM-yyyy')}</Text>
+                        </View>
                         <FlatList
                             data={historyDay}
                             keyExtractor={(item) => String(item.id)}
@@ -175,7 +193,6 @@ export function Progress() {
                     </>
                     : <></>
                 }
-
             </View>
         </SafeAreaView>
     )
@@ -210,7 +227,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-around'
     },
     card: {
-        width: 100,
+        width: 160,
         height: 70,
         backgroundColor: colors.white,
         borderRadius: 10,
@@ -235,16 +252,26 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
     },
     subtitle: {
-        marginHorizontal: 30,
-        paddingBottom: 10,
         fontSize: 20,
         fontFamily: fonts.content,
         color: colors.textDark
     },
+    selectedDate: {
+        fontSize: 14,
+        fontFamily: fonts.content,
+        color: colors.textUnfocus,
+        paddingLeft: 10
+    },
+    historyHeader: {
+        flexDirection: 'row',
+        alignItems: 'baseline',
+        marginHorizontal: 35,
+        paddingBottom: 10,
+    },
     history: {
         flex: 1,
         backgroundColor: colors.grayLight,
-        marginHorizontal: 20,
+        marginHorizontal: 30,
         borderRadius: 10,
         padding: 10,
     },
