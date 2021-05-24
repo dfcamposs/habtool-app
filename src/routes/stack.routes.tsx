@@ -4,6 +4,7 @@ import { createStackNavigator } from '@react-navigation/stack';
 import { Welcome } from '../pages/Welcome';
 import { HabitManager } from '../pages/HabitManager';
 import { Confirmation } from '../pages/Confirmation';
+import { Settings } from '../pages/Settings';
 import AuthRoutes from './tab.routes';
 
 import colors from '../styles/colors';
@@ -40,7 +41,6 @@ const AppRoutes: React.FC = () => {
             headerMode="none"
             initialRouteName="MyHabits"
             screenOptions={{
-                gestureEnabled: false,
                 cardStyle: {
                     backgroundColor: colors.background,
                 }
@@ -59,6 +59,11 @@ const AppRoutes: React.FC = () => {
             <stackRoutes.Screen
                 name="Confirmation"
                 component={Confirmation}
+            />
+
+            <stackRoutes.Screen
+                name="Settings"
+                component={Settings}
             />
 
         </stackRoutes.Navigator>

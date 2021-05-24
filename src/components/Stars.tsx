@@ -19,11 +19,11 @@ export function Stars() {
 
     return (
         <View style={styles.container}>
-            <MaterialIcons style={styles.star} name="star" size={30} color={handleCheckStar(10)} />
-            <MaterialIcons style={styles.star} name="star" size={30} color={handleCheckStar(30)} />
-            <MaterialIcons style={styles.star} name="star" size={30} color={handleCheckStar(50)} />
-            <MaterialIcons style={styles.star} name="star" size={30} color={handleCheckStar(80)} />
-            <MaterialIcons style={styles.star} name="star" size={30} color={handleCheckStar(100)} />
+            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(10)} />
+            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(30)} />
+            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(50)} />
+            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(80)} />
+            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(100)} />
         </View>
     )
 }

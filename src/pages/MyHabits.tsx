@@ -1,6 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, Text, StyleSheet, SafeAreaView, Platform, FlatList } from 'react-native';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper'
+import { View, Text, StyleSheet, SafeAreaView, Platform, FlatList, TouchableOpacity } from 'react-native';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/core';
 
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
@@ -14,6 +16,8 @@ export function MyHabits() {
     const [userName, setUserName] = useState<string>();
     const { myHabits } = useContext(HabitsContext);
 
+    const navigation = useNavigation();
+
     useEffect(() => {
         async function verifyUserName() {
             const user = await getUserName();
@@ -21,15 +25,31 @@ export function MyHabits() {
         }
 
         verifyUserName();
-    }, [])
+    }, []);
+
+    function handleOpenSettings() {
+        navigation.navigate('Settings');
+    }
 
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
-                <Text style={styles.title}>Olá, {userName}</Text>
-                <Text style={styles.subtitle}>seja 1% melhor todos os dias</Text>
+                <View style={styles.headerContent}>
+                    <View>
+                        <Text style={styles.title}>Olá, {userName}!</Text>
+                        <Text style={styles.subtitle}>seja 1% melhor todos os dias</Text>
 
-                <Stars />
+                        <Stars />
+                    </View>
+
+                    <TouchableOpacity style={styles.button} activeOpacity={0.3} onPress={handleOpenSettings}>
+                        <MaterialIcons
+                            name="tune"
+                            size={30}
+                            color={colors.textUnfocus}
+                        />
+                    </TouchableOpacity>
+                </View>
             </View>
             <View style={styles.content}>
                 <FlatList
@@ -54,13 +74,18 @@ const styles = StyleSheet.create({
     },
     header: {
         height: 170,
+        flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'center',
         paddingHorizontal: 30,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },
     headerContent: {
-        marginVertical: 10
+        flexDirection: 'row',
+        justifyContent: 'space-between'
+    },
+    button: {
+        flex: 1,
+        alignItems: 'flex-end',
     },
     content: {
         flex: 1,
@@ -72,7 +97,7 @@ const styles = StyleSheet.create({
         paddingTop: 20
     },
     title: {
-        fontSize: 36,
+        fontSize: 28,
         color: colors.textDark,
         fontFamily: fonts.title
     },
