@@ -32,7 +32,7 @@ export function Input({ name, icon, center = false, value, ...rest }: InputProps
                     style={styles.icon}
                     name={icon}
                     size={28}
-                    color={(isFocused || !!value) ? colors.blue : colors.textUnfocus}
+                    color={(isFocused || !!value || !!rest.defaultValue) ? colors.blue : colors.textUnfocus}
                 />}
             <TextInput
                 style={[styles.input, center && { textAlign: 'center' }]}
