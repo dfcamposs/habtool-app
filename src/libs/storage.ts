@@ -39,13 +39,13 @@ export interface StorageHabitSortProps {
 }
 
 export function formatWeekDay(weekDay: number): string | undefined {
-    if (weekDay === 0) return "sun";
-    if (weekDay === 1) return "mon";
-    if (weekDay === 2) return "tue";
-    if (weekDay === 3) return "wed";
-    if (weekDay === 4) return "thu";
-    if (weekDay === 5) return "fri";
-    if (weekDay === 6) return "sat";
+    if (weekDay === 1) return "sun";
+    if (weekDay === 2) return "mon";
+    if (weekDay === 3) return "tue";
+    if (weekDay === 4) return "wed";
+    if (weekDay === 5) return "thu";
+    if (weekDay === 6) return "fri";
+    if (weekDay === 7) return "sat";
 }
 
 export async function addSchedulePushNotification(habit: HabitProps): Promise<void> {
@@ -53,21 +53,19 @@ export async function addSchedulePushNotification(habit: HabitProps): Promise<vo
 
     if (!schedule) return;
 
-    for (let i = 0; i < 7; i++) {
+    for (let i = 1; i < 7; i++) {
+        await cancelSchedulePushNotification(habit.id + i);
         const weekDay = formatWeekDay(i);
         if (!weekDay) continue;
 
         if (habit.frequency[weekDay]) {
             const notification = await Notifications.scheduleNotificationAsync({
-                identifier: habit.id,
+                identifier: habit.id + i,
                 content: {
                     title: habit.name,
                     body: habit.motivation ?? 'Já executou este hábito hoje?',
                     sound: true,
                     priority: Notifications.AndroidNotificationPriority.HIGH,
-                    data: {
-                        habit
-                    }
                 },
                 trigger: {
                     hour: Number(format(schedule, "HH")),
@@ -76,13 +74,13 @@ export async function addSchedulePushNotification(habit: HabitProps): Promise<vo
                     weekday: i
                 },
             });
-            console.log("push notification: ", notification);
+            console.log("push notification created: ", notification);
         }
     }
 }
 
-export async function cancelSchedulePushNotification(habitId: string) {
-    await Notifications.dismissNotificationAsync(habitId);
+export async function cancelSchedulePushNotification(scheduleId: string) {
+    await Notifications.cancelScheduledNotificationAsync(scheduleId);
 }
 
 export async function saveUserName(name: string): Promise<void> {
@@ -121,7 +119,6 @@ export async function saveHabit(habit: HabitProps): Promise<void> {
         const oldHabits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
         delete oldHabits[habit.id];
-        cancelSchedulePushNotification(habit.id);
 
         const newHabit = {
             [habit.id]: habit
@@ -150,6 +147,21 @@ export async function getHabitByName(name: string): Promise<HabitProps | undefin
         const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
         const result = Object.values(habits).find((item) => item.name === name);
+
+        if (result) {
+            return result;
+        }
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function getHabitById(id: string): Promise<HabitProps | undefined> {
+    try {
+        const data = await AsyncStorage.getItem('@habto:habits');
+        const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
+
+        const result = Object.values(habits).find((item) => item.id === id);
 
         if (result) {
             return result;
@@ -232,6 +244,9 @@ export async function updateHabitHistory(habitId: string, date: number): Promise
         if (indexDate >= 0) {
             history.splice(indexDate, 1);
 
+            const habit = await getHabitById(habitId);
+            habit && await addSchedulePushNotification(habit);
+
             await AsyncStorage
                 .setItem('@habto:habitsHistory',
                     JSON.stringify({
@@ -240,6 +255,10 @@ export async function updateHabitHistory(habitId: string, date: number): Promise
                     })
                 );
         } else {
+            const dateFormatted = new Date(date);
+            const weekDay = dateFormatted.getDay() + 1;
+            await cancelSchedulePushNotification(habitId + weekDay);
+
             await AsyncStorage
                 .setItem('@habto:habitsHistory',
                     JSON.stringify({

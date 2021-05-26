@@ -14,21 +14,24 @@ import { LogBox } from 'react-native';
 
 import Routes from './src/routes';
 import { HabitsProvider } from './src/context/habits';
-import { HabitProps } from './src/libs/storage';
 
 export default function App() {
   LogBox.ignoreAllLogs();
 
   useEffect(() => {
-    const subscription = Notifications.addNotificationReceivedListener(
-      async notification => {
-        const data = notification.request.content.data.habit as HabitProps;
-        console.log(data);
-      }
-    );
+    Notifications.setNotificationHandler({
+      handleNotification: async () => ({
+        shouldShowAlert: true,
+        shouldPlaySound: true,
+        shouldSetBadge: false,
+      }),
+    });
 
+    const subscription = Notifications.addNotificationReceivedListener(notification => {
+      console.log(notification);
+    });
     return () => subscription.remove();
-  }, [])
+  }, []);
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
