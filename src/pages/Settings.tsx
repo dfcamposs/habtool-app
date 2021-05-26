@@ -1,7 +1,8 @@
 import React from 'react';
-import { Text, StyleSheet, SafeAreaView, View, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, SafeAreaView, View, Platform } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -34,7 +35,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },
     title: {
         fontSize: 24,

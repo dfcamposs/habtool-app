@@ -1,8 +1,9 @@
 import React, { useContext, useState } from 'react';
-import { Text, StyleSheet, SafeAreaView, TouchableOpacity, View } from 'react-native';
+import { Text, StyleSheet, SafeAreaView, TouchableOpacity, View, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DraggableFlatList, { DragEndParams } from 'react-native-draggable-flatlist';
 import { useNavigation } from '@react-navigation/core';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 import { HabitsContext } from '../context/habits';
 import { HabitProps, StorageHabitSortProps, updateHabitsSorted } from '../libs/storage';
@@ -75,7 +76,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },
     title: {
         fontSize: 24,

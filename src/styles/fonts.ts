@@ -5,5 +5,5 @@ export default {
     contentBold: 'Poppins_700Bold',
     complement: 'Poppins_400Regular',
     legend: 'Poppins_400Regular',
-    legendBold: 'Poppins_700Bold'
+    legendBold: 'Poppins_900Black'
 }

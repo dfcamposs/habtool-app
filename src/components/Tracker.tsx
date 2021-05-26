@@ -52,7 +52,7 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
             <Text style={[
                 styles.dayLegend,
                 enabled && { color: colors.textDark },
-                data.position === 0 && { fontFamily: fonts.legendBold, color: colors.blue }
+                data.position === 0 && { fontFamily: fonts.legendBold }
             ]}>{getLegendDayTracker(data.position)}</Text>
         </View>
     )

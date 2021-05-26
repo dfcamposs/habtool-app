@@ -1,6 +1,6 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, SafeAreaView, Platform, Text, FlatList } from 'react-native';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper'
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { Calendar, DateObject } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import { format } from 'date-fns';
@@ -53,8 +53,12 @@ export function Progress() {
     const [currentSequenceCount, setCurrentSequenceCount] = useState<number>(0);
 
     useEffect(() => {
-        setDaySelected(Date.now())
-        setActiveHabitsCount(myHabits.filter(item => !item.endDate).length)
+        const currentDate = new Date();
+        const dateFormatted = currentDate.setDate(currentDate.getDate() - 1);
+
+        setDaySelected(Date.now);
+        handleHabitsHistoryDay({ timestamp: dateFormatted } as DateObject)
+        setActiveHabitsCount(myHabits.filter(item => !item.endDate).length);
     }, [myHabits]);
 
     useEffect(() => {
