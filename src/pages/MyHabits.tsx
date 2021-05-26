@@ -51,15 +51,24 @@ export function MyHabits() {
                 </View>
             </View>
             <View style={styles.content}>
-                <FlatList
-                    data={myHabits}
-                    keyExtractor={(item) => String(item.id)}
-                    renderItem={({ item }) => (
-                        <Habit data={item} />
-                    )}
-                    showsVerticalScrollIndicator={false}
-                    style={styles.habitsList}
-                />
+                {myHabits.length ?
+                    <FlatList
+                        data={myHabits}
+                        keyExtractor={(item) => String(item.id)}
+                        renderItem={({ item }) => (
+                            <Habit data={item} />
+                        )}
+                        showsVerticalScrollIndicator={false}
+                        style={styles.habitList}
+                    />
+                    :
+                    <View style={styles.habitListEmpty}>
+                        <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('adicionar')}>
+                            <MaterialIcons name="add-circle" size={50} color={colors.textUnfocus} />
+                        </TouchableOpacity>
+                        <Text style={styles.habitListEmptyText}>Comece adicionando {'\n'} um novo hábito</Text>
+                    </View>
+                }
             </View>
         </SafeAreaView>
     )
@@ -86,7 +95,19 @@ const styles = StyleSheet.create({
         backgroundColor: colors.background,
         paddingBottom: 20
     },
-    habitsList: {
+    habitListEmpty: {
+        flex: 1,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    habitListEmptyText: {
+        fontSize: 16,
+        color: colors.textUnfocus,
+        fontFamily: fonts.subtitle,
+        paddingTop: 10,
+        textAlign: 'center'
+    },
+    habitList: {
         flex: 1,
         paddingTop: 20
     },
@@ -98,7 +119,7 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 16,
         color: colors.textDark,
-        fontFamily: fonts.complement,
-        paddingVertical: 10
+        fontFamily: fonts.subtitle,
+        paddingVertical: 10,
     }
 })

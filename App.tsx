@@ -2,6 +2,7 @@ import React, { useEffect } from 'react';
 import {
   useFonts,
   Poppins_400Regular,
+  Poppins_500Medium,
   Poppins_600SemiBold,
   Poppins_700Bold,
   Poppins_900Black
@@ -31,6 +32,7 @@ export default function App() {
 
   const [fontsLoaded] = useFonts({
     Poppins_400Regular,
+    Poppins_500Medium,
     Poppins_600SemiBold,
     Poppins_700Bold,
     Poppins_900Black

@@ -1,9 +1,10 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, SafeAreaView, Platform, Text, Alert, FlatList } from 'react-native';
+import React, { useContext, useState } from 'react';
+import { View, StyleSheet, SafeAreaView, Platform, Text, FlatList } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 import { Calendar, DateObject } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import { format } from 'date-fns';
+import { useFocusEffect } from '@react-navigation/native';
 
 import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/storage';
 
@@ -52,10 +53,10 @@ export function Progress() {
     const [activeHabitsCount, setActiveHabitsCount] = useState<number>(0);
     const [currentSequenceCount, setCurrentSequenceCount] = useState<number>(0);
 
-    useEffect(() => {
+    useFocusEffect(() => {
         handleMarkedDate();
         setActiveHabitsCount(myHabits.filter(item => !item.endDate).length)
-    }, [myHabits]);
+    });
 
     async function handleHabitsHistoryDay(date: DateObject): Promise<void> {
         const result: HabitHistoryDayProps[] = [];
@@ -159,7 +160,6 @@ export function Progress() {
                         todayTextColor: colors.blue,
                         dayTextColor: colors.textDark,
                         dotColor: colors.blue,
-                        selectedDotColor: colors.blue,
                         monthTextColor: colors.textDark,
                         indicatorColor: colors.textDark,
                         textDisabledColor: colors.textUnfocus,

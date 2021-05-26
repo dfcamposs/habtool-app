@@ -24,7 +24,7 @@ const AuthRoutes = () => {
                 labelPosition: 'beside-icon',
                 labelStyle: {
                     fontSize: 16,
-                    fontFamily: fonts.contentBold
+                    fontFamily: fonts.complement
                 },
                 style: {
                     paddingVertical: Platform.OS === 'ios' ? 10 : 0,
