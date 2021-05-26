@@ -1111,6 +1111,11 @@
   resolved "https://registry.yarnpkg.com/@expo-google-fonts/nunito/-/nunito-0.1.0.tgz#663caf8d99ee20dfd570c8ebefbacae4f1789d60"
   integrity sha512-9IQtlKj029h1XtSyhQck5yBi2nLJXHF3Uqmt2w7nxABTv99QYzCsIAaULmttxcZlJsyUMNMz3Fyor6UgfIV5cA==
 
+"@expo-google-fonts/poppins@^0.1.0":
+  version "0.1.0"
+  resolved "https://registry.yarnpkg.com/@expo-google-fonts/poppins/-/poppins-0.1.0.tgz#aae4df9e80d68ec9dc6764e57dc931f1f64016cd"
+  integrity sha512-iC8ii7hYyK22N3ivvLyIspLQ0D4dn1mB+llhYnUCr/h/QfwUWyEosq1uWiwNC47yCedsiPiZ99vJSfpYRjBDrA==
+
 "@expo/config-plugins@1.0.28", "@expo/config-plugins@^1.0.18":
   version "1.0.28"
   resolved "https://registry.yarnpkg.com/@expo/config-plugins/-/config-plugins-1.0.28.tgz#6c3911d493bc329bf9ef5c99585564539b1a57e1"

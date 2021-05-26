@@ -1,9 +1,9 @@
 export default {
-    title: 'Nunito_600SemiBold',
-    subtitle: 'Nunito_600SemiBold',
-    content: 'Nunito_400Regular',
-    contentBold: 'Nunito_700Bold',
-    complement: 'Nunito_400Regular',
-    legend: 'Nunito_400Regular',
-    legendBold: 'Nunito_900Black'
+    title: 'Poppins_600SemiBold',
+    subtitle: 'Poppins_600SemiBold',
+    content: 'Poppins_400Regular',
+    contentBold: 'Poppins_700Bold',
+    complement: 'Poppins_400Regular',
+    legend: 'Poppins_400Regular',
+    legendBold: 'Poppins_700Black'
 }
