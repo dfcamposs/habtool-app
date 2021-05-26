@@ -41,8 +41,7 @@ export function MyHabits() {
 
                         <Stars />
                     </View>
-
-                    <TouchableOpacity style={styles.button} activeOpacity={0.3} onPress={handleOpenSettings}>
+                    <TouchableOpacity activeOpacity={0.3} onPress={handleOpenSettings}>
                         <MaterialIcons
                             name="tune"
                             size={30}
@@ -74,18 +73,13 @@ const styles = StyleSheet.create({
     },
     header: {
         height: 170,
-        flexDirection: 'row',
-        alignItems: 'center',
         paddingHorizontal: 30,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
+        justifyContent: 'center'
     },
     headerContent: {
         flexDirection: 'row',
         justifyContent: 'space-between'
-    },
-    button: {
-        flex: 1,
-        alignItems: 'flex-end',
     },
     content: {
         flex: 1,

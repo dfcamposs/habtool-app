@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -17,16 +17,19 @@ import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 
 import { getUserName, saveUserName } from '../libs/storage';
+import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import logo from '../assets/logo.png';
 
 
+
 export function Welcome() {
     const [name, setName] = useState<string>();
 
     const navigation = useNavigation();
+    const { userName } = useContext(HabitsContext);
 
     async function handleSubmit() {
         if (!name)
@@ -59,7 +62,7 @@ export function Welcome() {
                             <Input name="username" placeholder="digite o nome" onChangeText={handleInputChange} center />
 
                             <View style={styles.footer}>
-                                <Button title="começar" onPress={handleSubmit} />
+                                <Button title={userName ? "alterar" : "começar"} onPress={handleSubmit} />
                             </View>
                         </View>
                     </View>

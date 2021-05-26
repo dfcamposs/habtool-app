@@ -5,6 +5,7 @@ import { Welcome } from '../pages/Welcome';
 import { HabitManager } from '../pages/HabitManager';
 import { Confirmation } from '../pages/Confirmation';
 import { Settings } from '../pages/Settings';
+import { SortHabits } from '../pages/SortHabits';
 import AuthRoutes from './tab.routes';
 
 import colors from '../styles/colors';
@@ -64,6 +65,21 @@ const AppRoutes: React.FC = () => {
             <stackRoutes.Screen
                 name="Settings"
                 component={Settings}
+            />
+
+            <stackRoutes.Screen
+                name="Rename"
+                component={Welcome}
+            />
+
+            <stackRoutes.Screen
+                name="SortHabits"
+                component={SortHabits}
+            />
+
+            <stackRoutes.Screen
+                name="AppRoutes"
+                component={AuthRoutes}
             />
 
         </stackRoutes.Navigator>
