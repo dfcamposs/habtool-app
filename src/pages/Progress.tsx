@@ -1,10 +1,9 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, SafeAreaView, Platform, Text, FlatList } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper'
 import { Calendar, DateObject } from 'react-native-calendars';
 import { LocaleConfig } from 'react-native-calendars';
 import { format } from 'date-fns';
-import { useFocusEffect } from '@react-navigation/native';
 
 import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/storage';
 
@@ -53,10 +52,14 @@ export function Progress() {
     const [activeHabitsCount, setActiveHabitsCount] = useState<number>(0);
     const [currentSequenceCount, setCurrentSequenceCount] = useState<number>(0);
 
-    useFocusEffect(() => {
-        handleMarkedDate();
+    useEffect(() => {
+        setDaySelected(Date.now())
         setActiveHabitsCount(myHabits.filter(item => !item.endDate).length)
-    });
+    }, [myHabits]);
+
+    useEffect(() => {
+        handleMarkedDate();
+    }, [daySelected])
 
     async function handleHabitsHistoryDay(date: DateObject): Promise<void> {
         const result: HabitHistoryDayProps[] = [];
@@ -125,6 +128,18 @@ export function Progress() {
                 }
             }
         });
+
+        if (daySelected) {
+            result = {
+                ...result,
+                [format(daySelected, 'yyyy-MM-dd')]: {
+                    startingDay: true,
+                    endingDay: true,
+                    color: colors.grayLight,
+                    textColor: colors.textDark
+                }
+            }
+        }
 
         setCalendarMarked(result);
         setCurrentSequenceCount(currentSequence);
