@@ -6,7 +6,6 @@ import fonts from '../styles/fonts';
 
 interface ButtonProps extends TouchableOpacityProps {
     title: string;
-    onPress: () => void;
 }
 
 export function SettingsButton({ title, ...rest }: ButtonProps) {

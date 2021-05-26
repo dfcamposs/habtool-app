@@ -14,6 +14,7 @@ export interface HabitProps {
     startDate: number;
     endDate?: number;
     notificationHour?: number;
+    order: number;
 }
 
 export interface HabitHistoryProps {
@@ -135,7 +136,7 @@ export async function saveHabit(habit: HabitProps): Promise<void> {
             );
 
         await createHabitHistory(habit.id);
-        await createHabitSort(habit.id);
+        await createHabitSort(habit.id, habit.order);
         await addSchedulePushNotification(habit);
 
     } catch (error) {
@@ -160,14 +161,18 @@ export async function getHabitByName(name: string): Promise<HabitProps | undefin
 
 export async function loadHabits(): Promise<HabitProps[]> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habits');
-        const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
+        const dataHabits = await AsyncStorage.getItem('@habto:habits');
+        const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
+
+        const dataSort = await AsyncStorage.getItem('@habto:habitsSorted');
+        const habitsSorted = dataSort ? (JSON.parse(dataSort) as StorageHabitSortProps) : {};
 
         return Object
             .keys(habits)
             .map((habit) => {
                 return {
-                    ...habits[habit]
+                    ...habits[habit],
+                    order: habitsSorted[habit]
                 }
             });
 
@@ -318,13 +323,13 @@ export async function deleteHabitHistory(habitId: string): Promise<void> {
     }
 }
 
-export async function createHabitSort(habitId: string): Promise<void> {
+export async function createHabitSort(habitId: string, position?: number): Promise<void> {
     try {
         const data = await AsyncStorage.getItem('@habto:habitsSorted');
         const habitsSorted = data ? (JSON.parse(data) as StorageHabitSortProps) : {};
 
         const newSort = {
-            [habitId]: habitsSorted ? Object.values(habitsSorted).length + 1 : 1
+            [habitId]: position ?? habitsSorted ? Object.values(habitsSorted).length + 1 : 1
         };
 
         await AsyncStorage

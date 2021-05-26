@@ -29,7 +29,8 @@ export const HabitsProvider: React.FC = ({ children }) => {
 
         async function getMyHabits() {
             const habitsStoraged = await loadHabits();
-            setMyHabits(habitsStoraged);
+            const habitsSorted = habitsStoraged.sort((a, b) => a.order - b.order)
+            setMyHabits(habitsSorted);
         }
 
         getUser();

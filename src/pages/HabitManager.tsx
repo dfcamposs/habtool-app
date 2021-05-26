@@ -150,7 +150,7 @@ export function HabitManager() {
                 startDate: selectedStartDateTime.getTime(),
                 endDate: selectedEndDateTime?.getTime(),
                 notificationHour: scheduleEnabled ? selectedScheduleDateTime.getTime() : undefined,
-
+                order: habit?.order ?? 0
             }
 
             await saveHabit(newHabit);
@@ -159,7 +159,7 @@ export function HabitManager() {
                 ? [{ ...newHabit }, ...myHabits.filter(item => item.id !== habit.id)]
                 : [{ ...newHabit }, ...myHabits]
 
-            handleUpdateMyHabits(habitsUpdated);
+            handleUpdateMyHabits(habitsUpdated.sort((a, b) => a.order - b.order));
             navigation.navigate('Confirmation');
 
         } catch {
