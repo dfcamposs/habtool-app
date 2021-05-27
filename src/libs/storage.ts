@@ -59,7 +59,7 @@ export async function addSchedulePushNotification(habit: HabitProps): Promise<vo
         if (!weekDay) continue;
 
         if (habit.frequency[weekDay]) {
-            const notification = await Notifications.scheduleNotificationAsync({
+            await Notifications.scheduleNotificationAsync({
                 identifier: habit.id + i,
                 content: {
                     title: habit.name,
@@ -74,7 +74,6 @@ export async function addSchedulePushNotification(habit: HabitProps): Promise<vo
                     weekday: i
                 },
             });
-            console.log("push notification created: ", notification);
         }
     }
 }
@@ -392,6 +391,18 @@ export async function loadHabitsHistory(): Promise<HabitHistoryProps[]> {
                     history: [...habitsHistory[habit]]
                 }
             });
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function loadHabitHistoryByHabitId(habitId: string): Promise<number[]> {
+    try {
+        const dataHistory = await AsyncStorage.getItem('@habto:habitsHistory');
+        const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
+
+        return habitsHistory[habitId];
 
     } catch (error) {
         throw new Error(error);

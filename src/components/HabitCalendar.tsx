@@ -1,23 +1,14 @@
-import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View } from 'react-native';
-import { Calendar, LocaleConfig } from 'react-native-calendars';
-import { format } from 'date-fns';
+import React, { useEffect, useState } from 'react';
+import { Alert, StyleSheet } from 'react-native';
+import { Calendar } from 'react-native-calendars';
+import { format, isBefore } from 'date-fns';
 
-import { loadHabitsHistory } from '../libs/storage';
-import { HabitsContext } from '../context/habits';
+import { loadHabitHistoryByHabitId, updateHabitHistory } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-LocaleConfig.locales['br'] = {
-    monthNames: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
-    monthNamesShort: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dec'],
-    dayNames: ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'],
-    dayNamesShort: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'],
-    today: 'hoje'
-};
-
-LocaleConfig.defaultLocale = 'br';
+import '../libs/calendarConfig';
 
 interface CalendarMarkedProps {
     [date: string]: {
@@ -29,7 +20,11 @@ interface CalendarMarkedProps {
     }
 }
 
-export function HabitCalendar() {
+interface HabitCalendar {
+    habitId: string;
+}
+
+export function HabitCalendar({ habitId }: HabitCalendar) {
     const initialCalendarMarked = {
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
@@ -37,78 +32,49 @@ export function HabitCalendar() {
             textColor: colors.textLight
         }
     }
-    const [daySelected, setDaySelected] = useState<number>();
     const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>(initialCalendarMarked);
 
-    const { myHabits } = useContext(HabitsContext);
-
     useEffect(() => {
-        const currentDate = new Date(Date.now());
-        const dateFormatted = currentDate.setDate(currentDate.getDate() - 1);
+        handleMarkedDate(Date.now());
+    }, []);
 
-        handleMarkDaySelected(dateFormatted)
-    }, [myHabits]);
+    async function handleChangeSelectedDay(date: number) {
+        const dateSelected = new Date(date);
+        const dateFormatted = dateSelected.setDate(dateSelected.getDate() + 1);
 
-    useEffect(() => {
-        handleMarkedDate();
-    }, [daySelected])
+        if (isBefore(dateSelected, Date.now()) ||
+            format(dateSelected, 'yyyy-MM-dd') === format(Date.now(), 'yyyy-MM-dd')
+        ) {
+            Alert.alert('Alterar Histórico', `Deseja alterar este dia no histórico?`, [
+                {
+                    text: 'Não',
+                    style: 'cancel'
+                },
+                {
+                    text: 'Sim',
+                    onPress: async () => {
+                        try {
+                            await updateHabitHistory(habitId, dateFormatted);
+                            await handleMarkedDate(dateFormatted);
+                        } catch (error) {
+                            Alert.alert('Não foi possível incluir no histórico');
+                        }
+                    }
+                }
+            ]);
+        }
 
-    function handleMarkDaySelected(date: number) {
-        const currentDate = new Date(date);
-        const dateFormatted = currentDate.setDate(currentDate.getDate() + 1);
-        setDaySelected(dateFormatted);
+        await handleMarkedDate(dateFormatted);
     }
 
-    async function handleMarkedDate(): Promise<void> {
-        const history = await loadHabitsHistory();
-        const daysChecked: number[] = [];
-        let result: any = {};
-        let currentSequence = 0
+    async function handleMarkedDate(dateSelected: number): Promise<void> {
+        const history = await loadHabitHistoryByHabitId(habitId);
+        let result: CalendarMarkedProps = {};
 
-        history.forEach(item => {
-            daysChecked.push(...item.history);
-        });
-
-        daysChecked.sort().forEach((day, index) => {
-            if (result[format(day, 'yyyy-MM-dd')]) {
-                return;
-            }
-            const newDateLastDay = new Date(day);
-            const newDateLastDayFormatted = format(newDateLastDay.setDate(newDateLastDay.getDate() - 1), 'yyyy-MM-dd');
-
-            const newDateNextDay = new Date(day);
-            const newDateNextDayFormatted = format(newDateLastDay.setDate(newDateNextDay.getDate() + 1), 'yyyy-MM-dd');
-
-            const lastDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === newDateLastDayFormatted);
-            const nextDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === newDateNextDayFormatted);
-
-            let startingDate = false;
-            let endingDate = false;
-
-            if (index === 0 || !lastDay) {
-                startingDate = true;
-                currentSequence = 0;
-            }
-            if (index === daysChecked.length - 1 || !nextDay) {
-                endingDate = true;
-            }
-
-            currentSequence++;
+        if (dateSelected) {
             result = {
                 ...result,
-                [format(day, 'yyyy-MM-dd')]: {
-                    startingDay: startingDate,
-                    endingDay: endingDate,
-                    color: colors.blue,
-                    textColor: colors.textLight
-                }
-            }
-        });
-
-        if (daySelected) {
-            result = {
-                ...result,
-                [format(daySelected, 'yyyy-MM-dd')]: {
+                [format(dateSelected, 'yyyy-MM-dd')]: {
                     startingDay: true,
                     endingDay: true,
                     color: colors.grayLight,
@@ -117,13 +83,48 @@ export function HabitCalendar() {
             }
         }
 
+        history.sort().forEach((day, index) => {
+            const newDateLastDay = new Date(day);
+            const newDateLastDayFormatted = format(newDateLastDay.setDate(newDateLastDay.getDate() - 1), 'yyyy-MM-dd');
+
+            const newDateNextDay = new Date(day);
+            const newDateNextDayFormatted = format(newDateLastDay.setDate(newDateNextDay.getDate() + 1), 'yyyy-MM-dd');
+
+            const lastDay = history.find(item => format(item, 'yyyy-MM-dd') === newDateLastDayFormatted);
+            const nextDay = history.find(item => format(item, 'yyyy-MM-dd') === newDateNextDayFormatted);
+
+            let startingDate = false;
+            let endingDate = false;
+
+            if (index === 0 || !lastDay) {
+                startingDate = true;
+            }
+            if (index === history.length - 1 || !nextDay) {
+                endingDate = true;
+            }
+
+            result = {
+                ...result,
+                [format(day, 'yyyy-MM-dd')]: {
+                    startingDay: startingDate,
+                    endingDay: endingDate,
+                    color: dateSelected
+                        && format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
+                        ? colors.blueDark
+                        : colors.blue,
+                    textColor: colors.textLight
+                }
+            }
+        });
+
+
         setCalendarMarked(result);
     }
     return (
         <Calendar
             markedDates={calendarMarked}
             markingType={'period'}
-            onDayPress={(date) => handleMarkDaySelected(date.timestamp)}
+            onDayPress={(date) => handleChangeSelectedDay(date.timestamp)}
             style={styles.container}
             theme={{
                 calendarBackground: colors.background,
@@ -147,8 +148,6 @@ export function HabitCalendar() {
 
 const styles = StyleSheet.create({
     container: {
-        marginHorizontal: 20,
-        marginVertical: 20,
         backgroundColor: colors.background,
     },
 })

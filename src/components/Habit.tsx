@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useCallback, useContext, useEffect, useState } from 'react';
 import { StyleSheet, Text, FlatList, View, Animated, Alert, TouchableOpacity, TouchableOpacityProps, Modal, TouchableHighlight, Platform } from 'react-native';
 import { RectButton, Swipeable, } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
@@ -37,34 +37,34 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
     const { handleUpdateMyHabits, myHabits } = useContext(HabitsContext);
     const navigation = useNavigation();
 
-    useEffect(() => {
-        async function getWeekHistory() {
-            const initialTrackerList: TrackerListProps[] = [
-                { position: 6, checked: false },
-                { position: 5, checked: false },
-                { position: 4, checked: false },
-                { position: 3, checked: false },
-                { position: 2, checked: false },
-                { position: 1, checked: false },
-                { position: 0, checked: false },
-            ]
+    async function getWeekHistory() {
+        const initialTrackerList: TrackerListProps[] = [
+            { position: 6, checked: false },
+            { position: 5, checked: false },
+            { position: 4, checked: false },
+            { position: 3, checked: false },
+            { position: 2, checked: false },
+            { position: 1, checked: false },
+            { position: 0, checked: false },
+        ]
 
-            const history = await getHabitWeekHistory(habit.id);
+        const history = await getHabitWeekHistory(habit.id);
 
-            const historyFormatted = history.map((item: number) => format(item, 'dd-MM-yyyy'));
+        const historyFormatted = history.map((item: number) => format(item, 'dd-MM-yyyy'));
 
-            for (const item of initialTrackerList) {
-                const currentDate = new Date();
-                const date = format(currentDate.setDate(currentDate.getDate() - item.position), 'dd-MM-yyyy');
+        for (const item of initialTrackerList) {
+            const currentDate = new Date();
+            const date = format(currentDate.setDate(currentDate.getDate() - item.position), 'dd-MM-yyyy');
 
-                if (historyFormatted.includes(date)) {
-                    item.checked = true
-                }
+            if (historyFormatted.includes(date)) {
+                item.checked = true
             }
-
-            setTrackerListProps(initialTrackerList);
         }
 
+        setTrackerListProps(initialTrackerList);
+    };
+
+    useEffect(() => {
         function verifyEndDate() {
             if (habit.endDate && habit.endDate < Date.now())
                 setHabitIsActive(false);
@@ -73,6 +73,13 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
         getWeekHistory();
         verifyEndDate();
     }, []);
+
+    useEffect(() => {
+        if (!modalVisible) {
+            setTrackerListProps([]);
+            getWeekHistory();
+        }
+    }, [modalVisible]);
 
     function handleRemoveHabit() {
         Alert.alert('Remover', `Deseja remover a ${habit.name}?`, [
@@ -111,9 +118,13 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
         return habit.frequency[weekDay];
     }
 
-    function handleViewProgress() {
+    function handleOpenModal() {
         setModalVisible(true);
     }
+
+    function handleCloseModal() {
+        setModalVisible(false);
+    };
 
     return (
         <>
@@ -126,10 +137,10 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                     <Text style={styles.modalTitle}>{habit.name}</Text>
 
                     <View style={styles.calendar}>
-                        <Text style={styles.subtitle}>progresso</Text>
-                        <HabitCalendar />
+                        <Text style={styles.subtitle}>histórico</Text>
+                        <HabitCalendar habitId={habit.id} />
                     </View>
-                    <RectButton style={styles.button} onPress={() => setModalVisible(!modalVisible)}>
+                    <RectButton style={styles.button} onPress={handleCloseModal}>
                         <Text style={styles.textButton}>voltar</Text>
                     </RectButton>
                 </View>
@@ -156,15 +167,17 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                     </Animated.View>
                 )}
             >
-                <TouchableOpacity
-                    style={styles.container}
-                    activeOpacity={0.8}
-                    onPress={handleViewProgress}
-                    {...rest}
-                >
-                    <Text style={[styles.text, habitIsActive && { color: colors.textDark }]}>
-                        {habit.name}
-                    </Text>
+                <View style={styles.container}>
+                    <TouchableOpacity
+                        style={styles.touch}
+                        activeOpacity={0.8}
+                        onPress={handleOpenModal}
+                        {...rest}
+                    >
+                        <Text style={[styles.text, habitIsActive && { color: colors.textDark }]}>
+                            {habit.name}
+                        </Text>
+                    </TouchableOpacity>
 
                     <FlatList
                         data={trackerListProps}
@@ -179,7 +192,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                         showsHorizontalScrollIndicator={false}
                         style={styles.tracker}
                     />
-                </TouchableOpacity>
+                </View>
             </Swipeable>
         </>
     )
@@ -195,16 +208,18 @@ const styles = StyleSheet.create({
         paddingTop: 15,
         paddingLeft: 15,
         paddingRight: 10,
-        justifyContent: 'space-around'
+        justifyContent: 'space-around',
+        flexDirection: 'row'
     },
     editButton: {
         width: 60,
         height: 100,
-        backgroundColor: colors.blue,
+        backgroundColor: colors.grayDark,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
         right: 20,
+        borderRadius: 10,
     },
     removeButton: {
         width: 60,
@@ -214,6 +229,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         position: 'relative',
         right: 20,
+        borderRadius: 10
     },
     text: {
         color: colors.textUnfocus,
@@ -221,6 +237,7 @@ const styles = StyleSheet.create({
         fontSize: 18
     },
     tracker: {
+        flex: 1,
         flexDirection: 'row',
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
@@ -239,6 +256,9 @@ const styles = StyleSheet.create({
         fontSize: 16,
         fontFamily: fonts.contentBold,
         color: colors.textDark
+    },
+    touch: {
+        flex: 1
     },
 
     //Modal
@@ -264,8 +284,7 @@ const styles = StyleSheet.create({
     subtitle: {
         fontSize: 18,
         fontFamily: fonts.subtitle,
-        color: colors.textDark,
-        paddingLeft: 25,
-        paddingBottom: 10
+        color: colors.textUnfocus,
+        paddingLeft: 20,
     },
 })
