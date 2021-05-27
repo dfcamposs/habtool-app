@@ -3,6 +3,8 @@ import { View, Text, StyleSheet, SafeAreaView, Platform, FlatList, TouchableOpac
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
+import { format } from 'date-fns';
+import pt from 'date-fns/locale/pt';
 
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
@@ -31,6 +33,11 @@ export function MyHabits() {
         navigation.navigate('Settings');
     }
 
+    function getLegendDayTracker(position: number): string {
+        const currentDate = new Date();
+        return format(currentDate.setDate(currentDate.getDate() - position), 'E', { locale: pt }).toLocaleLowerCase();
+    }
+
     return (
         <SafeAreaView style={styles.container}>
             <View style={styles.header}>
@@ -51,6 +58,17 @@ export function MyHabits() {
                 </View>
             </View>
             <View style={styles.content}>
+                <View style={styles.weekLegendContainer}>
+                    <View style={styles.weekLegend}>
+                        <Text style={styles.weekLegendText}>{getLegendDayTracker(6)}</Text>
+                        <Text style={styles.weekLegendText}>{getLegendDayTracker(5)}</Text>
+                        <Text style={styles.weekLegendText}>{getLegendDayTracker(4)}</Text>
+                        <Text style={styles.weekLegendText}>{getLegendDayTracker(3)}</Text>
+                        <Text style={styles.weekLegendText}>{getLegendDayTracker(2)}</Text>
+                        <Text style={styles.weekLegendText}>{getLegendDayTracker(1)}</Text>
+                        <Text style={[styles.weekLegendText, { fontFamily: fonts.legendBold }]}>{getLegendDayTracker(0)}</Text>
+                    </View>
+                </View>
                 {myHabits.length ?
                     <FlatList
                         data={myHabits}
@@ -81,19 +99,41 @@ const styles = StyleSheet.create({
         backgroundColor: colors.grayLight,
     },
     header: {
-        height: 170,
+        height: 140,
         paddingHorizontal: 30,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
-        justifyContent: 'center'
+        justifyContent: 'center',
     },
     headerContent: {
         flexDirection: 'row',
         justifyContent: 'space-between'
     },
+    weekLegendContainer: {
+        alignItems: 'flex-end',
+        paddingRight: 25
+    },
+    weekLegend: {
+        width: 250,
+        height: 20,
+        backgroundColor: colors.grayLight,
+        borderBottomRightRadius: 10,
+        borderBottomLeftRadius: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+    },
+    weekLegendText: {
+        color: colors.textDark,
+        fontSize: 10,
+        fontFamily: fonts.legend,
+        minWidth: 30,
+        marginHorizontal: 2.5,
+        textAlign: 'center'
+    },
     content: {
         flex: 1,
         backgroundColor: colors.background,
-        paddingBottom: 20
+        paddingBottom: 20,
     },
     habitListEmpty: {
         flex: 1,

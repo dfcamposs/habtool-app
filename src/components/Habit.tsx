@@ -234,7 +234,7 @@ const styles = StyleSheet.create({
     text: {
         color: colors.textUnfocus,
         fontFamily: fonts.content,
-        fontSize: 18
+        fontSize: 16
     },
     tracker: {
         flex: 1,

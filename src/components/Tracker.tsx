@@ -23,11 +23,6 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
     const { handleUpdatePercentageCheck } = useContext(HabitsContext)
     const [trackerChecked, setTrackerChecked] = useState(checked);
 
-    function getLegendDayTracker(position: number): string {
-        const currentDate = new Date();
-        return format(currentDate.setDate(currentDate.getDate() - position), 'EEEEE', { locale: pt }).toUpperCase();
-    }
-
     async function handleTrackerChecked() {
         const currentDate = new Date();
         const habitDate = currentDate.setDate(currentDate.getDate() - data.position);
@@ -49,11 +44,6 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
                 onPress={handleTrackerChecked}
                 {...rest}
             />
-            <Text style={[
-                styles.dayLegend,
-                enabled && { color: colors.textDark },
-                data.position === 0 && { fontFamily: fonts.legendBold }
-            ]}>{getLegendDayTracker(data.position)}</Text>
         </View>
     )
 }
@@ -62,19 +52,12 @@ const styles = StyleSheet.create({
     container: {
         marginLeft: 5,
         alignItems: 'center',
-        justifyContent: 'space-between',
-        maxHeight: 40
+        justifyContent: 'space-between'
     },
     dayCicle: {
         height: 30,
         width: 30,
         borderRadius: 15,
         backgroundColor: colors.grayDark
-    },
-    dayLegend: {
-        color: colors.textUnfocus,
-        fontSize: 6,
-        fontFamily: fonts.legend,
-        marginTop: 5
     }
 })
