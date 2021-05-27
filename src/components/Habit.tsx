@@ -1,11 +1,13 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, FlatList, View, Animated, Alert } from 'react-native';
-import { RectButton, Swipeable } from 'react-native-gesture-handler';
+import { StyleSheet, Text, FlatList, View, Animated, Alert, TouchableOpacity, TouchableOpacityProps, Modal, TouchableHighlight, Platform } from 'react-native';
+import { RectButton, Swipeable, } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 import { Tracker } from './Tracker';
+import { HabitCalendar } from './HabitCalendar';
 
 import { deleteHabit, FrequencyProps, getHabitWeekHistory } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
@@ -13,7 +15,7 @@ import { HabitsContext } from '../context/habits';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-interface HabitProps {
+interface HabitProps extends TouchableOpacityProps {
     data: {
         id: string;
         name: string,
@@ -27,9 +29,10 @@ interface TrackerListProps {
     checked: boolean;
 }
 
-export function Habit({ data: habit }: HabitProps) {
+export function Habit({ data: habit, ...rest }: HabitProps) {
     const [trackerListProps, setTrackerListProps] = useState<TrackerListProps[]>();
     const [habitIsActive, setHabitIsActive] = useState(true);
+    const [modalVisible, setModalVisible] = useState(false);
 
     const { handleUpdateMyHabits, myHabits } = useContext(HabitsContext);
     const navigation = useNavigation();
@@ -108,48 +111,77 @@ export function Habit({ data: habit }: HabitProps) {
         return habit.frequency[weekDay];
     }
 
-    return (
-        <Swipeable
-            overshootRight={false}
-            renderRightActions={() => (
-                <Animated.View>
-                    <View style={{ flexDirection: 'row' }}>
-                        <RectButton
-                            style={styles.editButton}
-                            onPress={handleUpdateHabit}
-                        >
-                            <MaterialIcons name="edit" size={20} color={colors.white} />
-                        </RectButton>
-                        <RectButton
-                            style={styles.removeButton}
-                            onPress={handleRemoveHabit}
-                        >
-                            <MaterialIcons name="delete" size={20} color={colors.white} />
-                        </RectButton>
-                    </View>
-                </Animated.View>
-            )}
-        >
-            <View style={styles.container}>
-                <Text style={[styles.text, habitIsActive && { color: colors.textDark }]}>
-                    {habit.name}
-                </Text>
+    function handleViewProgress() {
+        setModalVisible(true);
+    }
 
-                <FlatList
-                    data={trackerListProps}
-                    keyExtractor={(item) => String(item.position)}
-                    renderItem={({ item }) => (
-                        <Tracker
-                            data={{ habitId: habit.id, position: item.position }}
-                            enabled={verifyEnabledTracker(item.position)}
-                            checked={verifyEnabledTracker(item.position) && item.checked}
-                        />
-                    )}
-                    showsHorizontalScrollIndicator={false}
-                    style={styles.tracker}
-                />
-            </View>
-        </Swipeable>
+    return (
+        <>
+            <Modal
+                animationType="slide"
+                transparent={false}
+                visible={modalVisible}
+            >
+                <View style={styles.modalContainer}>
+                    <Text style={styles.modalTitle}>{habit.name}</Text>
+
+                    <View style={styles.calendar}>
+                        <Text style={styles.subtitle}>progresso</Text>
+                        <HabitCalendar />
+                    </View>
+                    <RectButton style={styles.button} onPress={() => setModalVisible(!modalVisible)}>
+                        <Text style={styles.textButton}>voltar</Text>
+                    </RectButton>
+                </View>
+            </Modal>
+
+            <Swipeable
+                overshootRight={false}
+                renderRightActions={() => (
+                    <Animated.View>
+                        <View style={{ flexDirection: 'row' }}>
+                            <RectButton
+                                style={styles.editButton}
+                                onPress={handleUpdateHabit}
+                            >
+                                <MaterialIcons name="edit" size={20} color={colors.white} />
+                            </RectButton>
+                            <RectButton
+                                style={styles.removeButton}
+                                onPress={handleRemoveHabit}
+                            >
+                                <MaterialIcons name="delete" size={20} color={colors.white} />
+                            </RectButton>
+                        </View>
+                    </Animated.View>
+                )}
+            >
+                <TouchableOpacity
+                    style={styles.container}
+                    activeOpacity={0.8}
+                    onPress={handleViewProgress}
+                    {...rest}
+                >
+                    <Text style={[styles.text, habitIsActive && { color: colors.textDark }]}>
+                        {habit.name}
+                    </Text>
+
+                    <FlatList
+                        data={trackerListProps}
+                        keyExtractor={(item) => String(item.position)}
+                        renderItem={({ item }) => (
+                            <Tracker
+                                data={{ habitId: habit.id, position: item.position }}
+                                enabled={verifyEnabledTracker(item.position)}
+                                checked={verifyEnabledTracker(item.position) && item.checked}
+                            />
+                        )}
+                        showsHorizontalScrollIndicator={false}
+                        style={styles.tracker}
+                    />
+                </TouchableOpacity>
+            </Swipeable>
+        </>
     )
 }
 
@@ -193,5 +225,47 @@ const styles = StyleSheet.create({
         alignItems: 'flex-end',
         justifyContent: 'flex-end',
         paddingVertical: 10
-    }
+    },
+    button: {
+        width: 100,
+        height: 40,
+        backgroundColor: colors.grayLight,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20
+    },
+    textButton: {
+        fontSize: 16,
+        fontFamily: fonts.contentBold,
+        color: colors.textDark
+    },
+
+    //Modal
+    modalContainer: {
+        flex: 1,
+        alignItems: 'center',
+        marginTop: getStatusBarHeight(),
+        paddingVertical: 20,
+        paddingHorizontal: 10,
+        backgroundColor: colors.background
+    },
+    modalTitle: {
+        fontSize: 24,
+        fontFamily: fonts.title,
+        color: colors.textDark,
+        paddingVertical: 40
+    },
+    calendar: {
+        flex: 1,
+        width: '100%',
+        backgroundColor: colors.background
+    },
+    subtitle: {
+        fontSize: 18,
+        fontFamily: fonts.subtitle,
+        color: colors.textDark,
+        paddingLeft: 25,
+        paddingBottom: 10
+    },
 })

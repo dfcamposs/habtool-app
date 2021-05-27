@@ -52,13 +52,13 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         borderColor: colors.textUnfocus,
         marginVertical: 15,
-        paddingVertical: 10,
+        paddingVertical: 10
     },
     icon: {
         paddingRight: 10
     },
     input: {
-        width: '100%',
+        width: '90%',
         fontSize: 18,
         fontFamily: fonts.content,
         color: colors.textDark

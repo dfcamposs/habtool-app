@@ -56,7 +56,6 @@ export function Progress() {
         const currentDate = new Date();
         const dateFormatted = currentDate.setDate(currentDate.getDate() - 1);
 
-        setDaySelected(Date.now);
         handleHabitsHistoryDay({ timestamp: dateFormatted } as DateObject)
         setActiveHabitsCount(myHabits.filter(item => !item.endDate).length);
     }, [myHabits]);
