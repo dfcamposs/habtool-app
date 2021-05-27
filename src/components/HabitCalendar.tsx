@@ -43,7 +43,10 @@ export function HabitCalendar() {
     const { myHabits } = useContext(HabitsContext);
 
     useEffect(() => {
-        handleMarkDaySelected(Date.now())
+        const currentDate = new Date(Date.now());
+        const dateFormatted = currentDate.setDate(currentDate.getDate() - 1);
+
+        handleMarkDaySelected(dateFormatted)
     }, [myHabits]);
 
     useEffect(() => {
