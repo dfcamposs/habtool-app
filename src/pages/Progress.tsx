@@ -2,24 +2,15 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, SafeAreaView, Platform, Text, FlatList } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { Calendar, DateObject } from 'react-native-calendars';
-import { LocaleConfig } from 'react-native-calendars';
 import { format } from 'date-fns';
 
 import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/storage';
+import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
-import { HabitsContext } from '../context/habits';
 
-LocaleConfig.locales['br'] = {
-    monthNames: ['janeiro', 'fevereiro', 'março', 'abril', 'maio', 'junho', 'julho', 'agosto', 'setembro', 'outubro', 'novembro', 'dezembro'],
-    monthNamesShort: ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dec'],
-    dayNames: ['domingo', 'segunda-feira', 'terça-feira', 'quarta-feira', 'quinta-feira', 'sexta-feira', 'sábado'],
-    dayNamesShort: ['dom', 'seg', 'ter', 'qua', 'qui', 'sex', 'sab'],
-    today: 'hoje'
-};
-
-LocaleConfig.defaultLocale = 'br';
+import '../libs/calendarConfig';
 
 interface HabitHistoryDayProps {
     id: string;
@@ -56,13 +47,10 @@ export function Progress() {
         const currentDate = new Date();
         const dateFormatted = currentDate.setDate(currentDate.getDate() - 1);
 
-        handleHabitsHistoryDay({ timestamp: dateFormatted } as DateObject)
         setActiveHabitsCount(myHabits.filter(item => !item.endDate).length);
+        handleHabitsHistoryDay({ timestamp: dateFormatted } as DateObject);
     }, [myHabits]);
 
-    useEffect(() => {
-        handleMarkedDate();
-    }, [daySelected])
 
     async function handleHabitsHistoryDay(date: DateObject): Promise<void> {
         const result: HabitHistoryDayProps[] = [];
@@ -70,8 +58,9 @@ export function Progress() {
         const dateFormatted = newDate.setDate(newDate.getDate() + 1);
         const weekDay = format(dateFormatted, 'EEE').toLowerCase();
 
-        const history = await loadHabitsHistoryCheckedByDay(dateFormatted);
+        handleMarkedDate(dateFormatted);
 
+        const history = await loadHabitsHistoryCheckedByDay(dateFormatted);
         myHabits.forEach(habit => {
             if (habit.frequency[weekDay]) {
                 result.push({
@@ -86,7 +75,7 @@ export function Progress() {
         setDaySelected(dateFormatted);
     }
 
-    async function handleMarkedDate(): Promise<void> {
+    async function handleMarkedDate(dateSelected: number): Promise<void> {
         const history = await loadHabitsHistory();
         const daysChecked: number[] = [];
         let result: any = {};
@@ -126,16 +115,18 @@ export function Progress() {
                 [format(day, 'yyyy-MM-dd')]: {
                     startingDay: startingDate,
                     endingDay: endingDate,
-                    color: colors.blue,
+                    color: format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
+                        ? colors.blueDark
+                        : colors.blue,
                     textColor: colors.textLight
                 }
             }
         });
 
-        if (daySelected) {
+        if (dateSelected && !result[format(dateSelected, 'yyyy-MM-dd')]) {
             result = {
                 ...result,
-                [format(daySelected, 'yyyy-MM-dd')]: {
+                [format(dateSelected, 'yyyy-MM-dd')]: {
                     startingDay: true,
                     endingDay: true,
                     color: colors.grayLight,

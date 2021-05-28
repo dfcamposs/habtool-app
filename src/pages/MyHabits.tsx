@@ -112,10 +112,10 @@ const styles = StyleSheet.create({
     },
     weekLegendContainer: {
         alignItems: 'flex-end',
-        paddingRight: 25
+        paddingRight: 20,
     },
     weekLegend: {
-        width: 250,
+        width: 260,
         height: 20,
         backgroundColor: colors.grayLight,
         borderBottomRightRadius: 10,
@@ -154,12 +154,12 @@ const styles = StyleSheet.create({
         paddingTop: 20
     },
     title: {
-        fontSize: 28,
+        fontSize: 24,
         color: colors.textDark,
         fontFamily: fonts.title
     },
     subtitle: {
-        fontSize: 16,
+        fontSize: 14,
         color: colors.textDark,
         fontFamily: fonts.subtitle,
         paddingVertical: 10,
