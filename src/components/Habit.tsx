@@ -152,16 +152,16 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                     <Animated.View>
                         <View style={{ flexDirection: 'row' }}>
                             <RectButton
-                                style={styles.editButton}
-                                onPress={handleUpdateHabit}
-                            >
-                                <MaterialIcons name="edit" size={20} color={colors.white} />
-                            </RectButton>
-                            <RectButton
                                 style={styles.removeButton}
                                 onPress={handleRemoveHabit}
                             >
                                 <MaterialIcons name="delete" size={20} color={colors.white} />
+                            </RectButton>
+                            <RectButton
+                                style={styles.editButton}
+                                onPress={handleUpdateHabit}
+                            >
+                                <MaterialIcons name="edit" size={20} color={colors.white} />
                             </RectButton>
                         </View>
                     </Animated.View>
@@ -243,20 +243,6 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-end',
         paddingVertical: 10
     },
-    button: {
-        width: 100,
-        height: 40,
-        backgroundColor: colors.grayLight,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 20
-    },
-    textButton: {
-        fontSize: 16,
-        fontFamily: fonts.contentBold,
-        color: colors.textDark
-    },
     touch: {
         flex: 1
     },
@@ -266,7 +252,7 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         marginTop: getStatusBarHeight(),
-        paddingVertical: 20,
+        paddingVertical: 23,
         paddingHorizontal: 10,
         backgroundColor: colors.background
     },
@@ -286,5 +272,19 @@ const styles = StyleSheet.create({
         fontFamily: fonts.subtitle,
         color: colors.textUnfocus,
         paddingLeft: 20,
+    },
+    button: {
+        width: 100,
+        height: 40,
+        backgroundColor: colors.grayLight,
+        borderRadius: 10,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginBottom: 20
+    },
+    textButton: {
+        fontSize: 16,
+        fontFamily: fonts.contentBold,
+        color: colors.textDark
     },
 })

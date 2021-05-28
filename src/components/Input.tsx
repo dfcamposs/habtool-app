@@ -38,6 +38,7 @@ export function Input({ name, icon, center = false, value, ...rest }: InputProps
                 style={[styles.input, center && { textAlign: 'center' }]}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
+                autoCapitalize='none'
                 {...rest}
             />
         </View>

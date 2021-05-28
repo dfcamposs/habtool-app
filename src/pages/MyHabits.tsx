@@ -58,27 +58,29 @@ export function MyHabits() {
                 </View>
             </View>
             <View style={styles.content}>
-                <View style={styles.weekLegendContainer}>
-                    <View style={styles.weekLegend}>
-                        <Text style={styles.weekLegendText}>{getLegendDayTracker(6)}</Text>
-                        <Text style={styles.weekLegendText}>{getLegendDayTracker(5)}</Text>
-                        <Text style={styles.weekLegendText}>{getLegendDayTracker(4)}</Text>
-                        <Text style={styles.weekLegendText}>{getLegendDayTracker(3)}</Text>
-                        <Text style={styles.weekLegendText}>{getLegendDayTracker(2)}</Text>
-                        <Text style={styles.weekLegendText}>{getLegendDayTracker(1)}</Text>
-                        <Text style={[styles.weekLegendText, { fontFamily: fonts.legendBold }]}>{getLegendDayTracker(0)}</Text>
-                    </View>
-                </View>
                 {myHabits.length ?
-                    <FlatList
-                        data={myHabits}
-                        keyExtractor={(item) => String(item.id)}
-                        renderItem={({ item }) => (
-                            <Habit data={item} />
-                        )}
-                        showsVerticalScrollIndicator={false}
-                        style={styles.habitList}
-                    />
+                    <>
+                        <View style={styles.weekLegendContainer}>
+                            <View style={styles.weekLegend}>
+                                <Text style={styles.weekLegendText}>{getLegendDayTracker(6)}</Text>
+                                <Text style={styles.weekLegendText}>{getLegendDayTracker(5)}</Text>
+                                <Text style={styles.weekLegendText}>{getLegendDayTracker(4)}</Text>
+                                <Text style={styles.weekLegendText}>{getLegendDayTracker(3)}</Text>
+                                <Text style={styles.weekLegendText}>{getLegendDayTracker(2)}</Text>
+                                <Text style={styles.weekLegendText}>{getLegendDayTracker(1)}</Text>
+                                <Text style={[styles.weekLegendText, { fontFamily: fonts.legendBold }]}>{getLegendDayTracker(0)}</Text>
+                            </View>
+                        </View>
+                        <FlatList
+                            data={myHabits}
+                            keyExtractor={(item) => String(item.id)}
+                            renderItem={({ item }) => (
+                                <Habit data={item} />
+                            )}
+                            showsVerticalScrollIndicator={false}
+                            style={styles.habitList}
+                        />
+                    </>
                     :
                     <View style={styles.habitListEmpty}>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('adicionar')}>
