@@ -297,14 +297,14 @@ const styles = StyleSheet.create({
         backgroundColor: colors.grayLight
     },
     header: {
-        height: 170,
+        height: 160,
         alignItems: 'center',
         paddingHorizontal: 30,
         paddingVertical: 20,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         fontFamily: fonts.title,
         color: colors.textDark,
         paddingBottom: 25
@@ -315,7 +315,7 @@ const styles = StyleSheet.create({
         padding: 20
     },
     subtitle: {
-        fontSize: 20,
+        fontSize: 18,
         fontFamily: fonts.content,
         color: colors.textDark,
         paddingRight: 20
@@ -339,7 +339,7 @@ const styles = StyleSheet.create({
     dateTimePickerButton: {
         width: '100%',
         alignItems: 'center',
-        paddingVertical: 40
+        paddingVertical: 36
     },
     dateTimePickerText: {
         color: colors.textDark,

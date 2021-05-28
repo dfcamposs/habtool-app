@@ -60,7 +60,7 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '90%',
-        fontSize: 18,
+        fontSize: 16,
         fontFamily: fonts.content,
         color: colors.textDark
     }

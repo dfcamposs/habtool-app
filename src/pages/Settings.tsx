@@ -39,7 +39,7 @@ const styles = StyleSheet.create({
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },
     title: {
-        fontSize: 24,
+        fontSize: 20,
         fontFamily: fonts.title,
         color: colors.textDark,
         paddingTop: 20

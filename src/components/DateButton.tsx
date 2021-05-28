@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
         paddingRight: 10
     },
     text: {
-        fontSize: 18,
+        fontSize: 16,
         fontFamily: fonts.content,
         color: colors.textUnfocus
     }
