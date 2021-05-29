@@ -155,13 +155,13 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                                 style={styles.removeButton}
                                 onPress={handleRemoveHabit}
                             >
-                                <MaterialIcons name="delete" size={20} color={colors.backgroundPrimary} />
+                                <MaterialIcons name="delete" size={20} color={colors.textSecundary} />
                             </RectButton>
                             <RectButton
                                 style={styles.editButton}
                                 onPress={handleUpdateHabit}
                             >
-                                <MaterialIcons name="edit" size={20} color={colors.backgroundPrimary} />
+                                <MaterialIcons name="edit" size={20} color={colors.textSecundary} />
                             </RectButton>
                         </View>
                     </Animated.View>
