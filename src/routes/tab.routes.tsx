@@ -27,6 +27,7 @@ const AuthRoutes = () => {
                     fontFamily: fonts.complement
                 },
                 style: {
+                    backgroundColor: colors.backgroundTertiary,
                     paddingVertical: Platform.OS === 'ios' ? 10 : 0,
                     height: Platform.OS === 'ios' ? 80 : 60
                 }

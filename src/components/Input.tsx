@@ -39,6 +39,7 @@ export function Input({ name, icon, center = false, value, ...rest }: InputProps
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
                 autoCapitalize='none'
+                placeholderTextColor={colors.textUnfocus}
                 {...rest}
             />
         </View>

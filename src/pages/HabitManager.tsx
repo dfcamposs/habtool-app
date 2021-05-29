@@ -226,6 +226,7 @@ export function HabitManager() {
                                     display="spinner"
                                     onChange={handleChangeStartDate}
                                     style={styles.dateTimePickerIos}
+                                    textColor={colors.textPrimary}
                                 />
                             )}
 
@@ -242,6 +243,7 @@ export function HabitManager() {
                                     display="spinner"
                                     onChange={handleChangeEndDate}
                                     style={styles.dateTimePickerIos}
+                                    textColor={colors.textPrimary}
                                 />
                             )}
 
@@ -263,6 +265,7 @@ export function HabitManager() {
                                     display="spinner"
                                     onChange={handleChangeTimeSchedule}
                                     style={styles.dateTimePickerIos}
+                                    textColor={colors.textPrimary}
                                 />
                             )}
 
@@ -334,7 +337,7 @@ const styles = StyleSheet.create({
     dateTimePickerIos: {
         width: '100%',
         height: 100,
-        marginVertical: 10
+        marginVertical: 10,
     },
     dateTimePickerButton: {
         width: '100%',
