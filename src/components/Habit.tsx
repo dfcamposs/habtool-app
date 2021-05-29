@@ -155,13 +155,13 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                                 style={styles.removeButton}
                                 onPress={handleRemoveHabit}
                             >
-                                <MaterialIcons name="delete" size={20} color={colors.white} />
+                                <MaterialIcons name="delete" size={20} color={colors.backgroundPrimary} />
                             </RectButton>
                             <RectButton
                                 style={styles.editButton}
                                 onPress={handleUpdateHabit}
                             >
-                                <MaterialIcons name="edit" size={20} color={colors.white} />
+                                <MaterialIcons name="edit" size={20} color={colors.backgroundPrimary} />
                             </RectButton>
                         </View>
                     </Animated.View>
@@ -174,7 +174,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                         onPress={handleOpenModal}
                         {...rest}
                     >
-                        <Text style={[styles.text, habitIsActive && { color: colors.textDark }]}>
+                        <Text style={[styles.text, habitIsActive && { color: colors.textPrimary }]}>
                             {habit.name}
                         </Text>
                     </TouchableOpacity>
@@ -200,7 +200,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
         height: 100,
         marginHorizontal: 20,
         marginBottom: 20,
@@ -214,7 +214,7 @@ const styles = StyleSheet.create({
     editButton: {
         width: 60,
         height: 100,
-        backgroundColor: colors.grayDark,
+        backgroundColor: colors.gray,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
@@ -254,18 +254,18 @@ const styles = StyleSheet.create({
         marginTop: getStatusBarHeight(),
         paddingVertical: 23,
         paddingHorizontal: 10,
-        backgroundColor: colors.background
+        backgroundColor: colors.backgroundPrimary
     },
     modalTitle: {
         fontSize: 24,
         fontFamily: fonts.title,
-        color: colors.textDark,
+        color: colors.textPrimary,
         paddingVertical: 40
     },
     calendar: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors.background
+        backgroundColor: colors.backgroundPrimary
     },
     subtitle: {
         fontSize: 18,
@@ -276,7 +276,7 @@ const styles = StyleSheet.create({
     button: {
         width: 100,
         height: 40,
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -285,6 +285,6 @@ const styles = StyleSheet.create({
     textButton: {
         fontSize: 16,
         fontFamily: fonts.contentBold,
-        color: colors.textDark
+        color: colors.textPrimary
     },
 })

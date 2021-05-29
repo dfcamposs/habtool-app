@@ -24,7 +24,7 @@ export function SettingsButton({ title, ...rest }: ButtonProps) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
         justifyContent: 'center',
         padding: 20,
         marginBottom: 10,
@@ -34,6 +34,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors.textDark
+        color: colors.textPrimary
     }
 })

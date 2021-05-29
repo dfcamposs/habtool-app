@@ -33,7 +33,7 @@ export function Progress() {
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
             color: colors.blue,
-            textColor: colors.textLight
+            textColor: colors.textSecundary
         }
     }
     const { myHabits } = useContext(HabitsContext);
@@ -118,7 +118,7 @@ export function Progress() {
                     color: format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
                         ? colors.blueDark
                         : colors.blue,
-                    textColor: colors.textLight
+                    textColor: colors.textSecundary
                 }
             }
         });
@@ -129,8 +129,8 @@ export function Progress() {
                 [format(dateSelected, 'yyyy-MM-dd')]: {
                     startingDay: true,
                     endingDay: true,
-                    color: colors.grayLight,
-                    textColor: colors.textDark
+                    color: colors.backgroundSecundary,
+                    textColor: colors.textPrimary
                 }
             }
         }
@@ -164,13 +164,13 @@ export function Progress() {
                     onDayPress={(date) => handleHabitsHistoryDay(date)}
                     style={styles.calendar}
                     theme={{
-                        calendarBackground: colors.background,
-                        arrowColor: colors.textDark,
+                        calendarBackground: colors.backgroundPrimary,
+                        arrowColor: colors.textPrimary,
                         todayTextColor: colors.blue,
-                        dayTextColor: colors.textDark,
+                        dayTextColor: colors.textPrimary,
                         dotColor: colors.blue,
-                        monthTextColor: colors.textDark,
-                        indicatorColor: colors.textDark,
+                        monthTextColor: colors.textPrimary,
+                        indicatorColor: colors.textPrimary,
                         textDisabledColor: colors.textUnfocus,
                         textDayFontFamily: fonts.content,
                         textMonthFontFamily: fonts.content,
@@ -192,7 +192,7 @@ export function Progress() {
                             keyExtractor={(item) => String(item.id)}
                             renderItem={({ item: habit }) => (
                                 <View style={styles.historyLine}>
-                                    <View style={[styles.circle, { backgroundColor: habit.checked ? colors.green : colors.white }]} />
+                                    <View style={[styles.circle, { backgroundColor: habit.checked ? colors.green : colors.backgroundPrimary }]} />
                                     <Text style={styles.historyLineText}>{habit.name}</Text>
                                 </View>
                             )}
@@ -211,7 +211,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
     },
     header: {
         height: 170,
@@ -222,13 +222,13 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: colors.backgroundPrimary,
         paddingBottom: 20
     },
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors.textDark,
+        color: colors.textPrimary,
         paddingBottom: 25
     },
     cards: {
@@ -238,7 +238,7 @@ const styles = StyleSheet.create({
     card: {
         width: 160,
         height: 70,
-        backgroundColor: colors.white,
+        backgroundColor: colors.backgroundPrimary,
         borderRadius: 10,
         marginHorizontal: 15,
         alignItems: 'center',
@@ -247,23 +247,23 @@ const styles = StyleSheet.create({
     },
     score: {
         fontSize: 30,
-        color: colors.textDark,
+        color: colors.textPrimary,
         fontFamily: fonts.content
     },
     legend: {
         fontSize: 12,
-        color: colors.textDark,
+        color: colors.textPrimary,
         fontFamily: fonts.legend
     },
     calendar: {
         marginHorizontal: 20,
         marginVertical: 20,
-        backgroundColor: colors.background,
+        backgroundColor: colors.backgroundPrimary,
     },
     subtitle: {
         fontSize: 20,
         fontFamily: fonts.content,
-        color: colors.textDark
+        color: colors.textPrimary
     },
     selectedDate: {
         fontSize: 14,
@@ -279,7 +279,7 @@ const styles = StyleSheet.create({
     },
     history: {
         flex: 1,
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
         marginHorizontal: 30,
         borderRadius: 10,
         padding: 10,
@@ -293,14 +293,14 @@ const styles = StyleSheet.create({
         height: 20,
         width: 20,
         borderRadius: 10,
-        backgroundColor: colors.grayDark,
+        backgroundColor: colors.gray,
         marginHorizontal: 10
     },
     historyLineText: {
         flex: 1,
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors.textDark
+        color: colors.textPrimary
     },
     emptyText: {
         paddingLeft: 40,

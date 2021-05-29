@@ -1,16 +1,15 @@
 export default {
-    superWhite: '#FFFFFF',
-    white: '#F8F9FA',
-    grayLight: '#E9ECEF',
-    grayDark: '#C3C9CE',
+    gray: '#C3C9CE',
     blue: '#4985F9',
     blueDark: '#1049BB',
     green: '#00D95A',
     red: '#FF0000',
 
-    textLight: '#F8F9FA',
-    textDark: '#495057',
+    textPrimary: '#495057',
+    textSecundary: '#F8F9FA',
     textUnfocus: '#C3C9CE',
 
-    background: '#F8F9FA'
+    backgroundPrimary: '#F8F9FA',
+    backgroundSecundary: '#E9ECEF',
+    backgroundTertiary: '#FFFFFF',
 };

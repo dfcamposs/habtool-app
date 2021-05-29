@@ -22,13 +22,13 @@ export function DateButton({ name, date, clear, ...rest }: DateButtonProps) {
                     size={28}
                     color={date ? colors.blue : colors.textUnfocus}
                 />
-                <Text style={[styles.text, !!date && { color: colors.textDark }]}>
+                <Text style={[styles.text, !!date && { color: colors.textPrimary }]}>
                     {date || "selecionar data fim"}
                 </Text>
             </TouchableOpacity>
             {!!clear && !!date && (
                 <TouchableOpacity style={styles.button} activeOpacity={0.3} onPress={clear}>
-                    <Text style={[styles.text, !!date && { color: colors.textDark }]}>
+                    <Text style={[styles.text, !!date && { color: colors.textPrimary }]}>
                         clear
                     </Text>
                 </TouchableOpacity>

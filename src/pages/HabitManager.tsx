@@ -248,9 +248,9 @@ export function HabitManager() {
                             <View style={styles.scheduleLabel}>
                                 <Text style={styles.subtitle}> lembrete </Text>
                                 <Switch
-                                    thumbColor={colors.white}
-                                    trackColor={{ true: colors.blue, false: colors.grayLight }}
-                                    ios_backgroundColor={colors.grayLight}
+                                    thumbColor={colors.backgroundPrimary}
+                                    trackColor={{ true: colors.blue, false: colors.backgroundSecundary }}
+                                    ios_backgroundColor={colors.backgroundSecundary}
                                     onValueChange={changeScheduleSwitch}
                                     value={scheduleEnabled}
                                 />
@@ -294,7 +294,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors.grayLight
+        backgroundColor: colors.backgroundSecundary
     },
     header: {
         height: 160,
@@ -306,18 +306,18 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors.textDark,
+        color: colors.textPrimary,
         paddingBottom: 25
     },
     form: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: colors.backgroundPrimary,
         padding: 20
     },
     subtitle: {
         fontSize: 18,
         fontFamily: fonts.content,
-        color: colors.textDark,
+        color: colors.textPrimary,
         paddingRight: 20
     },
     week: {
@@ -342,7 +342,7 @@ const styles = StyleSheet.create({
         paddingVertical: 36
     },
     dateTimePickerText: {
-        color: colors.textDark,
+        color: colors.textPrimary,
         fontSize: 20,
         fontFamily: fonts.content,
     },

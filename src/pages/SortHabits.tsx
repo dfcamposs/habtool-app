@@ -82,7 +82,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors.textDark,
+        color: colors.textPrimary,
         paddingTop: 20
     },
     habitList: {
@@ -92,7 +92,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     habit: {
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 20,
@@ -103,7 +103,7 @@ const styles = StyleSheet.create({
     habitName: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors.textDark,
+        color: colors.textPrimary,
         paddingLeft: 10
     },
     footer: {

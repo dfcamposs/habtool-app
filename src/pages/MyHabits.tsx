@@ -98,7 +98,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
     },
     header: {
         height: 140,
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     weekLegend: {
         width: 260,
         height: 20,
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
         borderBottomRightRadius: 10,
         borderBottomLeftRadius: 10,
         flexDirection: 'row',
@@ -125,7 +125,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     weekLegendText: {
-        color: colors.textDark,
+        color: colors.textPrimary,
         fontSize: 10,
         fontFamily: fonts.legend,
         minWidth: 30,
@@ -134,7 +134,7 @@ const styles = StyleSheet.create({
     },
     content: {
         flex: 1,
-        backgroundColor: colors.background,
+        backgroundColor: colors.backgroundPrimary,
         paddingBottom: 20,
     },
     habitListEmpty: {
@@ -155,12 +155,12 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        color: colors.textDark,
+        color: colors.textPrimary,
         fontFamily: fonts.title
     },
     subtitle: {
         fontSize: 14,
-        color: colors.textDark,
+        color: colors.textPrimary,
         fontFamily: fonts.subtitle,
         paddingVertical: 10,
     }

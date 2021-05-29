@@ -14,7 +14,7 @@ export function Stars() {
             return colors.blue;
         }
 
-        return colors.white;
+        return colors.backgroundPrimary;
     }
 
     return (

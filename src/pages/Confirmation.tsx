@@ -19,7 +19,7 @@ export function Confirmation() {
         <SafeAreaView style={styles.container}>
             <Text style={styles.title}>hábito salvo com sucesso!</Text>
             <RectButton style={styles.button} onPress={handleNavigateToMyHabits}>
-                <MaterialIcons name="done" size={40} color={colors.white} />
+                <MaterialIcons name="done" size={40} color={colors.backgroundPrimary} />
             </RectButton>
         </SafeAreaView>
     )
@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: fonts.title,
         fontSize: 28,
-        color: colors.textDark,
+        color: colors.textPrimary,
         textAlign: 'center',
         marginHorizontal: 30,
         paddingTop: '40%',

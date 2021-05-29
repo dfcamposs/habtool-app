@@ -19,7 +19,7 @@ export function WeekDayButton({ title, active = false, ...rest }: WeekDayButton)
             activeOpacity={0.7}
             {...rest}
         >
-            <Text style={[styles.text, active && { color: colors.textLight }]}>
+            <Text style={[styles.text, active && { color: colors.textSecundary }]}>
                 {title}
             </Text>
         </TouchableOpacity>
@@ -31,13 +31,13 @@ const styles = StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 25,
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center'
     },
     text: {
         fontSize: 14,
         fontFamily: fonts.content,
-        color: colors.textDark
+        color: colors.textPrimary
     }
 })

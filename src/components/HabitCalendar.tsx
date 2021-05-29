@@ -29,7 +29,7 @@ export function HabitCalendar({ habitId }: HabitCalendar) {
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
             color: colors.blue,
-            textColor: colors.textLight
+            textColor: colors.textSecundary
         }
     }
     const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>(initialCalendarMarked);
@@ -77,8 +77,8 @@ export function HabitCalendar({ habitId }: HabitCalendar) {
                 [format(dateSelected, 'yyyy-MM-dd')]: {
                     startingDay: true,
                     endingDay: true,
-                    color: colors.grayLight,
-                    textColor: colors.textDark
+                    color: colors.backgroundSecundary,
+                    textColor: colors.textPrimary
                 }
             }
         }
@@ -112,7 +112,7 @@ export function HabitCalendar({ habitId }: HabitCalendar) {
                         && format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
                         ? colors.blueDark
                         : colors.blue,
-                    textColor: colors.textLight
+                    textColor: colors.textSecundary
                 }
             }
         });
@@ -127,13 +127,13 @@ export function HabitCalendar({ habitId }: HabitCalendar) {
             onDayPress={(date) => handleChangeSelectedDay(date.timestamp)}
             style={styles.container}
             theme={{
-                calendarBackground: colors.background,
-                arrowColor: colors.textDark,
+                calendarBackground: colors.backgroundPrimary,
+                arrowColor: colors.textPrimary,
                 todayTextColor: colors.blue,
-                dayTextColor: colors.textDark,
+                dayTextColor: colors.textPrimary,
                 dotColor: colors.blue,
-                monthTextColor: colors.textDark,
-                indicatorColor: colors.textDark,
+                monthTextColor: colors.textPrimary,
+                indicatorColor: colors.textPrimary,
                 textDisabledColor: colors.textUnfocus,
                 textDayFontFamily: fonts.content,
                 textMonthFontFamily: fonts.content,
@@ -148,6 +148,6 @@ export function HabitCalendar({ habitId }: HabitCalendar) {
 
 const styles = StyleSheet.create({
     container: {
-        backgroundColor: colors.background,
+        backgroundColor: colors.backgroundPrimary,
     },
 })

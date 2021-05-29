@@ -100,14 +100,14 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: fonts.title,
         fontSize: 28,
-        color: colors.textDark,
+        color: colors.textPrimary,
         textAlign: 'center',
         paddingBottom: 50
     },
     input: {
         borderBottomWidth: 1,
         borderColor: colors.textUnfocus,
-        color: colors.textDark,
+        color: colors.textPrimary,
         width: '100%',
         fontSize: 16,
         padding: 10,

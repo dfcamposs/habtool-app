@@ -19,7 +19,7 @@ const InitialRoutes: React.FC = () => {
             initialRouteName="Welcome"
             screenOptions={{
                 cardStyle: {
-                    backgroundColor: colors.background,
+                    backgroundColor: colors.backgroundPrimary,
                 }
             }}
         >
@@ -43,7 +43,7 @@ const AppRoutes: React.FC = () => {
             initialRouteName="MyHabits"
             screenOptions={{
                 cardStyle: {
-                    backgroundColor: colors.background,
+                    backgroundColor: colors.backgroundPrimary,
                 }
             }}
         >

@@ -33,7 +33,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        color: colors.white,
+        color: colors.backgroundPrimary,
         fontFamily: fonts.contentBold
     }
 })

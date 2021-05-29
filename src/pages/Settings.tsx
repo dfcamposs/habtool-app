@@ -41,20 +41,20 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors.textDark,
+        color: colors.textPrimary,
         paddingTop: 20
     },
     subtitle: {
         fontSize: 18,
         fontFamily: fonts.content,
-        color: colors.textDark,
+        color: colors.textPrimary,
         paddingRight: 20,
         paddingVertical: 20
     },
     button: {
         width: 100,
         height: 40,
-        backgroundColor: colors.grayLight,
+        backgroundColor: colors.backgroundSecundary,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     textButton: {
         fontSize: 16,
         fontFamily: fonts.contentBold,
-        color: colors.textDark
+        color: colors.textPrimary
     },
     menu: {
         flex: 1,

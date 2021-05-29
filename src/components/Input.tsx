@@ -62,6 +62,6 @@ const styles = StyleSheet.create({
         width: '90%',
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors.textDark
+        color: colors.textPrimary
     }
 })

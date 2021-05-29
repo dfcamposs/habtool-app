@@ -37,7 +37,7 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
             <RectButton
                 style={[
                     styles.dayCicle,
-                    enabled && { backgroundColor: colors.white },
+                    enabled && { backgroundColor: colors.backgroundPrimary },
                     trackerChecked && { backgroundColor: colors.green },
                 ]}
                 enabled={enabled}
@@ -58,6 +58,6 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         borderRadius: 15,
-        backgroundColor: colors.grayDark
+        backgroundColor: colors.gray
     }
 })
