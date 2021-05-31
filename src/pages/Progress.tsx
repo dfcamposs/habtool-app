@@ -79,7 +79,7 @@ export function Progress() {
         const history = await loadHabitsHistory();
         const daysChecked: number[] = [];
         let result: any = {};
-        let currentSequence = 0
+        let currentSequence = 0;
 
         history.forEach(item => {
             daysChecked.push(...item.history);

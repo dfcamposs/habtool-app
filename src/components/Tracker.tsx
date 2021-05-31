@@ -50,7 +50,7 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
 
 const styles = StyleSheet.create({
     container: {
-        marginLeft: 5,
+        marginLeft: 7,
         alignItems: 'center',
         justifyContent: 'space-between'
     },

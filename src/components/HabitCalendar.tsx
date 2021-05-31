@@ -3,7 +3,7 @@ import { Alert, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 import { format, isBefore } from 'date-fns';
 
-import { loadHabitHistoryByHabitId, updateHabitHistory } from '../libs/storage';
+import { FrequencyProps, HabitProps, loadHabitHistoryByHabitId, updateHabitHistory } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -21,10 +21,15 @@ interface CalendarMarkedProps {
 }
 
 interface HabitCalendar {
-    habitId: string;
+    data: {
+        id: string;
+        name: string,
+        frequency: FrequencyProps,
+        endDate?: number;
+    }
 }
 
-export function HabitCalendar({ habitId }: HabitCalendar) {
+export function HabitCalendar({ data: habit }: HabitCalendar) {
     const initialCalendarMarked = {
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
@@ -41,34 +46,46 @@ export function HabitCalendar({ habitId }: HabitCalendar) {
     async function handleChangeSelectedDay(date: number) {
         const dateSelected = new Date(date);
         const dateFormatted = dateSelected.setDate(dateSelected.getDate() + 1);
+        const weekDay = format(dateFormatted, 'E').toLocaleLowerCase();
 
         if (isBefore(dateSelected, Date.now()) ||
             format(dateSelected, 'yyyy-MM-dd') === format(Date.now(), 'yyyy-MM-dd')
+
         ) {
-            Alert.alert('Alterar Histórico', `Deseja alterar este dia no histórico?`, [
-                {
-                    text: 'Não',
-                    style: 'cancel'
-                },
-                {
-                    text: 'Sim',
-                    onPress: async () => {
-                        try {
-                            await updateHabitHistory(habitId, dateFormatted);
-                            await handleMarkedDate(dateFormatted);
-                        } catch (error) {
-                            Alert.alert('Não foi possível incluir no histórico');
+            if (habit.frequency[weekDay]) {
+                Alert.alert('alterar histórico', `deseja alterar este dia no histórico?`, [
+                    {
+                        text: 'não',
+                        style: 'cancel'
+                    },
+                    {
+                        text: 'sim',
+                        onPress: async () => {
+                            try {
+                                await updateHabitHistory(habit.id, dateFormatted);
+                                await handleMarkedDate(dateFormatted);
+                            } catch (error) {
+                                Alert.alert(
+                                    'algo deu errado',
+                                    'não foi possível incluir este dia no histórico do hábito'
+                                );
+                            }
                         }
                     }
-                }
-            ]);
+                ]);
+            } else {
+                Alert.alert(
+                    'dia não disponível',
+                    'atualize as configurações do hábito para alterar o histórico'
+                );
+            }
         }
 
         await handleMarkedDate(dateFormatted);
     }
 
     async function handleMarkedDate(dateSelected: number): Promise<void> {
-        const history = await loadHabitHistoryByHabitId(habitId);
+        const history = await loadHabitHistoryByHabitId(habit.id);
         let result: CalendarMarkedProps = {};
 
         if (dateSelected) {

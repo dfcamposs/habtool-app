@@ -34,7 +34,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
     const [habitIsActive, setHabitIsActive] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
 
-    const { handleUpdateMyHabits, myHabits } = useContext(HabitsContext);
+    const { handleUpdateMyHabits, myHabits, handleUpdatePercentageCheck } = useContext(HabitsContext);
     const navigation = useNavigation();
 
     async function getWeekHistory() {
@@ -78,17 +78,18 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
         if (!modalVisible) {
             setTrackerListProps([]);
             getWeekHistory();
+            handleUpdatePercentageCheck();
         }
     }, [modalVisible]);
 
     function handleRemoveHabit() {
-        Alert.alert('Remover', `Deseja remover a ${habit.name}?`, [
+        Alert.alert(`remover hábito`, `deseja realmente remover ${habit.name}?`, [
             {
-                text: 'Não 🙏🏼',
+                text: 'não',
                 style: 'cancel'
             },
             {
-                text: 'Sim 😢',
+                text: 'sim',
                 onPress: async () => {
                     try {
                         await deleteHabit(habit.id);
@@ -97,7 +98,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                         handleUpdateMyHabits(habitsUpdated);
 
                     } catch (error) {
-                        Alert.alert('Não foi possível remover! 😢');
+                        Alert.alert('algo deu errado', 'não foi possível remover!');
                     }
                 }
             }
@@ -138,7 +139,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
 
                     <View style={styles.calendar}>
                         <Text style={styles.subtitle}>histórico</Text>
-                        <HabitCalendar habitId={habit.id} />
+                        <HabitCalendar data={habit} />
                     </View>
                     <RectButton style={styles.button} onPress={handleCloseModal}>
                         <Text style={styles.textButton}>voltar</Text>

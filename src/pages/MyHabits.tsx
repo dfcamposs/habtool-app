@@ -16,8 +16,7 @@ import fonts from '../styles/fonts';
 
 export function MyHabits() {
     const [userName, setUserName] = useState<string>();
-    const { myHabits } = useContext(HabitsContext);
-
+    const { myHabits, motivationalPhrase } = useContext(HabitsContext);
     const navigation = useNavigation();
 
     useEffect(() => {
@@ -44,7 +43,9 @@ export function MyHabits() {
                 <View style={styles.headerContent}>
                     <View>
                         <Text style={styles.title}>Olá, {userName}!</Text>
-                        <Text style={styles.subtitle}>seja 1% melhor todos os dias</Text>
+                        <Text style={styles.subtitle}>
+                            {motivationalPhrase}
+                        </Text>
 
                         <Stars />
                     </View>
@@ -115,7 +116,7 @@ const styles = StyleSheet.create({
         paddingRight: 20,
     },
     weekLegend: {
-        width: 260,
+        width: 272,
         height: 20,
         backgroundColor: colors.backgroundSecundary,
         borderBottomRightRadius: 10,
@@ -129,7 +130,7 @@ const styles = StyleSheet.create({
         fontSize: 10,
         fontFamily: fonts.legend,
         minWidth: 30,
-        marginHorizontal: 2.5,
+        marginHorizontal: 3.5,
         textAlign: 'center'
     },
     content: {
@@ -160,7 +161,7 @@ const styles = StyleSheet.create({
     },
     subtitle: {
         fontSize: 14,
-        color: colors.textPrimary,
+        color: colors.textUnfocus,
         fontFamily: fonts.subtitle,
         paddingVertical: 10,
     }
