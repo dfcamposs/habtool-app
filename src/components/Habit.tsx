@@ -140,7 +140,11 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                     <View style={styles.calendar}>
                         <Text style={styles.subtitle}>histórico</Text>
                         <HabitCalendar data={habit} />
+                        {habit.endDate &&
+                            <Text style={styles.disabledText}>este hábito está desabilitado.</Text>
+                        }
                     </View>
+
                     <RectButton style={styles.button} onPress={handleCloseModal}>
                         <Text style={styles.textButton}>voltar</Text>
                     </RectButton>
@@ -252,7 +256,7 @@ const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
         alignItems: 'center',
-        marginTop: getStatusBarHeight(),
+        paddingTop: getStatusBarHeight(),
         paddingVertical: 23,
         paddingHorizontal: 10,
         backgroundColor: colors.backgroundPrimary
@@ -272,6 +276,13 @@ const styles = StyleSheet.create({
         fontSize: 18,
         fontFamily: fonts.subtitle,
         color: colors.textUnfocus,
+        paddingLeft: 20,
+    },
+    disabledText: {
+        fontSize: 16,
+        fontFamily: fonts.content,
+        color: colors.textUnfocus,
+        paddingTop: 20,
         paddingLeft: 20,
     },
     button: {

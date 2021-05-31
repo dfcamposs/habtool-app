@@ -35,7 +35,7 @@ export function Input({ name, icon, center = false, value, ...rest }: InputProps
                     color={(isFocused || !!value || !!rest.defaultValue) ? colors.blue : colors.textUnfocus}
                 />}
             <TextInput
-                style={[styles.input, center && { textAlign: 'center' }]}
+                style={[styles.input, center && { textAlign: 'center', width: '100%' }]}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
                 autoCapitalize='none'
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '90%',
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: fonts.content,
         color: colors.textPrimary
     }

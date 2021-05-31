@@ -48,9 +48,9 @@ export function HabitCalendar({ data: habit }: HabitCalendar) {
         const dateFormatted = dateSelected.setDate(dateSelected.getDate() + 1);
         const weekDay = format(dateFormatted, 'E').toLocaleLowerCase();
 
-        if (isBefore(dateSelected, Date.now()) ||
-            format(dateSelected, 'yyyy-MM-dd') === format(Date.now(), 'yyyy-MM-dd')
-
+        if ((isBefore(dateSelected, Date.now()) ||
+            format(dateSelected, 'yyyy-MM-dd') === format(Date.now(), 'yyyy-MM-dd'))
+            && !habit.endDate
         ) {
             if (habit.frequency[weekDay]) {
                 Alert.alert('alterar histórico', `deseja alterar este dia no histórico?`, [

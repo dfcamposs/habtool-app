@@ -1,7 +1,7 @@
 const lightTheme = {
     gray: '#C3C9CE',
     blue: '#4985F9',
-    blueDark: '#1049BB',
+    blueDark: '#0055ff',
     green: '#00D95A',
     red: '#FF0000',
 
@@ -17,7 +17,7 @@ const lightTheme = {
 const darkTheme = {
     gray: '#575E65',
     blue: '#4985F9',
-    blueDark: '#1049BB',
+    blueDark: '#0055ff',
     green: '#00D95A',
     red: '#FF0000',
 

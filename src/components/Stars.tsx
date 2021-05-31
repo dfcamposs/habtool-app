@@ -30,8 +30,7 @@ export function Stars() {
 
 const styles = StyleSheet.create({
     container: {
-        flexDirection: 'row',
-        paddingVertical: 10
+        flexDirection: 'row'
     },
     star: {
         marginRight: 5

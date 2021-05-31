@@ -102,14 +102,15 @@ const styles = StyleSheet.create({
         backgroundColor: colors.backgroundSecundary,
     },
     header: {
-        height: 140,
+        height: 170,
         paddingHorizontal: 30,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
         justifyContent: 'center',
     },
     headerContent: {
         flexDirection: 'row',
-        justifyContent: 'space-between'
+        justifyContent: 'space-between',
+        paddingVertical: 10
     },
     weekLegendContainer: {
         alignItems: 'flex-end',
@@ -163,6 +164,7 @@ const styles = StyleSheet.create({
         fontSize: 14,
         color: colors.textUnfocus,
         fontFamily: fonts.subtitle,
-        paddingVertical: 10,
+        paddingTop: 5,
+        paddingBottom: 20
     }
 })

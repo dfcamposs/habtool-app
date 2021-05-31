@@ -42,6 +42,7 @@ export function Progress() {
     const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>(initialCalendarMarked);
     const [activeHabitsCount, setActiveHabitsCount] = useState<number>(0);
     const [currentSequenceCount, setCurrentSequenceCount] = useState<number>(0);
+    const [maxSequenceCount, setMaxSequenceCount] = useState<number>(0);
 
     useEffect(() => {
         const currentDate = new Date();
@@ -80,6 +81,7 @@ export function Progress() {
         const daysChecked: number[] = [];
         let result: any = {};
         let currentSequence = 0;
+        let maxSequence = 0;
 
         history.forEach(item => {
             daysChecked.push(...item.history);
@@ -103,6 +105,7 @@ export function Progress() {
 
             if (index === 0 || !lastDay) {
                 startingDate = true;
+                maxSequence = currentSequence > maxSequence ? currentSequence : maxSequence;
                 currentSequence = 0;
             }
             if (index === daysChecked.length - 1 || !nextDay) {
@@ -137,6 +140,7 @@ export function Progress() {
 
         setCalendarMarked(result);
         setCurrentSequenceCount(currentSequence);
+        setMaxSequenceCount(maxSequence);
     }
 
     return (
@@ -148,12 +152,16 @@ export function Progress() {
 
                 <View style={styles.cards}>
                     <View style={styles.card}>
+                        <Text style={styles.score}>{maxSequenceCount}</Text>
+                        <Text style={styles.legend}>seq. máxima (dias)</Text>
+                    </View>
+                    <View style={styles.card}>
                         <Text style={styles.score}>{activeHabitsCount}</Text>
                         <Text style={styles.legend}>hábitos ativos</Text>
                     </View>
                     <View style={styles.card}>
                         <Text style={styles.score}>{currentSequenceCount}</Text>
-                        <Text style={styles.legend}>sequencia atual (dias)</Text>
+                        <Text style={styles.legend}>seq. atual (dias)</Text>
                     </View>
                 </View>
             </View>
@@ -177,7 +185,7 @@ export function Progress() {
                         textDayHeaderFontFamily: fonts.content,
                         textDayFontSize: 12,
                         textDayHeaderFontSize: 12,
-                        textMonthFontSize: 16,
+                        textMonthFontSize: 14,
                     }}
                 />
 
@@ -216,7 +224,7 @@ const styles = StyleSheet.create({
     header: {
         height: 170,
         alignItems: 'center',
-        paddingHorizontal: 30,
+        paddingHorizontal: 10,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
         paddingVertical: 20
     },
@@ -229,18 +237,18 @@ const styles = StyleSheet.create({
         fontSize: 20,
         fontFamily: fonts.title,
         color: colors.textPrimary,
-        paddingBottom: 25
+        paddingBottom: 30
     },
     cards: {
         flexDirection: 'row',
         justifyContent: 'space-around'
     },
     card: {
-        width: 160,
+        width: 120,
         height: 70,
         backgroundColor: colors.backgroundPrimary,
         borderRadius: 10,
-        marginHorizontal: 15,
+        marginHorizontal: 7,
         alignItems: 'center',
         justifyContent: 'center',
         padding: 10
@@ -251,17 +259,18 @@ const styles = StyleSheet.create({
         fontFamily: fonts.content
     },
     legend: {
-        fontSize: 12,
-        color: colors.textPrimary,
-        fontFamily: fonts.legend
+        fontSize: 10,
+        color: colors.textUnfocus,
+        fontFamily: fonts.legend,
+        textAlign: 'center'
     },
     calendar: {
-        marginHorizontal: 20,
+        marginHorizontal: 10,
         marginVertical: 20,
         backgroundColor: colors.backgroundPrimary,
     },
     subtitle: {
-        fontSize: 20,
+        fontSize: 16,
         fontFamily: fonts.content,
         color: colors.textPrimary
     },
@@ -274,13 +283,13 @@ const styles = StyleSheet.create({
     historyHeader: {
         flexDirection: 'row',
         alignItems: 'baseline',
-        marginHorizontal: 35,
+        marginHorizontal: 25,
         paddingBottom: 10,
     },
     history: {
         flex: 1,
         backgroundColor: colors.backgroundSecundary,
-        marginHorizontal: 30,
+        marginHorizontal: 20,
         borderRadius: 10,
         padding: 10,
     },
@@ -298,7 +307,7 @@ const styles = StyleSheet.create({
     },
     historyLineText: {
         flex: 1,
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: fonts.content,
         color: colors.textPrimary
     },
