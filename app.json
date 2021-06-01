@@ -1,14 +1,14 @@
 {
   "expo": {
-    "name": "hab.to",
-    "slug": "hab.to",
+    "name": "habto",
+    "slug": "habto",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
+      "resizeMode": "cover",
+      "backgroundColor": "#F8F9FA"
     },
     "updates": {
       "fallbackToCacheTimeout": 0
@@ -20,11 +20,9 @@
       "supportsTablet": true
     },
     "android": {
-      "package": "com.dfcamposs.habto",
-      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "backgroundColor": "#F8F9FA"
       }
     },
     "web": {

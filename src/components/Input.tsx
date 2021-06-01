@@ -38,7 +38,7 @@ export function Input({ name, icon, center = false, value, ...rest }: InputProps
                 style={[styles.input, center && { textAlign: 'center', width: '100%' }]}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
-                autoCapitalize='none'
+                autoCapitalize={center ? 'sentences' : 'none'}
                 placeholderTextColor={colors.textUnfocus}
                 {...rest}
             />
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '90%',
-        fontSize: 14,
+        fontSize: 16,
         fontFamily: fonts.content,
         color: colors.textPrimary
     }

@@ -79,7 +79,7 @@ export function Progress() {
     async function handleMarkedDate(dateSelected: number): Promise<void> {
         const history = await loadHabitsHistory();
         const daysChecked: number[] = [];
-        let result: any = {};
+        let result: CalendarMarkedProps = {};
         let currentSequence = 0;
         let maxSequence = 0;
 
@@ -113,6 +113,7 @@ export function Progress() {
             }
 
             currentSequence++;
+            maxSequence = maxSequence < currentSequence ? currentSequence : maxSequence;
             result = {
                 ...result,
                 [format(day, 'yyyy-MM-dd')]: {

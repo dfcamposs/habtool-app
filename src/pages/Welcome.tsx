@@ -16,7 +16,7 @@ import { useNavigation } from '@react-navigation/native';
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 
-import { getUserName, saveUserName } from '../libs/storage';
+import { saveUserName } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
@@ -93,13 +93,13 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     logo: {
-        width: 100,
+        width: 80,
         height: 80,
         marginBottom: 30
     },
     title: {
         fontFamily: fonts.title,
-        fontSize: 28,
+        fontSize: 24,
         color: colors.textPrimary,
         textAlign: 'center',
         paddingBottom: 50

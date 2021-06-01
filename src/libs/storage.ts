@@ -87,7 +87,7 @@ export async function saveUserName(name: string): Promise<void> {
         await AsyncStorage
             .setItem('@habto:user',
                 JSON.stringify({
-                    name: name
+                    name: name.trim()
                 })
             );
 

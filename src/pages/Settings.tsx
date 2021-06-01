@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Text, StyleSheet, SafeAreaView, View, Platform } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
@@ -7,8 +7,10 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 import { SettingsButton } from '../components/SettingsButton';
+import { HabitsContext } from '../context/habits';
 
 export function Settings() {
+    const { myHabits } = useContext(HabitsContext);
     const navigation = useNavigation();
 
     return (
@@ -17,7 +19,7 @@ export function Settings() {
             <View style={styles.menu}>
 
                 <Text style={styles.subtitle}>sistema</Text>
-                <SettingsButton title="ordenar hábitos" onPress={() => navigation.navigate('SortHabits')} />
+                <SettingsButton title="ordenar hábitos" onPress={() => myHabits.length && navigation.navigate('SortHabits')} disabled={!myHabits.length} />
                 <SettingsButton title="alterar como deseja ser chamado" onPress={() => navigation.navigate('Rename')} />
 
                 <Text style={styles.subtitle}>suporte</Text>

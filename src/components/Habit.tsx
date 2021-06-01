@@ -1,5 +1,16 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react';
-import { StyleSheet, Text, FlatList, View, Animated, Alert, TouchableOpacity, TouchableOpacityProps, Modal, TouchableHighlight, Platform } from 'react-native';
+import React, { useContext, useEffect, useState } from 'react';
+import {
+    StyleSheet,
+    Text,
+    FlatList,
+    View,
+    Animated,
+    Alert,
+    TouchableOpacity,
+    TouchableOpacityProps,
+    Modal,
+    Platform
+} from 'react-native';
 import { RectButton, Swipeable, } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
 import { MaterialIcons } from '@expo/vector-icons';
@@ -124,6 +135,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
     }
 
     function handleCloseModal() {
+        console.log("entrei");
         setModalVisible(false);
     };
 
@@ -145,9 +157,9 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                         }
                     </View>
 
-                    <RectButton style={styles.button} onPress={handleCloseModal}>
+                    <TouchableOpacity style={styles.button} onPress={handleCloseModal} activeOpacity={0.5}>
                         <Text style={styles.textButton}>voltar</Text>
-                    </RectButton>
+                    </TouchableOpacity>
                 </View>
             </Modal>
 
@@ -249,14 +261,15 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     touch: {
-        flex: 1
+        flex: 1,
+        maxWidth: 100
     },
 
     //Modal
     modalContainer: {
         flex: 1,
         alignItems: 'center',
-        paddingTop: getStatusBarHeight(),
+        paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
         paddingVertical: 23,
         paddingHorizontal: 10,
         backgroundColor: colors.backgroundPrimary
