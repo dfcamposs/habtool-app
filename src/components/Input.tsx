@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '90%',
-        fontSize: 16,
+        fontSize: 15,
         fontFamily: fonts.content,
         color: colors.textPrimary
     }

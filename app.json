@@ -1,6 +1,6 @@
 {
   "expo": {
-    "name": "habto",
+    "name": "hab.to",
     "slug": "habto",
     "version": "1.0.0",
     "orientation": "portrait",
@@ -23,7 +23,8 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F8F9FA"
-      }
+      },
+      "package": "com.dfcamposs.habto"
     },
     "web": {
       "favicon": "./assets/favicon.png"

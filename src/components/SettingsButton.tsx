@@ -32,7 +32,7 @@ const styles = StyleSheet.create({
         borderRadius: 10
     },
     text: {
-        fontSize: 16,
+        fontSize: 14,
         fontFamily: fonts.content,
         color: colors.textPrimary
     }

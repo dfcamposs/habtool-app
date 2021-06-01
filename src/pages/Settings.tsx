@@ -47,7 +47,7 @@ const styles = StyleSheet.create({
         paddingTop: 20
     },
     subtitle: {
-        fontSize: 18,
+        fontSize: 16,
         fontFamily: fonts.content,
         color: colors.textPrimary,
         paddingRight: 20,

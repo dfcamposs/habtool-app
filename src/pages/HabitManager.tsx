@@ -193,17 +193,19 @@ export function HabitManager() {
                         </View>
                     </TouchableWithoutFeedback>
                     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <View style={styles.form}>
+                        <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
                             <Text style={styles.subtitle}>frequencia</Text>
 
                             <View style={styles.week}>
-                                <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
-                                <WeekDayButton title="sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
+                                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                                    <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
+                                    <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
+                                    <WeekDayButton title="ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
+                                    <WeekDayButton title="qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
+                                    <WeekDayButton title="qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
+                                    <WeekDayButton title="sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
+                                    <WeekDayButton title="sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
+                                </ScrollView>
                             </View>
 
                             <Input
@@ -285,7 +287,7 @@ export function HabitManager() {
                             <View style={styles.footer}>
                                 <Button title="salvar" onPress={handleSaveHabit} />
                             </View>
-                        </View>
+                        </ScrollView>
                     </TouchableWithoutFeedback>
                 </KeyboardAvoidingView>
             </SafeAreaView>
@@ -324,10 +326,7 @@ const styles = StyleSheet.create({
         paddingRight: 20
     },
     week: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        paddingVertical: 20
+        paddingVertical: 15,
     },
     scheduleLabel: {
         flexDirection: 'row',
@@ -342,15 +341,16 @@ const styles = StyleSheet.create({
     dateTimePickerButton: {
         width: '100%',
         alignItems: 'center',
-        paddingVertical: 36
+        paddingVertical: 30
     },
     dateTimePickerText: {
         color: colors.textPrimary,
-        fontSize: 20,
+        fontSize: 15,
         fontFamily: fonts.content,
     },
     footer: {
-        flex: 1,
+        paddingTop: 20,
+        paddingBottom: 40,
         justifyContent: 'flex-end'
     }
 })
