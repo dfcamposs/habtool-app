@@ -1,14 +1,11 @@
 import React, { useContext, useState } from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
-import { format } from 'date-fns';
-import pt from 'date-fns/locale/pt';
 
 import { updateHabitHistory } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
-import fonts from '../styles/fonts';
 
 interface TrackerProps extends RectButtonProps {
     data: {

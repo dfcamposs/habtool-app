@@ -283,7 +283,6 @@ export function HabitManager() {
                                     </TouchableOpacity>
                                 )
                             }
-
                             <View style={styles.footer}>
                                 <Button title="salvar" onPress={handleSaveHabit} />
                             </View>
@@ -315,9 +314,9 @@ const styles = StyleSheet.create({
         paddingBottom: 25
     },
     form: {
-        flex: 1,
+        flexGrow: 1,
         backgroundColor: colors.backgroundPrimary,
-        padding: 20
+        padding: 20,
     },
     subtitle: {
         fontSize: 16,
@@ -350,7 +349,6 @@ const styles = StyleSheet.create({
     },
     footer: {
         paddingTop: 20,
-        paddingBottom: 40,
-        justifyContent: 'flex-end'
+        paddingBottom: 40
     }
 })
