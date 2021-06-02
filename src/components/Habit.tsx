@@ -135,7 +135,6 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
     }
 
     function handleCloseModal() {
-        console.log("entrei");
         setModalVisible(false);
     };
 
@@ -145,6 +144,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                 animationType="slide"
                 transparent={false}
                 visible={modalVisible}
+                statusBarTranslucent={true}
             >
                 <View style={styles.modalContainer}>
                     <Text style={styles.modalTitle}>{habit.name}</Text>
@@ -269,7 +269,7 @@ const styles = StyleSheet.create({
     modalContainer: {
         flex: 1,
         alignItems: 'center',
-        paddingTop: Platform.OS === 'ios' ? getStatusBarHeight() : 0,
+        paddingTop: getStatusBarHeight(),
         paddingVertical: 23,
         paddingHorizontal: 10,
         backgroundColor: colors.backgroundPrimary

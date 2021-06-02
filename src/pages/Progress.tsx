@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { View, StyleSheet, SafeAreaView, Platform, Text, FlatList } from 'react-native';
+import { View, StyleSheet, SafeAreaView, Platform, Text, FlatList, ScrollView } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { Calendar, DateObject } from 'react-native-calendars';
 import { format } from 'date-fns';
@@ -151,7 +151,7 @@ export function Progress() {
                     progresso geral
                 </Text>
 
-                <View style={styles.cards}>
+                <ScrollView showsHorizontalScrollIndicator={false} horizontal>
                     <View style={styles.card}>
                         <Text style={styles.score}>{maxSequenceCount}</Text>
                         <Text style={styles.legend}>seq. máxima (dias)</Text>
@@ -164,7 +164,7 @@ export function Progress() {
                         <Text style={styles.score}>{currentSequenceCount}</Text>
                         <Text style={styles.legend}>seq. atual (dias)</Text>
                     </View>
-                </View>
+                </ScrollView>
             </View>
             <View style={styles.content}>
                 <Calendar
@@ -186,7 +186,7 @@ export function Progress() {
                         textDayHeaderFontFamily: fonts.content,
                         textDayFontSize: 12,
                         textDayHeaderFontSize: 12,
-                        textMonthFontSize: 14,
+                        textMonthFontSize: 15,
                     }}
                 />
 
@@ -223,7 +223,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.backgroundSecundary,
     },
     header: {
-        height: 170,
+        height: Platform.OS === 'ios' ? 170 : 180,
         alignItems: 'center',
         paddingHorizontal: 10,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
@@ -239,10 +239,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.title,
         color: colors.textPrimary,
         paddingBottom: 30
-    },
-    cards: {
-        flexDirection: 'row',
-        justifyContent: 'space-around'
     },
     card: {
         width: 120,
@@ -276,7 +272,7 @@ const styles = StyleSheet.create({
         color: colors.textPrimary
     },
     selectedDate: {
-        fontSize: 14,
+        fontSize: 15,
         fontFamily: fonts.content,
         color: colors.textUnfocus,
         paddingLeft: 10
@@ -308,7 +304,7 @@ const styles = StyleSheet.create({
     },
     historyLineText: {
         flex: 1,
-        fontSize: 14,
+        fontSize: 15,
         fontFamily: fonts.content,
         color: colors.textPrimary
     },

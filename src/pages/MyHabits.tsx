@@ -161,7 +161,7 @@ const styles = StyleSheet.create({
         fontFamily: fonts.title
     },
     subtitle: {
-        fontSize: 14,
+        fontSize: 15,
         color: colors.textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 5,

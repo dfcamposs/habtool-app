@@ -157,7 +157,7 @@ export function HabitCalendar({ data: habit }: HabitCalendar) {
                 textDayHeaderFontFamily: fonts.content,
                 textDayFontSize: 12,
                 textDayHeaderFontSize: 12,
-                textMonthFontSize: 16,
+                textMonthFontSize: 15,
             }}
         />
     )

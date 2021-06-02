@@ -23,7 +23,7 @@ const AuthRoutes = () => {
                 inactiveTintColor: colors.textUnfocus,
                 labelPosition: 'beside-icon',
                 labelStyle: {
-                    fontSize: 14,
+                    fontSize: 15,
                     fontFamily: fonts.complement
                 },
                 style: {

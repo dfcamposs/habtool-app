@@ -168,32 +168,32 @@ export function HabitManager() {
     }
 
     return (
-        <ScrollView
-            showsVerticalScrollIndicator={false}
-            contentContainerStyle={styles.container}
-        >
-            <SafeAreaView style={styles.container}>
-                <KeyboardAvoidingView
-                    style={styles.container}
-                    behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-                >
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <View style={styles.header}>
-                            <Text style={styles.title}>
-                                criar um hábito
+        <SafeAreaView style={styles.container}>
+            <KeyboardAvoidingView
+                style={styles.container}
+                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+            >
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <View style={styles.header}>
+                        <Text style={styles.title}>
+                            criar um hábito
                             </Text>
 
-                            <Input
-                                name="habitName"
-                                icon="loop"
-                                placeholder="digite o nome do hábito"
-                                defaultValue={habitName}
-                                onChangeText={(text: string) => setHabitName(text)}
-                            />
-                        </View>
-                    </TouchableWithoutFeedback>
-                    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                        <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
+                        <Input
+                            name="habitName"
+                            icon="loop"
+                            placeholder="digite o nome do hábito"
+                            defaultValue={habitName}
+                            onChangeText={(text: string) => setHabitName(text)}
+                        />
+                    </View>
+                </TouchableWithoutFeedback>
+                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                    <ScrollView
+                        showsVerticalScrollIndicator={false}
+                        contentContainerStyle={styles.form}
+                    >
+                        <View>
                             <Text style={styles.subtitle}>frequencia</Text>
 
                             <View style={styles.week}>
@@ -283,14 +283,14 @@ export function HabitManager() {
                                     </TouchableOpacity>
                                 )
                             }
-                            <View style={styles.footer}>
-                                <Button title="salvar" onPress={handleSaveHabit} />
-                            </View>
-                        </ScrollView>
-                    </TouchableWithoutFeedback>
-                </KeyboardAvoidingView>
-            </SafeAreaView>
-        </ScrollView>
+                        </View>
+                        <View style={styles.footer}>
+                            <Button title="salvar" onPress={handleSaveHabit} />
+                        </View>
+                    </ScrollView>
+                </TouchableWithoutFeedback>
+            </KeyboardAvoidingView>
+        </SafeAreaView >
     )
 }
 
@@ -317,6 +317,7 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         backgroundColor: colors.backgroundPrimary,
         padding: 20,
+        justifyContent: 'space-between'
     },
     subtitle: {
         fontSize: 16,
@@ -325,7 +326,8 @@ const styles = StyleSheet.create({
         paddingRight: 20
     },
     week: {
-        paddingVertical: 15,
+        paddingTop: 15,
+        paddingBottom: 5
     },
     scheduleLabel: {
         flexDirection: 'row',
@@ -348,7 +350,6 @@ const styles = StyleSheet.create({
         fontFamily: fonts.content,
     },
     footer: {
-        paddingTop: 20,
-        paddingBottom: 40
+        paddingTop: 10
     }
 })
