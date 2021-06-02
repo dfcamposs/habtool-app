@@ -7,7 +7,8 @@ interface HabitsContextProps {
     percentageChecked: number;
     motivationalPhrase: string;
     handleUpdateMyHabits: (habits: HabitProps[]) => void
-    handleUpdatePercentageCheck: () => void
+    handleUpdatePercentageCheck: () => void,
+    handleUpdateUserName: (username: string) => void
 }
 
 const motivationalPhrases = [
@@ -63,6 +64,10 @@ export const HabitsProvider: React.FC = ({ children }) => {
         getProgress();
     }
 
+    function handleUpdateUserName(username: string) {
+        setUserName(username);
+    }
+
     return (
         <HabitsContext.Provider value={{
             myHabits,
@@ -70,7 +75,8 @@ export const HabitsProvider: React.FC = ({ children }) => {
             percentageChecked,
             motivationalPhrase,
             handleUpdateMyHabits,
-            handleUpdatePercentageCheck
+            handleUpdatePercentageCheck,
+            handleUpdateUserName
         }}>
             {children}
         </HabitsContext.Provider>

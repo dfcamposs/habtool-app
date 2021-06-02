@@ -15,18 +15,8 @@ import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
 export function MyHabits() {
-    const [userName, setUserName] = useState<string>();
-    const { myHabits, motivationalPhrase } = useContext(HabitsContext);
+    const { userName, myHabits, motivationalPhrase } = useContext(HabitsContext);
     const navigation = useNavigation();
-
-    useEffect(() => {
-        async function verifyUserName() {
-            const user = await getUserName();
-            setUserName(user);
-        }
-
-        verifyUserName();
-    }, []);
 
     function handleOpenSettings() {
         navigation.navigate('Settings');
@@ -137,7 +127,6 @@ const styles = StyleSheet.create({
     content: {
         flex: 1,
         backgroundColor: colors.backgroundPrimary,
-        paddingBottom: 20,
     },
     habitListEmpty: {
         flex: 1,

@@ -29,13 +29,14 @@ export function Welcome() {
     const [name, setName] = useState<string>();
 
     const navigation = useNavigation();
-    const { userName } = useContext(HabitsContext);
+    const { userName, handleUpdateUserName } = useContext(HabitsContext);
 
     async function handleSubmit() {
         if (!name)
             return Alert.alert('Me diz como chamar você 😢');
 
         await saveUserName(name);
+        handleUpdateUserName(name);
         navigation.navigate('AppRoutes');
     }
 
@@ -59,7 +60,7 @@ export function Welcome() {
                                 </Text>
                             </View>
 
-                            <Input name="username" placeholder="digite o nome" onChangeText={handleInputChange} center />
+                            <Input name="username" defaultValue={userName} placeholder="digite o nome" onChangeText={handleInputChange} center />
 
                             <View style={styles.footer}>
                                 <Button title={userName ? "alterar" : "começar"} onPress={handleSubmit} />
@@ -93,8 +94,8 @@ const styles = StyleSheet.create({
         alignItems: 'center'
     },
     logo: {
-        width: 80,
-        height: 80,
+        width: 60,
+        height: 60,
         marginBottom: 30
     },
     title: {
