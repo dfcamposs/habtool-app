@@ -224,9 +224,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         paddingTop: 15,
         paddingLeft: 15,
-        paddingRight: 10,
-        justifyContent: 'space-around',
-        flexDirection: 'row'
+        paddingRight: 10
     },
     editButton: {
         width: 60,
@@ -261,8 +259,7 @@ const styles = StyleSheet.create({
         paddingVertical: 10
     },
     touch: {
-        flex: 1,
-        maxWidth: 100
+        flex: 1
     },
 
     //Modal

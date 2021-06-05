@@ -303,7 +303,7 @@ const styles = StyleSheet.create({
     header: {
         height: 160,
         alignItems: 'center',
-        paddingHorizontal: 30,
+        paddingHorizontal: 20,
         paddingVertical: 20,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },

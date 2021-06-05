@@ -1,7 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { format, isAfter } from 'date-fns';
+import { format, isAfter, isBefore } from 'date-fns';
 import * as Notifications from "expo-notifications";
-import { startClock } from 'react-native-reanimated';
 
 export interface FrequencyProps {
     [weekDay: string]: boolean
@@ -182,6 +181,9 @@ export async function loadHabits(): Promise<HabitProps[]> {
         return Object
             .keys(habits)
             .map((habit) => {
+                if (habits[habit].endDate && isBefore(Number(habits[habit].endDate), Date.now())) {
+                    Array.of(1, 2, 3, 4, 5, 6, 7).forEach(dayWeek => cancelSchedulePushNotification(habits[habit].id + dayWeek));
+                }
                 return {
                     ...habits[habit],
                     order: habitsSorted[habit]

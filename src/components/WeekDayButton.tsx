@@ -1,18 +1,17 @@
 import React from 'react';
-import { StyleSheet, Text } from 'react-native';
-import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
+import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-interface WeekDayButton extends RectButtonProps {
+interface WeekDayButton extends TouchableOpacityProps {
     title: string;
     active?: boolean;
 }
 
 export function WeekDayButton({ title, active = false, ...rest }: WeekDayButton) {
     return (
-        <RectButton
+        <TouchableOpacity
             style={[
                 styles.container,
                 active && { backgroundColor: colors.blue }
@@ -23,7 +22,7 @@ export function WeekDayButton({ title, active = false, ...rest }: WeekDayButton)
             <Text style={[styles.text, active && { color: colors.textSecundary }]}>
                 {title}
             </Text>
-        </RectButton>
+        </TouchableOpacity>
     )
 }
 
@@ -35,7 +34,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 4
+        marginRight: 5
     },
     text: {
         fontSize: 12,

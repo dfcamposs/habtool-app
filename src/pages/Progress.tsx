@@ -166,7 +166,7 @@ export function Progress() {
                     </View>
                 </ScrollView>
             </View>
-            <View style={styles.content}>
+            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
                 <Calendar
                     markedDates={calendarMarked}
                     markingType={'period'}
@@ -211,7 +211,7 @@ export function Progress() {
                     </>
                     : <Text style={styles.emptyText}>nenhum hábito nesta data.</Text>
                 }
-            </View>
+            </ScrollView>
         </SafeAreaView>
     )
 }
@@ -230,9 +230,9 @@ const styles = StyleSheet.create({
         paddingVertical: 20
     },
     content: {
-        flex: 1,
+        flexGrow: 1,
         backgroundColor: colors.backgroundPrimary,
-        paddingBottom: 20
+        paddingBottom: 20,
     },
     title: {
         fontSize: 20,
@@ -291,6 +291,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         borderRadius: 10,
         padding: 10,
+        minHeight: 150,
+        marginBottom: 20
     },
     historyLine: {
         flexDirection: 'row',
