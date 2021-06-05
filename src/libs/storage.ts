@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format, isAfter } from 'date-fns';
 import * as Notifications from "expo-notifications";
+import { startClock } from 'react-native-reanimated';
 
 export interface FrequencyProps {
     [weekDay: string]: boolean
@@ -53,7 +54,7 @@ export async function addSchedulePushNotification(habit: HabitProps): Promise<vo
 
     if (!schedule) return;
 
-    for (let i = 1; i < 7; i++) {
+    for (let i = 1; i <= 7; i++) {
         await cancelSchedulePushNotification(habit.id + i);
         const weekDay = formatWeekDay(i);
         if (!weekDay) continue;
@@ -254,10 +255,6 @@ export async function updateHabitHistory(habitId: string, date: number): Promise
                     })
                 );
         } else {
-            const dateFormatted = new Date(date);
-            const weekDay = dateFormatted.getDay() + 1;
-            await cancelSchedulePushNotification(habitId + weekDay);
-
             await AsyncStorage
                 .setItem('@habto:habitsHistory',
                     JSON.stringify({
@@ -318,6 +315,7 @@ export async function deleteHabit(habitId: string): Promise<void> {
             );
 
         await deleteHabitHistory(habitId);
+        Array.of(1, 2, 3, 4, 5, 6, 7).forEach(dayWeek => cancelSchedulePushNotification(habitId + dayWeek));
 
     } catch (error) {
         throw new Error(error);

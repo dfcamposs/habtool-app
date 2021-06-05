@@ -1,13 +1,12 @@
 import React, { useContext, useState } from 'react';
-import { View, StyleSheet } from 'react-native';
-import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
+import { View, StyleSheet, TouchableOpacityProps, TouchableOpacity } from 'react-native';
 
 import { updateHabitHistory } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
 
-interface TrackerProps extends RectButtonProps {
+interface TrackerProps extends TouchableOpacityProps {
     data: {
         habitId: string;
         position: number;
@@ -31,13 +30,14 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
 
     return (
         <View style={styles.container}>
-            <RectButton
+            <TouchableOpacity
+                activeOpacity={.7}
                 style={[
                     styles.dayCicle,
                     enabled && { backgroundColor: colors.backgroundPrimary },
                     trackerChecked && { backgroundColor: colors.green },
                 ]}
-                enabled={enabled}
+                disabled={!enabled}
                 onPress={handleTrackerChecked}
                 {...rest}
             />

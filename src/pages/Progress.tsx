@@ -95,7 +95,7 @@ export function Progress() {
             const newDateLastDayFormatted = format(newDateLastDay.setDate(newDateLastDay.getDate() - 1), 'yyyy-MM-dd');
 
             const newDateNextDay = new Date(day);
-            const newDateNextDayFormatted = format(newDateLastDay.setDate(newDateNextDay.getDate() + 1), 'yyyy-MM-dd');
+            const newDateNextDayFormatted = format(newDateNextDay.setDate(newDateNextDay.getDate() + 1), 'yyyy-MM-dd');
 
             const lastDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === newDateLastDayFormatted);
             const nextDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === newDateNextDayFormatted);
@@ -251,15 +251,17 @@ const styles = StyleSheet.create({
         padding: 10
     },
     score: {
-        fontSize: 30,
+        fontSize: 24,
         color: colors.textPrimary,
-        fontFamily: fonts.content
+        fontFamily: fonts.content,
+        alignSelf: 'center',
+        lineHeight: 30
     },
     legend: {
         fontSize: 10,
         color: colors.textUnfocus,
         fontFamily: fonts.legend,
-        textAlign: 'center'
+        alignSelf: 'center'
     },
     calendar: {
         marginHorizontal: 10,
@@ -310,7 +312,7 @@ const styles = StyleSheet.create({
     },
     emptyText: {
         paddingLeft: 40,
-        fontSize: 16,
+        fontSize: 15,
         fontFamily: fonts.content,
         color: colors.textUnfocus
     }

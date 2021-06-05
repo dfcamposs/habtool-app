@@ -105,7 +105,7 @@ export function HabitCalendar({ data: habit }: HabitCalendar) {
             const newDateLastDayFormatted = format(newDateLastDay.setDate(newDateLastDay.getDate() - 1), 'yyyy-MM-dd');
 
             const newDateNextDay = new Date(day);
-            const newDateNextDayFormatted = format(newDateLastDay.setDate(newDateNextDay.getDate() + 1), 'yyyy-MM-dd');
+            const newDateNextDayFormatted = format(newDateNextDay.setDate(newDateNextDay.getDate() + 1), 'yyyy-MM-dd');
 
             const lastDay = history.find(item => format(item, 'yyyy-MM-dd') === newDateLastDayFormatted);
             const nextDay = history.find(item => format(item, 'yyyy-MM-dd') === newDateNextDayFormatted);

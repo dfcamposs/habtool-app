@@ -74,7 +74,7 @@ export function HabitManager() {
             setSelectedEndDateTime(habit.endDate ? new Date(habit.endDate) : undefined);
             setSelectedScheduleDateTime(!!habit.notificationHour ? new Date(habit.notificationHour) : new Date());
             setScheduleEnabled(!!habit.notificationHour);
-            setShowDatePicker(true);
+            setShowDatePicker(false);
         }
     }, [habit]);
 
