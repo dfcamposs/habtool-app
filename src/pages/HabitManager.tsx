@@ -74,7 +74,7 @@ export function HabitManager() {
             setSelectedEndDateTime(habit.endDate ? new Date(habit.endDate) : undefined);
             setSelectedScheduleDateTime(!!habit.notificationHour ? new Date(habit.notificationHour) : new Date());
             setScheduleEnabled(!!habit.notificationHour);
-            setShowDatePicker(false);
+            setShowDatePicker(Platform.OS === 'ios');
         }
     }, [habit]);
 
@@ -225,7 +225,7 @@ export function HabitManager() {
                                 <DateTimePicker
                                     value={selectedStartDateTime}
                                     mode="date"
-                                    display="spinner"
+                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={handleChangeStartDate}
                                     style={styles.dateTimePickerIos}
                                     textColor={colors.textPrimary}
@@ -242,7 +242,7 @@ export function HabitManager() {
                                 <DateTimePicker
                                     value={selectedEndDateTime ?? new Date()}
                                     mode="date"
-                                    display="spinner"
+                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={handleChangeEndDate}
                                     style={styles.dateTimePickerIos}
                                     textColor={colors.textPrimary}
@@ -264,7 +264,7 @@ export function HabitManager() {
                                 <DateTimePicker
                                     value={selectedScheduleDateTime}
                                     mode="time"
-                                    display="spinner"
+                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={handleChangeTimeSchedule}
                                     style={styles.dateTimePickerIos}
                                     textColor={colors.textPrimary}

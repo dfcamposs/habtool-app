@@ -196,18 +196,20 @@ export function Progress() {
                             <Text style={styles.subtitle}>histórico</Text>
                             <Text style={styles.selectedDate}>{daySelected && format(daySelected, 'dd-MM-yyyy')}</Text>
                         </View>
-                        <FlatList
-                            data={historyDay}
-                            keyExtractor={(item) => String(item.id)}
-                            renderItem={({ item: habit }) => (
-                                <View style={styles.historyLine}>
-                                    <View style={[styles.circle, { backgroundColor: habit.checked ? colors.green : colors.backgroundPrimary }]} />
-                                    <Text style={styles.historyLineText}>{habit.name}</Text>
-                                </View>
-                            )}
-                            showsVerticalScrollIndicator={false}
-                            style={styles.history}
-                        />
+                        <View style={styles.history}>
+                            <FlatList
+                                data={historyDay}
+                                keyExtractor={(item) => String(item.id)}
+                                renderItem={({ item: habit }) => (
+                                    <View style={styles.historyLine}>
+                                        <View style={[styles.circle, { backgroundColor: habit.checked ? colors.green : colors.backgroundPrimary }]} />
+                                        <Text style={styles.historyLineText}>{habit.name}</Text>
+                                    </View>
+                                )}
+                                showsVerticalScrollIndicator={false}
+
+                            />
+                        </View>
                     </>
                     : <Text style={styles.emptyText}>nenhum hábito nesta data.</Text>
                 }
@@ -291,8 +293,8 @@ const styles = StyleSheet.create({
         marginHorizontal: 20,
         borderRadius: 10,
         padding: 10,
-        minHeight: 150,
-        marginBottom: 20
+        height: 150,
+        marginBottom: 20,
     },
     historyLine: {
         flexDirection: 'row',
