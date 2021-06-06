@@ -339,9 +339,15 @@ const styles = StyleSheet.create({
         marginVertical: 10,
     },
     dateTimePickerButton: {
-        width: '100%',
+        alignSelf: 'center',
+        width: 150,
+        height: 50,
         alignItems: 'center',
-        paddingVertical: 30
+        justifyContent: 'center',
+        paddingVertical: 20,
+        backgroundColor: colors.backgroundSecundary,
+        borderRadius: 10,
+        marginTop: 20
     },
     dateTimePickerText: {
         color: colors.textPrimary,

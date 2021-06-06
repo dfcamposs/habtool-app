@@ -53,6 +53,7 @@ export function HabitCalendar({ calendarMarked, handleChangeSelectedDay }: Habit
 const styles = StyleSheet.create({
     container: {
         backgroundColor: colors.backgroundPrimary,
-        marginVertical: 20
+        marginTop: 10,
+        marginBottom: 20
     },
 })
