@@ -7,32 +7,24 @@ import {
     Animated,
     Alert,
     TouchableOpacity,
-    TouchableOpacityProps,
-    Modal,
-    Platform
+    TouchableOpacityProps
 } from 'react-native';
 import { RectButton, Swipeable, } from 'react-native-gesture-handler';
-import { format, isBefore } from 'date-fns';
+import { format } from 'date-fns';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 import { Tracker } from './Tracker';
-import { HabitCalendar } from './HabitCalendar';
+import { ProgressModal } from './ProgressModal';
 
-import { deleteHabit, FrequencyProps, getHabitWeekHistory } from '../libs/storage';
+import { deleteHabit, getHabitWeekHistory, HabitProps } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-interface HabitProps extends TouchableOpacityProps {
-    data: {
-        id: string;
-        name: string,
-        frequency: FrequencyProps,
-        endDate?: number;
-    }
+interface HabitComponentProps extends TouchableOpacityProps {
+    data: HabitProps
 }
 
 interface TrackerListProps {
@@ -40,7 +32,7 @@ interface TrackerListProps {
     checked: boolean;
 }
 
-export function Habit({ data: habit, ...rest }: HabitProps) {
+export function Habit({ data: habit, ...rest }: HabitComponentProps) {
     const [trackerListProps, setTrackerListProps] = useState<TrackerListProps[]>();
     const [habitIsActive, setHabitIsActive] = useState(true);
     const [modalVisible, setModalVisible] = useState(false);
@@ -140,28 +132,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
 
     return (
         <>
-            <Modal
-                animationType="slide"
-                transparent={false}
-                visible={modalVisible}
-                statusBarTranslucent={true}
-            >
-                <View style={styles.modalContainer}>
-                    <Text style={styles.modalTitle}>{habit.name}</Text>
-
-                    <View style={styles.calendar}>
-                        <Text style={styles.subtitle}>histórico</Text>
-                        <HabitCalendar data={habit} />
-                        {habit.endDate && isBefore(habit.endDate, Date.now()) &&
-                            <Text style={styles.disabledText}>este hábito está desabilitado.</Text>
-                        }
-                    </View>
-
-                    <TouchableOpacity style={styles.button} onPress={handleCloseModal} activeOpacity={0.5}>
-                        <Text style={styles.textButton}>voltar</Text>
-                    </TouchableOpacity>
-                </View>
-            </Modal>
+            <ProgressModal data={habit} visible={modalVisible} closeModal={handleCloseModal} />
 
             <Swipeable
                 overshootRight={false}
@@ -260,53 +231,5 @@ const styles = StyleSheet.create({
     },
     touch: {
         flex: 1
-    },
-
-    //Modal
-    modalContainer: {
-        flex: 1,
-        alignItems: 'center',
-        paddingTop: getStatusBarHeight(),
-        paddingVertical: 23,
-        paddingHorizontal: 10,
-        backgroundColor: colors.backgroundPrimary
-    },
-    modalTitle: {
-        fontSize: 24,
-        fontFamily: fonts.title,
-        color: colors.textPrimary,
-        paddingVertical: 40
-    },
-    calendar: {
-        flex: 1,
-        width: '100%',
-        backgroundColor: colors.backgroundPrimary
-    },
-    subtitle: {
-        fontSize: 18,
-        fontFamily: fonts.subtitle,
-        color: colors.textUnfocus,
-        paddingLeft: 20,
-    },
-    disabledText: {
-        fontSize: 16,
-        fontFamily: fonts.content,
-        color: colors.textUnfocus,
-        paddingTop: 20,
-        paddingLeft: 20,
-    },
-    button: {
-        width: 100,
-        height: 40,
-        backgroundColor: colors.backgroundSecundary,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginBottom: 20
-    },
-    textButton: {
-        fontSize: 16,
-        fontFamily: fonts.contentBold,
-        color: colors.textPrimary
-    },
+    }
 })

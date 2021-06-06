@@ -123,14 +123,13 @@ export function HabitManager() {
 
     async function handleSaveHabit(): Promise<void> {
         try {
-
             if (!habitName) {
                 return Alert.alert('Não é possível criar um hábito sem nome!');
             }
 
             const verifyHabitExists = await getHabitByName(habitName.trim());
 
-            if (verifyHabitExists) {
+            if (verifyHabitExists && !(habit && (verifyHabitExists.id === habit.id))) {
                 return Alert.alert('Hábito com este nome já cadastrado!');
             }
 

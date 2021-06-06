@@ -16,7 +16,7 @@ interface TrackerProps extends TouchableOpacityProps {
 }
 
 export function Tracker({ data, checked = false, enabled = true, ...rest }: TrackerProps) {
-    const { handleUpdatePercentageCheck } = useContext(HabitsContext)
+    const { handleUpdatePercentageCheck, handleRefreshHistoryCalendar } = useContext(HabitsContext)
     const [trackerChecked, setTrackerChecked] = useState(checked);
 
     async function handleTrackerChecked() {
@@ -26,6 +26,7 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
         await updateHabitHistory(data.habitId, habitDate);
         handleUpdatePercentageCheck();
         setTrackerChecked((oldValue) => !oldValue);
+        handleRefreshHistoryCalendar();
     }
 
     return (

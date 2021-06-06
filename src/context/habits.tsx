@@ -6,9 +6,11 @@ interface HabitsContextProps {
     userName: string;
     percentageChecked: number;
     motivationalPhrase: string;
-    handleUpdateMyHabits: (habits: HabitProps[]) => void
-    handleUpdatePercentageCheck: () => void,
-    handleUpdateUserName: (username: string) => void
+    refreshHistoryCalendar: number;
+    handleUpdateMyHabits: (habits: HabitProps[]) => void;
+    handleUpdatePercentageCheck: () => void;
+    handleUpdateUserName: (username: string) => void;
+    handleRefreshHistoryCalendar: () => void;
 }
 
 const motivationalPhrases = [
@@ -24,6 +26,7 @@ export const HabitsProvider: React.FC = ({ children }) => {
     const [myHabits, setMyHabits] = useState<HabitProps[]>([]);
     const [percentageChecked, setPercentageChecked] = useState<number>(0);
     const [motivationalPhrase, setMotivationalPhrase] = useState<string>(motivationalPhrases[0]);
+    const [refreshHistoryCalendar, setRefreshHistoryCalendar] = useState(0);
 
     async function getProgress(): Promise<void> {
         const percentage = await getProgressStars();
@@ -68,15 +71,21 @@ export const HabitsProvider: React.FC = ({ children }) => {
         setUserName(username);
     }
 
+    function handleRefreshHistoryCalendar() {
+        setRefreshHistoryCalendar(oldState => oldState + 1);
+    }
+
     return (
         <HabitsContext.Provider value={{
             myHabits,
             userName,
             percentageChecked,
             motivationalPhrase,
+            refreshHistoryCalendar,
             handleUpdateMyHabits,
             handleUpdatePercentageCheck,
-            handleUpdateUserName
+            handleUpdateUserName,
+            handleRefreshHistoryCalendar
         }}>
             {children}
         </HabitsContext.Provider>

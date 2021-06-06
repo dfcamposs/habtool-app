@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, SafeAreaView, Platform, Text, FlatList, ScrollView } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { Calendar, DateObject } from 'react-native-calendars';
 import { format } from 'date-fns';
+
+import { CalendarMarkedProps, HabitCalendar } from '../components/HabitCalendar';
 
 import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
@@ -10,22 +11,12 @@ import { HabitsContext } from '../context/habits';
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
 
-import '../libs/calendarConfig';
+import '../config/calendar';
 
 interface HabitHistoryDayProps {
     id: string;
     name: string;
     checked: boolean;
-}
-
-interface CalendarMarkedProps {
-    [date: string]: {
-        startingDay?: boolean;
-        endingDay?: boolean;
-        selected?: boolean;
-        color?: string;
-        textColor?: string;
-    }
 }
 
 export function Progress() {
@@ -49,13 +40,12 @@ export function Progress() {
         const dateFormatted = currentDate.setDate(currentDate.getDate() - 1);
 
         setActiveHabitsCount(myHabits.filter(item => !item.endDate).length);
-        handleHabitsHistoryDay({ timestamp: dateFormatted } as DateObject);
-    }, [myHabits]);
+        handleHabitsHistoryDay(dateFormatted);
+    }, []);
 
-
-    async function handleHabitsHistoryDay(date: DateObject): Promise<void> {
+    async function handleHabitsHistoryDay(date: number): Promise<void> {
         const result: HabitHistoryDayProps[] = [];
-        const newDate = new Date(date.timestamp);
+        const newDate = new Date(date);
         const dateFormatted = newDate.setDate(newDate.getDate() + 1);
         const weekDay = format(dateFormatted, 'EEE').toLowerCase();
 
@@ -167,28 +157,7 @@ export function Progress() {
                 </ScrollView>
             </View>
             <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
-                <Calendar
-                    markedDates={calendarMarked}
-                    markingType={'period'}
-                    onDayPress={(date) => handleHabitsHistoryDay(date)}
-                    style={styles.calendar}
-                    theme={{
-                        calendarBackground: colors.backgroundPrimary,
-                        arrowColor: colors.textPrimary,
-                        todayTextColor: colors.blue,
-                        dayTextColor: colors.textPrimary,
-                        dotColor: colors.blue,
-                        monthTextColor: colors.textPrimary,
-                        indicatorColor: colors.textPrimary,
-                        textDisabledColor: colors.textUnfocus,
-                        textDayFontFamily: fonts.content,
-                        textMonthFontFamily: fonts.content,
-                        textDayHeaderFontFamily: fonts.content,
-                        textDayFontSize: 12,
-                        textDayHeaderFontSize: 12,
-                        textMonthFontSize: 15,
-                    }}
-                />
+                <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleHabitsHistoryDay} />
 
                 {historyDay?.length ?
                     <>
@@ -285,7 +254,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'baseline',
         marginHorizontal: 25,
-        paddingBottom: 10,
+        paddingVertical: 10
     },
     history: {
         flex: 1,
