@@ -12,7 +12,7 @@ import {
     Platform
 } from 'react-native';
 import { RectButton, Swipeable, } from 'react-native-gesture-handler';
-import { format } from 'date-fns';
+import { format, isBefore } from 'date-fns';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
@@ -152,7 +152,7 @@ export function Habit({ data: habit, ...rest }: HabitProps) {
                     <View style={styles.calendar}>
                         <Text style={styles.subtitle}>histórico</Text>
                         <HabitCalendar data={habit} />
-                        {habit.endDate &&
+                        {habit.endDate && isBefore(habit.endDate, Date.now()) &&
                             <Text style={styles.disabledText}>este hábito está desabilitado.</Text>
                         }
                     </View>

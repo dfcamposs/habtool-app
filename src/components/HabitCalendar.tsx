@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Alert, StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { format, isBefore } from 'date-fns';
+import { format, isAfter, isBefore } from 'date-fns';
 
-import { FrequencyProps, HabitProps, loadHabitHistoryByHabitId, updateHabitHistory } from '../libs/storage';
+import { FrequencyProps, loadHabitHistoryByHabitId, updateHabitHistory } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -50,7 +50,7 @@ export function HabitCalendar({ data: habit }: HabitCalendar) {
 
         if ((isBefore(dateSelected, Date.now()) ||
             format(dateSelected, 'yyyy-MM-dd') === format(Date.now(), 'yyyy-MM-dd'))
-            && !habit.endDate
+            && (!habit.endDate || isAfter(habit.endDate, Date.now()))
         ) {
             if (habit.frequency[weekDay]) {
                 Alert.alert('alterar histórico', `deseja alterar este dia no histórico?`, [

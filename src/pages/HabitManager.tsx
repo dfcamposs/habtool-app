@@ -128,15 +128,15 @@ export function HabitManager() {
                 return Alert.alert('Não é possível criar um hábito sem nome!');
             }
 
-            const verifyHabitExists = await getHabitByName(habitName);
+            const verifyHabitExists = await getHabitByName(habitName.trim());
 
-            if (verifyHabitExists && (habit && verifyHabitExists.id !== habit.id)) {
+            if (verifyHabitExists) {
                 return Alert.alert('Hábito com este nome já cadastrado!');
             }
 
             const newHabit: HabitProps = {
                 id: habit?.id ?? uuid(),
-                name: habitName,
+                name: habitName.trim(),
                 motivation: habitMotivation,
                 frequency: {
                     sun: sundayEnabled,

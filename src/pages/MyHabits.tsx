@@ -62,15 +62,16 @@ export function MyHabits() {
                                 <Text style={[styles.weekLegendText, { fontFamily: fonts.legendBold }]}>{getLegendDayTracker(0)}</Text>
                             </View>
                         </View>
-                        <FlatList
-                            data={myHabits}
-                            keyExtractor={(item) => String(item.id)}
-                            renderItem={({ item }) => (
-                                <Habit data={item} />
-                            )}
-                            showsVerticalScrollIndicator={false}
-                            style={styles.habitList}
-                        />
+                        <View style={styles.habitList}>
+                            <FlatList
+                                data={myHabits}
+                                keyExtractor={(item) => String(item.id)}
+                                renderItem={({ item }) => (
+                                    <Habit data={item} />
+                                )}
+                                showsVerticalScrollIndicator={false}
+                            />
+                        </View>
                     </>
                     :
                     <View style={styles.habitListEmpty}>
@@ -105,6 +106,7 @@ const styles = StyleSheet.create({
     weekLegendContainer: {
         alignItems: 'flex-end',
         paddingRight: 20,
+        paddingBottom: 15
     },
     weekLegend: {
         width: 272,
@@ -141,8 +143,7 @@ const styles = StyleSheet.create({
         textAlign: 'center'
     },
     habitList: {
-        flex: 1,
-        paddingTop: 20
+        flex: 1
     },
     title: {
         fontSize: 24,

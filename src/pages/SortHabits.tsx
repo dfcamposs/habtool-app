@@ -4,13 +4,15 @@ import { MaterialIcons } from '@expo/vector-icons';
 import DraggableFlatList, { DragEndParams } from 'react-native-draggable-flatlist';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { isBefore } from 'date-fns';
+
+import { Button } from '../components/Button';
 
 import { HabitsContext } from '../context/habits';
-import { HabitProps, StorageHabitSortProps, updateHabitsSorted } from '../libs/storage';
+import { HabitProps, StorageHabitSortProps, updateHabitsSort } from '../libs/storage';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
-import { Button } from '../components/Button';
 
 export function SortHabits() {
     const { myHabits, handleUpdateMyHabits } = useContext(HabitsContext);
@@ -26,10 +28,11 @@ export function SortHabits() {
 
         habitsSorted.forEach((habit, index) => {
             saveHabitsSorted = { ...saveHabitsSorted, [habit.id]: index + 1 }
+            habit.order = index + 1
         });
 
         handleUpdateMyHabits(habitsSorted);
-        await updateHabitsSorted(saveHabitsSorted);
+        await updateHabitsSort(saveHabitsSorted);
         navigation.navigate('MyHabits');
     }
 
@@ -54,7 +57,9 @@ export function SortHabits() {
                             <Text
                                 style={[
                                     styles.habitName,
-                                    habit.endDate !== undefined && { color: colors.textUnfocus }
+                                    (habit.endDate !== undefined
+                                        && isBefore(Number(habit.endDate), Date.now()))
+                                    && { color: colors.textUnfocus }
                                 ]}
                             >
                                 {habit.name}

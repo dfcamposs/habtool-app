@@ -34,7 +34,7 @@ const styles = StyleSheet.create({
         backgroundColor: colors.backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 5
+        marginRight: 4
     },
     text: {
         fontSize: 12,
