@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     View,
     StyleSheet,
@@ -8,12 +8,15 @@ import {
     Platform,
     TouchableWithoutFeedback,
     Keyboard,
-    Alert
+    Alert,
+    Image
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
+import Logo from '../assets/logo.png';
 
 import { saveUserName } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
@@ -27,9 +30,15 @@ export function Welcome() {
     const navigation = useNavigation();
     const { userName, handleUpdateUserName } = useContext(HabitsContext);
 
+    useEffect(() => {
+        if (userName) {
+            setName(userName);
+        }
+    }, [])
+
     async function handleSubmit() {
         if (!name)
-            return Alert.alert('Me diz como chamar você 😢');
+            return Alert.alert('Não é possível deixar seu nome em branco!');
 
         await saveUserName(name);
         handleUpdateUserName(name);
@@ -43,25 +52,39 @@ export function Welcome() {
     return (
         <SafeAreaView style={styles.container}>
             <KeyboardAvoidingView
-                style={styles.container}
+                style={[styles.container, !(!!userName) && { paddingHorizontal: 20 }]}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.content}>
-                        <View style={styles.form}>
-                            <View style={styles.header}>
-                                <Text style={styles.title}>
-                                    como você deseja ser chamado?
-                                </Text>
+                    <>
+                        {!userName &&
+                            <View style={styles.welcome}>
+                                <Text style={styles.title}>seja bem-vindo!</Text>
+                                <Image style={styles.logo} source={Logo} />
                             </View>
+                        }
+                        <View style={[
+                            styles.content,
+                            !!userName && {
+                                flex: 1,
+                                justifyContent: 'space-between',
+                                backgroundColor: colors.backgroundPrimary
+                            }
+                        ]}>
+                            <View>
+                                <Text style={styles.subtitle}>
+                                    como você se chama?
+                                </Text>
 
-                            <Input name="username" defaultValue={userName} placeholder="digite o nome" onChangeText={handleInputChange} center />
-
+                                <Input name="username" defaultValue={userName} placeholder="digite o nome" onChangeText={handleInputChange} center />
+                            </View>
                             <View style={styles.footer}>
                                 <Button title={userName ? "alterar" : "começar"} onPress={handleSubmit} />
                             </View>
                         </View>
-                    </View>
+
+
+                    </>
                 </TouchableWithoutFeedback>
             </KeyboardAvoidingView>
         </SafeAreaView>
@@ -71,22 +94,19 @@ export function Welcome() {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        width: '100%',
+        paddingTop: getStatusBarHeight()
+    },
+    welcome: {
         alignItems: 'center',
-        justifyContent: 'space-around'
+        justifyContent: 'center',
+        height: '40%'
     },
     content: {
-        flex: 1,
-        width: '100%'
-    },
-    form: {
-        flex: 1,
         alignItems: 'center',
-        paddingHorizontal: 30,
-        paddingTop: '40%'
-    },
-    header: {
-        alignItems: 'center'
+        backgroundColor: colors.backgroundSecundary,
+        paddingVertical: 20,
+        paddingHorizontal: 20,
+        borderRadius: 10
     },
     logo: {
         width: 120,
@@ -97,8 +117,15 @@ const styles = StyleSheet.create({
         fontFamily: fonts.title,
         fontSize: 24,
         color: colors.textPrimary,
-        textAlign: 'center',
+        alignSelf: 'center',
         paddingBottom: 50
+    },
+    subtitle: {
+        fontFamily: fonts.subtitle,
+        fontSize: 20,
+        color: colors.textPrimary,
+        alignSelf: 'center',
+        paddingBottom: 30
     },
     input: {
         borderBottomWidth: 1,
@@ -111,6 +138,6 @@ const styles = StyleSheet.create({
     },
     footer: {
         width: '100%',
-        marginTop: 20
+        paddingTop: 20
     }
 })
