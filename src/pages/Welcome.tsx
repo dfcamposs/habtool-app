@@ -1,10 +1,9 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     View,
     StyleSheet,
     SafeAreaView,
     Text,
-    Image,
     KeyboardAvoidingView,
     Platform,
     TouchableWithoutFeedback,
@@ -21,9 +20,6 @@ import { HabitsContext } from '../context/habits';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
-import logo from '../assets/logo.png';
-
-
 
 export function Welcome() {
     const [name, setName] = useState<string>();
@@ -54,7 +50,6 @@ export function Welcome() {
                     <View style={styles.content}>
                         <View style={styles.form}>
                             <View style={styles.header}>
-                                <Image style={styles.logo} source={logo} />
                                 <Text style={styles.title}>
                                     como você deseja ser chamado?
                                 </Text>
@@ -87,16 +82,16 @@ const styles = StyleSheet.create({
     form: {
         flex: 1,
         alignItems: 'center',
-        paddingHorizontal: 50,
-        paddingVertical: 100
+        paddingHorizontal: 30,
+        paddingTop: '40%'
     },
     header: {
         alignItems: 'center'
     },
     logo: {
-        width: 60,
+        width: 120,
         height: 60,
-        marginBottom: 30
+        marginBottom: 50
     },
     title: {
         fontFamily: fonts.title,
@@ -110,12 +105,12 @@ const styles = StyleSheet.create({
         borderColor: colors.textUnfocus,
         color: colors.textPrimary,
         width: '100%',
-        fontSize: 16,
+        fontSize: 15,
         padding: 10,
         textAlign: 'center'
     },
     footer: {
         width: '100%',
-        marginTop: 30
+        marginTop: 20
     }
 })
