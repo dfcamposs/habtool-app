@@ -1,5 +1,6 @@
 import React, { useContext, useState } from 'react';
 import { View, StyleSheet, TouchableOpacityProps, TouchableOpacity } from 'react-native';
+import * as Haptics from 'expo-haptics';
 
 import { updateHabitHistory } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
@@ -20,12 +21,14 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
     const [trackerChecked, setTrackerChecked] = useState(checked);
 
     async function handleTrackerChecked() {
+        setTrackerChecked((oldValue) => !oldValue);
+        Haptics.impactAsync();
+
         const currentDate = new Date();
         const habitDate = currentDate.setDate(currentDate.getDate() - data.position);
 
         await updateHabitHistory(data.habitId, habitDate);
         handleUpdatePercentageCheck();
-        setTrackerChecked((oldValue) => !oldValue);
         handleRefreshHistoryCalendar();
     }
 

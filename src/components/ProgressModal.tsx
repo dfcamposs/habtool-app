@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { StyleSheet, View, Text, Modal, ModalProps, TouchableOpacity, Alert } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { format, isAfter, isBefore } from 'date-fns';
+import * as Haptics from 'expo-haptics';
 
 import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
 
@@ -30,6 +31,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
     const { refreshHistoryCalendar } = useContext(HabitsContext);
 
     async function handleChangeSelectedDay(date: number) {
+
         const dateSelected = new Date(date);
         const dateFormatted = dateSelected.setDate(dateSelected.getDate() + 1);
         const weekDay = format(dateFormatted, 'E').toLocaleLowerCase();
@@ -38,6 +40,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
             format(dateSelected, 'yyyy-MM-dd') === format(Date.now(), 'yyyy-MM-dd'))
             && (!habit.endDate || isAfter(habit.endDate, Date.now()))
         ) {
+            Haptics.impactAsync();
             if (habit.frequency[weekDay]) {
                 Alert.alert('alterar histórico', `deseja alterar este dia no histórico?`, [
                     {
