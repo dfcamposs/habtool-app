@@ -14,20 +14,21 @@ import fonts from '../styles/fonts';
 const AppTab = createBottomTabNavigator();
 
 const AuthRoutes = () => {
+    const theme = "dark";
     return (
         <AppTab.Navigator
             initialRouteName="hábitos"
             backBehavior="initialRoute"
             tabBarOptions={{
-                activeTintColor: colors.blue,
-                inactiveTintColor: colors.textUnfocus,
+                activeTintColor: colors[theme].blue,
+                inactiveTintColor: colors[theme].textUnfocus,
                 labelPosition: 'beside-icon',
                 labelStyle: {
                     fontSize: 15,
                     fontFamily: fonts.complement
                 },
                 style: {
-                    backgroundColor: colors.backgroundTertiary,
+                    backgroundColor: colors[theme].backgroundTertiary,
                     paddingVertical: Platform.OS === 'ios' ? 10 : 0,
                     height: Platform.OS === 'ios' ? 80 : 60
                 }

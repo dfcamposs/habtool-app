@@ -12,28 +12,29 @@ import { HabitsContext } from '../context/habits';
 export function Settings() {
     const { myHabits } = useContext(HabitsContext);
     const navigation = useNavigation();
+    const theme = "dark";
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>configurações</Text>
-            <View style={styles.menu}>
+        <SafeAreaView style={styles(theme).container}>
+            <Text style={styles(theme).title}>configurações</Text>
+            <View style={styles(theme).menu}>
 
-                <Text style={styles.subtitle}>sistema</Text>
+                <Text style={styles(theme).subtitle}>sistema</Text>
                 <SettingsButton title="ordenar hábitos" onPress={() => myHabits.length && navigation.navigate('SortHabits')} disabled={!myHabits.length} />
                 <SettingsButton title="alterar como deseja ser chamado" onPress={() => navigation.navigate('Rename')} />
 
-                <Text style={styles.subtitle}>suporte</Text>
+                <Text style={styles(theme).subtitle}>suporte</Text>
                 <SettingsButton title="avaliar app" onPress={() => { }} />
                 <SettingsButton title="contatar desenvolvedor" onPress={() => { }} />
             </View>
-            <RectButton style={styles.button} onPress={() => navigation.goBack()}>
-                <Text style={styles.textButton}>cancelar</Text>
+            <RectButton style={styles(theme).button} onPress={() => navigation.goBack()}>
+                <Text style={styles(theme).textButton}>cancelar</Text>
             </RectButton>
         </SafeAreaView>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
@@ -43,20 +44,20 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         paddingTop: 20
     },
     subtitle: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         paddingRight: 20,
         paddingVertical: 20
     },
     button: {
         width: 100,
         height: 40,
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: colors[theme].backgroundSecundary,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -65,7 +66,7 @@ const styles = StyleSheet.create({
     textButton: {
         fontSize: 16,
         fontFamily: fonts.contentBold,
-        color: colors.textPrimary
+        color: colors[theme].textPrimary
     },
     menu: {
         flex: 1,

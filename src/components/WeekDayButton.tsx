@@ -10,28 +10,29 @@ interface WeekDayButton extends TouchableOpacityProps {
 }
 
 export function WeekDayButton({ title, active = false, ...rest }: WeekDayButton) {
+    const theme = "dark";
     return (
         <TouchableOpacity
             style={[
-                styles.container,
-                active && { backgroundColor: colors.blue }
+                styles(theme).container,
+                active && { backgroundColor: colors[theme].blue }
             ]}
             activeOpacity={0.7}
             {...rest}
         >
-            <Text style={[styles.text, active && { color: colors.textSecundary }]}>
+            <Text style={[styles(theme).text, active && { color: colors[theme].textSecundary }]}>
                 {title}
             </Text>
         </TouchableOpacity>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         width: 50,
         height: 50,
         borderRadius: 25,
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: colors[theme].backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 4
@@ -39,6 +40,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 12,
         fontFamily: fonts.content,
-        color: colors.textPrimary
+        color: colors[theme].textPrimary
     }
 })

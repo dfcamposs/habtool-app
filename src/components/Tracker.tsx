@@ -19,6 +19,7 @@ interface TrackerProps extends TouchableOpacityProps {
 export function Tracker({ data, checked = false, enabled = true, ...rest }: TrackerProps) {
     const { handleUpdatePercentageCheck, handleRefreshHistoryCalendar } = useContext(HabitsContext)
     const [trackerChecked, setTrackerChecked] = useState(checked);
+    const theme = "dark";
 
     async function handleTrackerChecked() {
         setTrackerChecked((oldValue) => !oldValue);
@@ -33,13 +34,13 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles(theme).container}>
             <TouchableOpacity
                 activeOpacity={.7}
                 style={[
-                    styles.dayCicle,
-                    enabled && { backgroundColor: colors.backgroundPrimary },
-                    trackerChecked && { backgroundColor: colors.green },
+                    styles(theme).dayCicle,
+                    enabled && { backgroundColor: colors[theme].backgroundPrimary },
+                    trackerChecked && { backgroundColor: colors[theme].green },
                 ]}
                 disabled={!enabled}
                 onPress={handleTrackerChecked}
@@ -49,7 +50,7 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         marginLeft: 7,
         alignItems: 'center',
@@ -59,7 +60,7 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         borderRadius: 15,
-        backgroundColor: colors.gray,
+        backgroundColor: colors[theme].gray,
         alignItems: 'center',
         justifyContent: 'center',
     }

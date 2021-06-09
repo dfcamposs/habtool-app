@@ -58,6 +58,7 @@ export function HabitManager() {
     const navigation = useNavigation();
     const route = useRoute();
     const { habit } = route.params as Params;
+    const theme = "dark";
 
     useEffect(() => {
         if (habit) {
@@ -167,14 +168,14 @@ export function HabitManager() {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles(theme).container}>
             <KeyboardAvoidingView
-                style={styles.container}
+                style={styles(theme).container}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles.header}>
-                        <Text style={styles.title}>
+                    <View style={styles(theme).header}>
+                        <Text style={styles(theme).title}>
                             criar um hábito
                             </Text>
 
@@ -190,12 +191,12 @@ export function HabitManager() {
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <ScrollView
                         showsVerticalScrollIndicator={false}
-                        contentContainerStyle={styles.form}
+                        contentContainerStyle={styles(theme).form}
                     >
                         <View>
-                            <Text style={styles.subtitle}>frequencia</Text>
+                            <Text style={styles(theme).subtitle}>frequencia</Text>
 
-                            <View style={styles.week}>
+                            <View style={styles(theme).week}>
                                 <ScrollView horizontal showsHorizontalScrollIndicator={false}>
                                     <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
                                     <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
@@ -226,8 +227,8 @@ export function HabitManager() {
                                     mode="date"
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={handleChangeStartDate}
-                                    style={styles.dateTimePickerIos}
-                                    textColor={colors.textPrimary}
+                                    style={styles(theme).dateTimePickerIos}
+                                    textColor={colors[theme].textPrimary}
                                 />
                             )}
 
@@ -243,17 +244,17 @@ export function HabitManager() {
                                     mode="date"
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={handleChangeEndDate}
-                                    style={styles.dateTimePickerIos}
-                                    textColor={colors.textPrimary}
+                                    style={styles(theme).dateTimePickerIos}
+                                    textColor={colors[theme].textPrimary}
                                 />
                             )}
 
-                            <View style={styles.scheduleLabel}>
-                                <Text style={styles.subtitle}> lembrete </Text>
+                            <View style={styles(theme).scheduleLabel}>
+                                <Text style={styles(theme).subtitle}> lembrete </Text>
                                 <Switch
-                                    thumbColor={colors.backgroundPrimary}
-                                    trackColor={{ true: colors.blue, false: colors.backgroundSecundary }}
-                                    ios_backgroundColor={colors.backgroundSecundary}
+                                    thumbColor={colors[theme].backgroundPrimary}
+                                    trackColor={{ true: colors[theme].blue, false: colors[theme].backgroundSecundary }}
+                                    ios_backgroundColor={colors[theme].backgroundSecundary}
                                     onValueChange={changeScheduleSwitch}
                                     value={scheduleEnabled}
                                 />
@@ -265,25 +266,25 @@ export function HabitManager() {
                                     mode="time"
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={handleChangeTimeSchedule}
-                                    style={styles.dateTimePickerIos}
-                                    textColor={colors.textPrimary}
+                                    style={styles(theme).dateTimePickerIos}
+                                    textColor={colors[theme].textPrimary}
                                 />
                             )}
 
                             {
                                 scheduleEnabled && Platform.OS === 'android' && (
                                     <TouchableOpacity
-                                        style={styles.dateTimePickerButton}
+                                        style={styles(theme).dateTimePickerButton}
                                         onPress={handleOpenDatetimePickerScheduleForAndroid}
                                     >
-                                        <Text style={styles.dateTimePickerText}>
+                                        <Text style={styles(theme).dateTimePickerText}>
                                             {`alterar ${format(selectedScheduleDateTime, 'HH:mm')}`}
                                         </Text>
                                     </TouchableOpacity>
                                 )
                             }
                         </View>
-                        <View style={styles.footer}>
+                        <View style={styles(theme).footer}>
                             <Button title="salvar" onPress={handleSaveHabit} />
                         </View>
                     </ScrollView>
@@ -293,11 +294,11 @@ export function HabitManager() {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors.backgroundSecundary
+        backgroundColor: colors[theme].backgroundSecundary
     },
     header: {
         height: 160,
@@ -309,19 +310,19 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         paddingBottom: 25
     },
     form: {
         flexGrow: 1,
-        backgroundColor: colors.backgroundPrimary,
+        backgroundColor: colors[theme].backgroundPrimary,
         padding: 20,
         justifyContent: 'space-between'
     },
     subtitle: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         paddingRight: 20
     },
     week: {
@@ -345,12 +346,12 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 20,
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: colors[theme].backgroundSecundary,
         borderRadius: 10,
         marginTop: 20
     },
     dateTimePickerText: {
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         fontSize: 15,
         fontFamily: fonts.content,
     },

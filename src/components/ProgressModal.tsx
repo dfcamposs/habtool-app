@@ -19,11 +19,12 @@ interface ProgressModalProps extends ModalProps {
 }
 
 export function ProgressModal({ data: habit, visible = false, closeModal, ...rest }: ProgressModalProps) {
+    const theme = "dark";
     const initialCalendarMarked = {
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
-            color: colors.blue,
-            textColor: colors.textSecundary
+            color: colors[theme].blue,
+            textColor: colors[theme].textSecundary
         }
     }
     const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>(initialCalendarMarked);
@@ -83,8 +84,8 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                 [format(dateSelected, 'yyyy-MM-dd')]: {
                     startingDay: true,
                     endingDay: true,
-                    color: colors.backgroundSecundary,
-                    textColor: colors.textPrimary
+                    color: colors[theme].backgroundSecundary,
+                    textColor: colors[theme].textPrimary
                 }
             }
         }
@@ -116,9 +117,9 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                     endingDay: endingDate,
                     color: dateSelected
                         && format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
-                        ? colors.blueDark
-                        : colors.blue,
-                    textColor: colors.textSecundary
+                        ? colors[theme].blueDark
+                        : colors[theme].blue,
+                    textColor: colors[theme].textSecundary
                 }
             }
         });
@@ -138,62 +139,62 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
             visible={visible}
             statusBarTranslucent={true}
         >
-            <View style={styles.container}>
-                <Text style={styles.modalTitle}>{habit.name}</Text>
+            <View style={styles(theme).container}>
+                <Text style={styles(theme).modalTitle}>{habit.name}</Text>
 
-                <View style={styles.calendar}>
-                    <Text style={styles.subtitle}>histórico</Text>
+                <View style={styles(theme).calendar}>
+                    <Text style={styles(theme).subtitle}>histórico</Text>
                     <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleChangeSelectedDay} />
                     {habit.endDate && isBefore(habit.endDate, Date.now()) &&
-                        <Text style={styles.disabledText}>este hábito está desabilitado.</Text>
+                        <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
                     }
                 </View>
 
-                <TouchableOpacity style={styles.button} onPress={closeModal} activeOpacity={0.5}>
-                    <Text style={styles.textButton}>voltar</Text>
+                <TouchableOpacity style={styles(theme).button} onPress={closeModal} activeOpacity={0.5}>
+                    <Text style={styles(theme).textButton}>voltar</Text>
                 </TouchableOpacity>
             </View>
         </Modal>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
         paddingTop: getStatusBarHeight(),
         paddingVertical: 23,
         paddingHorizontal: 10,
-        backgroundColor: colors.backgroundPrimary
+        backgroundColor: colors[theme].backgroundPrimary
     },
     modalTitle: {
         fontSize: 24,
         fontFamily: fonts.title,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         paddingVertical: 40
     },
     calendar: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors.backgroundPrimary
+        backgroundColor: colors[theme].backgroundPrimary
     },
     subtitle: {
         fontSize: 18,
         fontFamily: fonts.subtitle,
-        color: colors.textUnfocus,
+        color: colors[theme].textUnfocus,
         paddingLeft: 20,
     },
     disabledText: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors.textUnfocus,
+        color: colors[theme].textUnfocus,
         paddingTop: 20,
         paddingLeft: 20,
     },
     button: {
         width: 100,
         height: 40,
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: colors[theme].backgroundSecundary,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -202,6 +203,6 @@ const styles = StyleSheet.create({
     textButton: {
         fontSize: 16,
         fontFamily: fonts.contentBold,
-        color: colors.textPrimary
+        color: colors[theme].textPrimary
     },
 })

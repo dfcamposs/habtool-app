@@ -13,6 +13,7 @@ interface InputProps extends TextInputProps {
 
 export function Input({ name, icon, center = false, value, ...rest }: InputProps) {
     const [isFocused, setIsFocused] = useState(false);
+    const theme = "dark";
 
     function handleInputFocus() {
         setIsFocused(true);
@@ -24,35 +25,35 @@ export function Input({ name, icon, center = false, value, ...rest }: InputProps
 
     return (
         <View style={[
-            styles.container,
-            (isFocused) && { borderColor: colors.blue }
+            styles(theme).container,
+            (isFocused) && { borderColor: colors[theme].blue }
         ]}>
             {icon &&
                 <MaterialIcons
-                    style={styles.icon}
+                    style={styles(theme).icon}
                     name={icon}
                     size={28}
-                    color={(isFocused || !!value || !!rest.defaultValue) ? colors.blue : colors.textUnfocus}
+                    color={(isFocused || !!value || !!rest.defaultValue) ? colors[theme].blue : colors[theme].textUnfocus}
                 />}
             <TextInput
-                style={[styles.input, center && { textAlign: 'center', width: '100%' }]}
+                style={[styles(theme).input, center && { textAlign: 'center', width: '100%' }]}
                 onFocus={handleInputFocus}
                 onBlur={handleInputBlur}
                 autoCapitalize={center ? 'sentences' : 'none'}
-                placeholderTextColor={colors.textUnfocus}
+                placeholderTextColor={colors[theme].textUnfocus}
                 {...rest}
             />
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
         borderBottomWidth: 1,
-        borderColor: colors.textUnfocus,
+        borderColor: colors[theme].textUnfocus,
         marginVertical: 15,
         paddingVertical: 10
     },
@@ -63,6 +64,6 @@ const styles = StyleSheet.create({
         width: '90%',
         fontSize: 15,
         fontFamily: fonts.content,
-        color: colors.textPrimary
+        color: colors[theme].textPrimary
     }
 })

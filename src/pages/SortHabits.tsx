@@ -18,6 +18,7 @@ export function SortHabits() {
     const { myHabits, handleUpdateMyHabits } = useContext(HabitsContext);
     const [habitsSorted, setHabitsSorted] = useState<HabitProps[]>(myHabits);
     const navigation = useNavigation();
+    const theme = "dark";
 
     async function handleDragEnd({ data }: DragEndParams<HabitProps>) {
         setHabitsSorted(data);
@@ -37,29 +38,29 @@ export function SortHabits() {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <Text style={styles.title}>ordenar hábitos</Text>
-            <View style={styles.habitList}>
+        <SafeAreaView style={styles(theme).container}>
+            <Text style={styles(theme).title}>ordenar hábitos</Text>
+            <View style={styles(theme).habitList}>
                 <DraggableFlatList
                     data={habitsSorted}
                     keyExtractor={(item) => String(item.id)}
                     renderItem={({ item: habit, drag }) => (
                         <TouchableOpacity
-                            style={styles.habit}
+                            style={styles(theme).habit}
                             activeOpacity={0.7}
                             onLongPress={drag}
                         >
                             <MaterialIcons
                                 name="drag-indicator"
                                 size={25}
-                                color={colors.textUnfocus}
+                                color={colors[theme].textUnfocus}
                             />
                             <Text
                                 style={[
-                                    styles.habitName,
+                                    styles(theme).habitName,
                                     (habit.endDate !== undefined
                                         && isBefore(Number(habit.endDate), Date.now()))
-                                    && { color: colors.textUnfocus }
+                                    && { color: colors[theme].textUnfocus }
                                 ]}
                             >
                                 {habit.name}
@@ -70,14 +71,14 @@ export function SortHabits() {
                     onDragEnd={(data) => handleDragEnd(data)}
                 />
             </View>
-            <View style={styles.footer}>
+            <View style={styles(theme).footer}>
                 <Button title="salvar" onPress={handleSaveHabitListSorted} />
             </View>
         </SafeAreaView>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         alignItems: 'center',
@@ -87,7 +88,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         paddingTop: 20
     },
     habitList: {
@@ -97,7 +98,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: 20
     },
     habit: {
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: colors[theme].backgroundSecundary,
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 20,
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     habitName: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         paddingLeft: 10
     },
     footer: {

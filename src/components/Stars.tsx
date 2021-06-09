@@ -8,27 +8,28 @@ import colors from '../styles/colors';
 
 export function Stars() {
     const { percentageChecked } = useContext(HabitsContext);
+    const theme = "dark";
 
     function handleCheckStar(minPercentage: number): string {
         if (percentageChecked >= minPercentage) {
-            return colors.blue;
+            return colors[theme].blue;
         }
 
-        return colors.backgroundPrimary;
+        return colors[theme].backgroundPrimary;
     }
 
     return (
-        <View style={styles.container}>
-            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(20)} />
-            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(40)} />
-            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(60)} />
-            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(80)} />
-            <MaterialIcons style={styles.star} name="star" size={25} color={handleCheckStar(100)} />
+        <View style={styles(theme).container}>
+            <MaterialIcons style={styles(theme).star} name="star" size={25} color={handleCheckStar(20)} />
+            <MaterialIcons style={styles(theme).star} name="star" size={25} color={handleCheckStar(40)} />
+            <MaterialIcons style={styles(theme).star} name="star" size={25} color={handleCheckStar(60)} />
+            <MaterialIcons style={styles(theme).star} name="star" size={25} color={handleCheckStar(80)} />
+            <MaterialIcons style={styles(theme).star} name="star" size={25} color={handleCheckStar(100)} />
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         flexDirection: 'row'
     },

@@ -29,6 +29,7 @@ export function Welcome() {
 
     const navigation = useNavigation();
     const { userName, handleUpdateUserName } = useContext(HabitsContext);
+    const theme = "dark";
 
     useEffect(() => {
         if (userName) {
@@ -50,35 +51,35 @@ export function Welcome() {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={styles(theme).container}>
             <KeyboardAvoidingView
-                style={[styles.container, !(!!userName) && { paddingHorizontal: 20 }]}
+                style={[styles(theme).container, !(!!userName) && { paddingHorizontal: 20 }]}
                 behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             >
                 <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
                     <>
                         {!userName &&
-                            <View style={styles.welcome}>
-                                <Text style={styles.title}>seja bem-vindo!</Text>
-                                <Image style={styles.logo} source={Logo} />
+                            <View style={styles(theme).welcome}>
+                                <Text style={styles(theme).title}>seja bem-vindo!</Text>
+                                <Image style={styles(theme).logo} source={Logo} />
                             </View>
                         }
                         <View style={[
-                            styles.content,
+                            styles(theme).content,
                             !!userName && {
                                 flex: 1,
                                 justifyContent: 'space-between',
-                                backgroundColor: colors.backgroundPrimary
+                                backgroundColor: colors[theme].backgroundPrimary
                             }
                         ]}>
                             <View>
-                                <Text style={styles.subtitle}>
+                                <Text style={styles(theme).subtitle}>
                                     como você se chama?
                                 </Text>
 
                                 <Input name="username" defaultValue={userName} placeholder="digite o nome" onChangeText={handleInputChange} center />
                             </View>
-                            <View style={styles.footer}>
+                            <View style={styles(theme).footer}>
                                 <Button title={userName ? "alterar" : "começar"} onPress={handleSubmit} />
                             </View>
                         </View>
@@ -91,7 +92,7 @@ export function Welcome() {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         paddingTop: getStatusBarHeight()
@@ -103,7 +104,7 @@ const styles = StyleSheet.create({
     },
     content: {
         alignItems: 'center',
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: colors[theme].backgroundSecundary,
         paddingVertical: 20,
         paddingHorizontal: 20,
         borderRadius: 10
@@ -116,21 +117,21 @@ const styles = StyleSheet.create({
     title: {
         fontFamily: fonts.title,
         fontSize: 24,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         alignSelf: 'center',
         paddingBottom: 50
     },
     subtitle: {
         fontFamily: fonts.subtitle,
         fontSize: 20,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         alignSelf: 'center',
         paddingBottom: 30
     },
     input: {
         borderBottomWidth: 1,
-        borderColor: colors.textUnfocus,
-        color: colors.textPrimary,
+        borderColor: colors[theme].textUnfocus,
+        color: colors[theme].textPrimary,
         width: '100%',
         fontSize: 15,
         padding: 10,

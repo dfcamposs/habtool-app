@@ -1,3 +1,19 @@
+interface Theme {
+    [theme: string]: {
+        gray: string,
+        blue: string,
+        blueDark: string,
+        green: string,
+        red: string,
+        textPrimary: string,
+        textSecundary: string,
+        textUnfocus: string,
+        backgroundPrimary: string,
+        backgroundSecundary: string,
+        backgroundTertiary: string,
+    };
+}
+
 const lightTheme = {
     gray: '#C3C9CE',
     blue: '#4985F9',
@@ -30,4 +46,4 @@ const darkTheme = {
     backgroundTertiary: '#495057',
 };
 
-export default lightTheme;
+export default { light: lightTheme, dark: darkTheme } as Theme;

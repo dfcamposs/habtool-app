@@ -24,21 +24,23 @@ interface HabitCalendar {
 }
 
 export function HabitCalendar({ calendarMarked, handleChangeSelectedDay }: HabitCalendar) {
+    const theme = "dark";
+
     return (
         <Calendar
             markedDates={calendarMarked}
             markingType={'period'}
             onDayPress={(date) => handleChangeSelectedDay(date.timestamp)}
-            style={styles.container}
+            style={styles(theme).container}
             theme={{
-                calendarBackground: colors.backgroundPrimary,
-                arrowColor: colors.textPrimary,
-                todayTextColor: colors.blue,
-                dayTextColor: colors.textPrimary,
-                dotColor: colors.blue,
-                monthTextColor: colors.textPrimary,
-                indicatorColor: colors.textPrimary,
-                textDisabledColor: colors.textUnfocus,
+                calendarBackground: colors[theme].backgroundPrimary,
+                arrowColor: colors[theme].textPrimary,
+                todayTextColor: colors[theme].blue,
+                dayTextColor: colors[theme].textPrimary,
+                dotColor: colors[theme].blue,
+                monthTextColor: colors[theme].textPrimary,
+                indicatorColor: colors[theme].textPrimary,
+                textDisabledColor: colors[theme].textUnfocus,
                 textDayFontFamily: fonts.content,
                 textMonthFontFamily: fonts.content,
                 textDayHeaderFontFamily: fonts.content,
@@ -50,9 +52,9 @@ export function HabitCalendar({ calendarMarked, handleChangeSelectedDay }: Habit
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
-        backgroundColor: colors.backgroundPrimary,
+        backgroundColor: colors[theme].backgroundPrimary,
         marginTop: 10,
         marginBottom: 20
     },

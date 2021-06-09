@@ -11,21 +11,23 @@ interface ButtonProps extends RectButtonProps {
 }
 
 export function Button({ title, ...rest }: ButtonProps) {
+    const theme = "dark";
+
     return (
         <RectButton
-            style={styles.container}
+            style={styles(theme).container}
             {...rest}
         >
-            <Text style={styles.text}>
+            <Text style={styles(theme).text}>
                 {title}
             </Text>
         </RectButton>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
-        backgroundColor: colors.blue,
+        backgroundColor: colors[theme].blue,
         height: 60,
         borderRadius: 10,
         justifyContent: 'center',
@@ -33,7 +35,7 @@ const styles = StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        color: colors.textSecundary,
+        color: colors[theme].textSecundary,
         fontFamily: fonts.contentBold
     }
 })

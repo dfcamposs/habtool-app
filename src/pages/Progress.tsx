@@ -20,11 +20,12 @@ interface HabitHistoryDayProps {
 }
 
 export function Progress() {
+    const theme = "dark";
     const initialCalendarMarked = {
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
-            color: colors.blue,
-            textColor: colors.textSecundary
+            color: colors[theme].blue,
+            textColor: colors[theme].textSecundary
         }
     }
     const { myHabits } = useContext(HabitsContext);
@@ -34,6 +35,7 @@ export function Progress() {
     const [activeHabitsCount, setActiveHabitsCount] = useState<number>(0);
     const [currentSequenceCount, setCurrentSequenceCount] = useState<number>(0);
     const [maxSequenceCount, setMaxSequenceCount] = useState<number>(0);
+
 
     useEffect(() => {
         const currentDate = new Date();
@@ -110,9 +112,9 @@ export function Progress() {
                     startingDay: startingDate,
                     endingDay: endingDate,
                     color: format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
-                        ? colors.blueDark
-                        : colors.blue,
-                    textColor: colors.textSecundary
+                        ? colors[theme].blueDark
+                        : colors[theme].blue,
+                    textColor: colors[theme].textSecundary
                 }
             }
         });
@@ -123,8 +125,8 @@ export function Progress() {
                 [format(dateSelected, 'yyyy-MM-dd')]: {
                     startingDay: true,
                     endingDay: true,
-                    color: colors.backgroundSecundary,
-                    textColor: colors.textPrimary
+                    color: colors[theme].backgroundSecundary,
+                    textColor: colors[theme].textPrimary
                 }
             }
         }
@@ -135,44 +137,44 @@ export function Progress() {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <Text style={styles.title}>
+        <SafeAreaView style={styles(theme).container}>
+            <View style={styles(theme).header}>
+                <Text style={styles(theme).title}>
                     progresso geral
                 </Text>
 
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-                    <View style={styles.card}>
-                        <Text style={styles.score}>{maxSequenceCount}</Text>
-                        <Text style={styles.legend}>seq. máxima (dias)</Text>
+                    <View style={styles(theme).card}>
+                        <Text style={styles(theme).score}>{maxSequenceCount}</Text>
+                        <Text style={styles(theme).legend}>seq. máxima (dias)</Text>
                     </View>
-                    <View style={styles.card}>
-                        <Text style={styles.score}>{activeHabitsCount}</Text>
-                        <Text style={styles.legend}>hábitos ativos</Text>
+                    <View style={styles(theme).card}>
+                        <Text style={styles(theme).score}>{activeHabitsCount}</Text>
+                        <Text style={styles(theme).legend}>hábitos ativos</Text>
                     </View>
-                    <View style={styles.card}>
-                        <Text style={styles.score}>{currentSequenceCount}</Text>
-                        <Text style={styles.legend}>seq. atual (dias)</Text>
+                    <View style={styles(theme).card}>
+                        <Text style={styles(theme).score}>{currentSequenceCount}</Text>
+                        <Text style={styles(theme).legend}>seq. atual (dias)</Text>
                     </View>
                 </ScrollView>
             </View>
-            <ScrollView style={styles.content} showsVerticalScrollIndicator={false}>
+            <ScrollView style={styles(theme).content} showsVerticalScrollIndicator={false}>
                 <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleHabitsHistoryDay} />
 
                 {historyDay?.length ?
                     <>
-                        <View style={styles.historyHeader}>
-                            <Text style={styles.subtitle}>histórico</Text>
-                            <Text style={styles.selectedDate}>{daySelected && format(daySelected, 'dd-MM-yyyy')}</Text>
+                        <View style={styles(theme).historyHeader}>
+                            <Text style={styles(theme).subtitle}>histórico</Text>
+                            <Text style={styles(theme).selectedDate}>{daySelected && format(daySelected, 'dd-MM-yyyy')}</Text>
                         </View>
-                        <View style={styles.history}>
+                        <View style={styles(theme).history}>
                             <FlatList
                                 data={historyDay}
                                 keyExtractor={(item) => String(item.id)}
                                 renderItem={({ item: habit }) => (
-                                    <View style={styles.historyLine}>
-                                        <View style={[styles.circle, { backgroundColor: habit.checked ? colors.green : colors.backgroundPrimary }]} />
-                                        <Text style={styles.historyLineText}>{habit.name}</Text>
+                                    <View style={styles(theme).historyLine}>
+                                        <View style={[styles(theme).circle, { backgroundColor: habit.checked ? colors[theme].green : colors[theme].backgroundPrimary }]} />
+                                        <Text style={styles(theme).historyLineText}>{habit.name}</Text>
                                     </View>
                                 )}
                                 showsVerticalScrollIndicator={false}
@@ -180,18 +182,18 @@ export function Progress() {
                             />
                         </View>
                     </>
-                    : <Text style={styles.emptyText}>nenhum hábito nesta data.</Text>
+                    : <Text style={styles(theme).emptyText}>nenhum hábito nesta data.</Text>
                 }
             </ScrollView>
         </SafeAreaView>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: colors[theme].backgroundSecundary,
     },
     header: {
         height: Platform.OS === 'ios' ? 170 : 180,
@@ -202,19 +204,19 @@ const styles = StyleSheet.create({
     },
     content: {
         flexGrow: 1,
-        backgroundColor: colors.backgroundPrimary,
+        backgroundColor: colors[theme].backgroundPrimary,
         paddingBottom: 20,
     },
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         paddingBottom: 30
     },
     card: {
         width: 120,
         height: 70,
-        backgroundColor: colors.backgroundPrimary,
+        backgroundColor: colors[theme].backgroundPrimary,
         borderRadius: 10,
         marginHorizontal: 7,
         alignItems: 'center',
@@ -223,31 +225,31 @@ const styles = StyleSheet.create({
     },
     score: {
         fontSize: 24,
-        color: colors.textPrimary,
+        color: colors[theme].textPrimary,
         fontFamily: fonts.content,
         alignSelf: 'center',
         lineHeight: 30
     },
     legend: {
         fontSize: 10,
-        color: colors.textUnfocus,
+        color: colors[theme].textUnfocus,
         fontFamily: fonts.legend,
         alignSelf: 'center'
     },
     calendar: {
         marginHorizontal: 10,
         marginVertical: 20,
-        backgroundColor: colors.backgroundPrimary,
+        backgroundColor: colors[theme].backgroundPrimary,
     },
     subtitle: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors.textPrimary
+        color: colors[theme].textPrimary
     },
     selectedDate: {
         fontSize: 15,
         fontFamily: fonts.content,
-        color: colors.textUnfocus,
+        color: colors[theme].textUnfocus,
         paddingLeft: 10
     },
     historyHeader: {
@@ -258,7 +260,7 @@ const styles = StyleSheet.create({
     },
     history: {
         flex: 1,
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: colors[theme].backgroundSecundary,
         marginHorizontal: 20,
         borderRadius: 10,
         padding: 10,
@@ -274,19 +276,19 @@ const styles = StyleSheet.create({
         height: 20,
         width: 20,
         borderRadius: 10,
-        backgroundColor: colors.gray,
+        backgroundColor: colors[theme].gray,
         marginHorizontal: 10
     },
     historyLineText: {
         flex: 1,
         fontSize: 15,
         fontFamily: fonts.content,
-        color: colors.textPrimary
+        color: colors[theme].textPrimary
     },
     emptyText: {
         paddingLeft: 40,
         fontSize: 15,
         fontFamily: fonts.content,
-        color: colors.textUnfocus
+        color: colors[theme].textUnfocus
     }
 })

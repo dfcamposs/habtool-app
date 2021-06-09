@@ -9,22 +9,23 @@ interface ButtonProps extends TouchableOpacityProps {
 }
 
 export function SettingsButton({ title, disabled, ...rest }: ButtonProps) {
+    const theme = "dark";
     return (
         <TouchableOpacity
             activeOpacity={0.5}
-            style={styles.container}
+            style={styles(theme).container}
             {...rest}
         >
-            <Text style={[styles.text, disabled && { color: colors.textUnfocus }]}>
+            <Text style={[styles(theme).text, disabled && { color: colors[theme].textUnfocus }]}>
                 {title}
             </Text>
         </TouchableOpacity>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: colors[theme].backgroundSecundary,
         justifyContent: 'center',
         padding: 20,
         marginBottom: 10,
@@ -34,6 +35,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 14,
         fontFamily: fonts.content,
-        color: colors.textPrimary
+        color: colors[theme].textPrimary
     }
 })

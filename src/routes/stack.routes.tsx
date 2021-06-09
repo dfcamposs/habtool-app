@@ -13,13 +13,14 @@ import colors from '../styles/colors';
 const stackRoutes = createStackNavigator();
 
 const InitialRoutes: React.FC = () => {
+    const theme = "dark";
     return (
         <stackRoutes.Navigator
             headerMode="none"
             initialRouteName="Welcome"
             screenOptions={{
                 cardStyle: {
-                    backgroundColor: colors.backgroundPrimary,
+                    backgroundColor: colors[theme].backgroundPrimary,
                 }
             }}
         >
@@ -37,13 +38,14 @@ const InitialRoutes: React.FC = () => {
 }
 
 const AppRoutes: React.FC = () => {
+    const theme = "dark";
     return (
         <stackRoutes.Navigator
             headerMode="none"
             initialRouteName="MyHabits"
             screenOptions={{
                 cardStyle: {
-                    backgroundColor: colors.backgroundPrimary,
+                    backgroundColor: colors[theme].backgroundPrimary,
                 }
             }}
         >
