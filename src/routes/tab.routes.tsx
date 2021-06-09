@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
@@ -7,28 +7,29 @@ import { MyHabits } from '../pages/MyHabits';
 import { HabitManager } from '../pages/HabitManager';
 import { Progress } from '../pages/Progress';
 
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import { ThemeContext } from '../context/themes';
 
+import themes from '../styles/themes';
+import fonts from '../styles/fonts';
 
 const AppTab = createBottomTabNavigator();
 
 const AuthRoutes = () => {
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
     return (
         <AppTab.Navigator
             initialRouteName="hábitos"
             backBehavior="initialRoute"
             tabBarOptions={{
-                activeTintColor: colors[theme].blue,
-                inactiveTintColor: colors[theme].textUnfocus,
+                activeTintColor: themes[theme].blue,
+                inactiveTintColor: themes[theme].textUnfocus,
                 labelPosition: 'beside-icon',
                 labelStyle: {
                     fontSize: 15,
                     fontFamily: fonts.complement
                 },
                 style: {
-                    backgroundColor: colors[theme].backgroundTertiary,
+                    backgroundColor: themes[theme].backgroundTertiary,
                     paddingVertical: Platform.OS === 'ios' ? 10 : 0,
                     height: Platform.OS === 'ios' ? 80 : 60
                 }

@@ -20,8 +20,9 @@ import Logo from '../assets/logo.png';
 
 import { saveUserName } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
 
-import colors from '../styles/colors';
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 export function Welcome() {
@@ -29,7 +30,7 @@ export function Welcome() {
 
     const navigation = useNavigation();
     const { userName, handleUpdateUserName } = useContext(HabitsContext);
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
         if (userName) {
@@ -69,7 +70,7 @@ export function Welcome() {
                             !!userName && {
                                 flex: 1,
                                 justifyContent: 'space-between',
-                                backgroundColor: colors[theme].backgroundPrimary
+                                backgroundColor: themes[theme].backgroundPrimary
                             }
                         ]}>
                             <View>
@@ -104,7 +105,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     content: {
         alignItems: 'center',
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         paddingVertical: 20,
         paddingHorizontal: 20,
         borderRadius: 10
@@ -117,21 +118,21 @@ const styles = (theme: string) => StyleSheet.create({
     title: {
         fontFamily: fonts.title,
         fontSize: 24,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         alignSelf: 'center',
         paddingBottom: 50
     },
     subtitle: {
         fontFamily: fonts.subtitle,
         fontSize: 20,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         alignSelf: 'center',
         paddingBottom: 30
     },
     input: {
         borderBottomWidth: 1,
-        borderColor: colors[theme].textUnfocus,
-        color: colors[theme].textPrimary,
+        borderColor: themes[theme].textUnfocus,
+        color: themes[theme].textPrimary,
         width: '100%',
         fontSize: 15,
         padding: 10,

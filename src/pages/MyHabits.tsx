@@ -8,16 +8,17 @@ import pt from 'date-fns/locale/pt';
 
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
-import { HabitsContext } from '../context/habits';
-import { getUserName } from '../libs/storage';
 
-import colors from '../styles/colors';
+import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
+
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 export function MyHabits() {
     const { userName, myHabits, motivationalPhrase } = useContext(HabitsContext);
     const navigation = useNavigation();
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     function handleOpenSettings() {
         navigation.navigate('Settings');
@@ -44,7 +45,7 @@ export function MyHabits() {
                         <MaterialIcons
                             name="tune"
                             size={30}
-                            color={colors[theme].textUnfocus}
+                            color={themes[theme].textUnfocus}
                         />
                     </TouchableOpacity>
                 </View>
@@ -77,7 +78,7 @@ export function MyHabits() {
                     :
                     <View style={styles(theme).habitListEmpty}>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('adicionar')}>
-                            <MaterialIcons name="add-circle" size={50} color={colors[theme].textUnfocus} />
+                            <MaterialIcons name="add-circle" size={50} color={themes[theme].textUnfocus} />
                         </TouchableOpacity>
                         <Text style={styles(theme).habitListEmptyText}>Comece adicionando {'\n'} um novo hábito</Text>
                     </View>
@@ -91,7 +92,7 @@ const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
     },
     header: {
         height: 170,
@@ -112,7 +113,7 @@ const styles = (theme: string) => StyleSheet.create({
     weekLegend: {
         width: 272,
         height: 20,
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         borderBottomRightRadius: 10,
         borderBottomLeftRadius: 10,
         flexDirection: 'row',
@@ -120,7 +121,7 @@ const styles = (theme: string) => StyleSheet.create({
         justifyContent: 'center',
     },
     weekLegendText: {
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         fontSize: 10,
         fontFamily: fonts.legend,
         minWidth: 30,
@@ -129,7 +130,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     content: {
         flex: 1,
-        backgroundColor: colors[theme].backgroundPrimary,
+        backgroundColor: themes[theme].backgroundPrimary,
     },
     habitListEmpty: {
         flex: 1,
@@ -138,7 +139,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     habitListEmptyText: {
         fontSize: 16,
-        color: colors[theme].textUnfocus,
+        color: themes[theme].textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 10,
         textAlign: 'center'
@@ -148,12 +149,12 @@ const styles = (theme: string) => StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         fontFamily: fonts.title
     },
     subtitle: {
         fontSize: 15,
-        color: colors[theme].textUnfocus,
+        color: themes[theme].textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 5,
         paddingBottom: 20

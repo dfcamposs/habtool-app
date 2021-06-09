@@ -3,19 +3,20 @@ import { StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
 
-import colors from '../styles/colors';
+import themes from '../styles/themes';
 
 export function Stars() {
     const { percentageChecked } = useContext(HabitsContext);
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     function handleCheckStar(minPercentage: number): string {
         if (percentageChecked >= minPercentage) {
-            return colors[theme].blue;
+            return themes[theme].blue;
         }
 
-        return colors[theme].backgroundPrimary;
+        return themes[theme].backgroundPrimary;
     }
 
     return (

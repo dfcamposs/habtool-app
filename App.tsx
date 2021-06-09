@@ -8,12 +8,12 @@ import {
   Poppins_900Black
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
-import { StatusBar } from 'expo-status-bar';
 import * as Notifications from "expo-notifications";
 import { LogBox } from 'react-native';
 
 import Routes from './src/routes';
 import { HabitsProvider } from './src/context/habits';
+import { ThemeProvider } from './src/context/themes';
 
 export default function App() {
   LogBox.ignoreAllLogs();
@@ -46,9 +46,10 @@ export default function App() {
   }
 
   return (
-    <HabitsProvider>
-      <StatusBar style="dark" />
-      <Routes />
-    </HabitsProvider>
+    <ThemeProvider>
+      <HabitsProvider>
+        <Routes />
+      </HabitsProvider>
+    </ThemeProvider>
   )
 }

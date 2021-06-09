@@ -7,8 +7,9 @@ import { CalendarMarkedProps, HabitCalendar } from '../components/HabitCalendar'
 
 import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
 
-import colors from '../styles/colors';
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 import '../config/calendar';
@@ -20,12 +21,12 @@ interface HabitHistoryDayProps {
 }
 
 export function Progress() {
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
     const initialCalendarMarked = {
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
-            color: colors[theme].blue,
-            textColor: colors[theme].textSecundary
+            color: themes[theme].blue,
+            textColor: themes[theme].textSecundary
         }
     }
     const { myHabits } = useContext(HabitsContext);
@@ -112,9 +113,9 @@ export function Progress() {
                     startingDay: startingDate,
                     endingDay: endingDate,
                     color: format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
-                        ? colors[theme].blueDark
-                        : colors[theme].blue,
-                    textColor: colors[theme].textSecundary
+                        ? themes[theme].blueDark
+                        : themes[theme].blue,
+                    textColor: themes[theme].textSecundary
                 }
             }
         });
@@ -125,8 +126,8 @@ export function Progress() {
                 [format(dateSelected, 'yyyy-MM-dd')]: {
                     startingDay: true,
                     endingDay: true,
-                    color: colors[theme].backgroundSecundary,
-                    textColor: colors[theme].textPrimary
+                    color: themes[theme].backgroundSecundary,
+                    textColor: themes[theme].textPrimary
                 }
             }
         }
@@ -173,7 +174,7 @@ export function Progress() {
                                 keyExtractor={(item) => String(item.id)}
                                 renderItem={({ item: habit }) => (
                                     <View style={styles(theme).historyLine}>
-                                        <View style={[styles(theme).circle, { backgroundColor: habit.checked ? colors[theme].green : colors[theme].backgroundPrimary }]} />
+                                        <View style={[styles(theme).circle, { backgroundColor: habit.checked ? themes[theme].green : themes[theme].backgroundPrimary }]} />
                                         <Text style={styles(theme).historyLineText}>{habit.name}</Text>
                                     </View>
                                 )}
@@ -193,7 +194,7 @@ const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
     },
     header: {
         height: Platform.OS === 'ios' ? 170 : 180,
@@ -204,19 +205,19 @@ const styles = (theme: string) => StyleSheet.create({
     },
     content: {
         flexGrow: 1,
-        backgroundColor: colors[theme].backgroundPrimary,
+        backgroundColor: themes[theme].backgroundPrimary,
         paddingBottom: 20,
     },
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         paddingBottom: 30
     },
     card: {
         width: 120,
         height: 70,
-        backgroundColor: colors[theme].backgroundPrimary,
+        backgroundColor: themes[theme].backgroundPrimary,
         borderRadius: 10,
         marginHorizontal: 7,
         alignItems: 'center',
@@ -225,31 +226,31 @@ const styles = (theme: string) => StyleSheet.create({
     },
     score: {
         fontSize: 24,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         fontFamily: fonts.content,
         alignSelf: 'center',
         lineHeight: 30
     },
     legend: {
         fontSize: 10,
-        color: colors[theme].textUnfocus,
+        color: themes[theme].textUnfocus,
         fontFamily: fonts.legend,
         alignSelf: 'center'
     },
     calendar: {
         marginHorizontal: 10,
         marginVertical: 20,
-        backgroundColor: colors[theme].backgroundPrimary,
+        backgroundColor: themes[theme].backgroundPrimary,
     },
     subtitle: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors[theme].textPrimary
+        color: themes[theme].textPrimary
     },
     selectedDate: {
         fontSize: 15,
         fontFamily: fonts.content,
-        color: colors[theme].textUnfocus,
+        color: themes[theme].textUnfocus,
         paddingLeft: 10
     },
     historyHeader: {
@@ -260,7 +261,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     history: {
         flex: 1,
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         marginHorizontal: 20,
         borderRadius: 10,
         padding: 10,
@@ -276,19 +277,19 @@ const styles = (theme: string) => StyleSheet.create({
         height: 20,
         width: 20,
         borderRadius: 10,
-        backgroundColor: colors[theme].gray,
+        backgroundColor: themes[theme].gray,
         marginHorizontal: 10
     },
     historyLineText: {
         flex: 1,
         fontSize: 15,
         fontFamily: fonts.content,
-        color: colors[theme].textPrimary
+        color: themes[theme].textPrimary
     },
     emptyText: {
         paddingLeft: 40,
         fontSize: 15,
         fontFamily: fonts.content,
-        color: colors[theme].textUnfocus
+        color: themes[theme].textUnfocus
     }
 })

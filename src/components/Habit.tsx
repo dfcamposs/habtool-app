@@ -19,8 +19,9 @@ import { ProgressModal } from './ProgressModal';
 
 import { deleteHabit, getHabitWeekHistory, HabitProps } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
 
-import colors from '../styles/colors';
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 interface HabitComponentProps extends TouchableOpacityProps {
@@ -39,7 +40,7 @@ export function Habit({ data: habit, ...rest }: HabitComponentProps) {
 
     const { handleUpdateMyHabits, myHabits, handleUpdatePercentageCheck } = useContext(HabitsContext);
     const navigation = useNavigation();
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     async function getWeekHistory() {
         const initialTrackerList: TrackerListProps[] = [
@@ -144,13 +145,13 @@ export function Habit({ data: habit, ...rest }: HabitComponentProps) {
                                 style={styles(theme).removeButton}
                                 onPress={handleRemoveHabit}
                             >
-                                <MaterialIcons name="delete" size={20} color={colors[theme].textSecundary} />
+                                <MaterialIcons name="delete" size={20} color={themes[theme].textSecundary} />
                             </RectButton>
                             <RectButton
                                 style={styles(theme).editButton}
                                 onPress={handleUpdateHabit}
                             >
-                                <MaterialIcons name="edit" size={20} color={colors[theme].textSecundary} />
+                                <MaterialIcons name="edit" size={20} color={themes[theme].textSecundary} />
                             </RectButton>
                         </View>
                     </Animated.View>
@@ -163,7 +164,7 @@ export function Habit({ data: habit, ...rest }: HabitComponentProps) {
                         onPress={handleOpenModal}
                         {...rest}
                     >
-                        <Text style={[styles(theme).text, habitIsActive && { color: colors[theme].textPrimary }]}>
+                        <Text style={[styles(theme).text, habitIsActive && { color: themes[theme].textPrimary }]}>
                             {habit.name}
                         </Text>
                     </TouchableOpacity>
@@ -189,7 +190,7 @@ export function Habit({ data: habit, ...rest }: HabitComponentProps) {
 
 const styles = (theme: string) => StyleSheet.create({
     container: {
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         height: 100,
         marginHorizontal: 20,
         marginBottom: 20,
@@ -201,7 +202,7 @@ const styles = (theme: string) => StyleSheet.create({
     editButton: {
         width: 60,
         height: 100,
-        backgroundColor: colors[theme].gray,
+        backgroundColor: themes[theme].gray,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
@@ -211,7 +212,7 @@ const styles = (theme: string) => StyleSheet.create({
     removeButton: {
         width: 60,
         height: 100,
-        backgroundColor: colors[theme].red,
+        backgroundColor: themes[theme].red,
         justifyContent: 'center',
         alignItems: 'center',
         position: 'relative',
@@ -219,7 +220,7 @@ const styles = (theme: string) => StyleSheet.create({
         borderRadius: 10
     },
     text: {
-        color: colors[theme].textUnfocus,
+        color: themes[theme].textUnfocus,
         fontFamily: fonts.content,
         fontSize: 16
     },

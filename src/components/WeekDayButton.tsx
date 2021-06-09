@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
-import colors from '../styles/colors';
+import { ThemeContext } from '../context/themes';
+
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 interface WeekDayButton extends TouchableOpacityProps {
@@ -10,17 +12,17 @@ interface WeekDayButton extends TouchableOpacityProps {
 }
 
 export function WeekDayButton({ title, active = false, ...rest }: WeekDayButton) {
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
     return (
         <TouchableOpacity
             style={[
                 styles(theme).container,
-                active && { backgroundColor: colors[theme].blue }
+                active && { backgroundColor: themes[theme].blue }
             ]}
             activeOpacity={0.7}
             {...rest}
         >
-            <Text style={[styles(theme).text, active && { color: colors[theme].textSecundary }]}>
+            <Text style={[styles(theme).text, active && { color: themes[theme].textSecundary }]}>
                 {title}
             </Text>
         </TouchableOpacity>
@@ -32,7 +34,7 @@ const styles = (theme: string) => StyleSheet.create({
         width: 50,
         height: 50,
         borderRadius: 25,
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center',
         marginRight: 4
@@ -40,6 +42,6 @@ const styles = (theme: string) => StyleSheet.create({
     text: {
         fontSize: 12,
         fontFamily: fonts.content,
-        color: colors[theme].textPrimary
+        color: themes[theme].textPrimary
     }
 })

@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
 
-import colors from '../styles/colors';
+import { ThemeContext } from '../context/themes';
+
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 interface ButtonProps extends RectButtonProps {
@@ -11,7 +13,7 @@ interface ButtonProps extends RectButtonProps {
 }
 
 export function Button({ title, ...rest }: ButtonProps) {
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     return (
         <RectButton
@@ -27,7 +29,7 @@ export function Button({ title, ...rest }: ButtonProps) {
 
 const styles = (theme: string) => StyleSheet.create({
     container: {
-        backgroundColor: colors[theme].blue,
+        backgroundColor: themes[theme].blue,
         height: 60,
         borderRadius: 10,
         justifyContent: 'center',
@@ -35,7 +37,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     text: {
         fontSize: 16,
-        color: colors[theme].textSecundary,
+        color: themes[theme].textSecundary,
         fontFamily: fonts.contentBold
     }
 })

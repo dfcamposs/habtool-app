@@ -4,8 +4,9 @@ import * as Haptics from 'expo-haptics';
 
 import { updateHabitHistory } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
 
-import colors from '../styles/colors';
+import themes from '../styles/themes';
 
 interface TrackerProps extends TouchableOpacityProps {
     data: {
@@ -19,7 +20,7 @@ interface TrackerProps extends TouchableOpacityProps {
 export function Tracker({ data, checked = false, enabled = true, ...rest }: TrackerProps) {
     const { handleUpdatePercentageCheck, handleRefreshHistoryCalendar } = useContext(HabitsContext)
     const [trackerChecked, setTrackerChecked] = useState(checked);
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     async function handleTrackerChecked() {
         setTrackerChecked((oldValue) => !oldValue);
@@ -39,8 +40,8 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
                 activeOpacity={.7}
                 style={[
                     styles(theme).dayCicle,
-                    enabled && { backgroundColor: colors[theme].backgroundPrimary },
-                    trackerChecked && { backgroundColor: colors[theme].green },
+                    enabled && { backgroundColor: themes[theme].backgroundPrimary },
+                    trackerChecked && { backgroundColor: themes[theme].green },
                 ]}
                 disabled={!enabled}
                 onPress={handleTrackerChecked}
@@ -60,7 +61,7 @@ const styles = (theme: string) => StyleSheet.create({
         height: 30,
         width: 30,
         borderRadius: 15,
-        backgroundColor: colors[theme].gray,
+        backgroundColor: themes[theme].gray,
         alignItems: 'center',
         justifyContent: 'center',
     }

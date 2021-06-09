@@ -118,6 +118,9 @@ export async function getUserName(): Promise<string> {
     }
 }
 
+export async function checkUserIsPro(): Promise<boolean> {
+    return true;
+}
 
 //Habit
 export async function saveHabit(habit: HabitProps): Promise<void> {

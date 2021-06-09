@@ -8,8 +8,9 @@ import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
 
 import { loadHabitHistoryByHabitId, updateHabitHistory, HabitProps } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
 
-import colors from '../styles/colors';
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 interface ProgressModalProps extends ModalProps {
@@ -19,12 +20,12 @@ interface ProgressModalProps extends ModalProps {
 }
 
 export function ProgressModal({ data: habit, visible = false, closeModal, ...rest }: ProgressModalProps) {
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
     const initialCalendarMarked = {
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
-            color: colors[theme].blue,
-            textColor: colors[theme].textSecundary
+            color: themes[theme].blue,
+            textColor: themes[theme].textSecundary
         }
     }
     const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>(initialCalendarMarked);
@@ -84,8 +85,8 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                 [format(dateSelected, 'yyyy-MM-dd')]: {
                     startingDay: true,
                     endingDay: true,
-                    color: colors[theme].backgroundSecundary,
-                    textColor: colors[theme].textPrimary
+                    color: themes[theme].backgroundSecundary,
+                    textColor: themes[theme].textPrimary
                 }
             }
         }
@@ -117,9 +118,9 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                     endingDay: endingDate,
                     color: dateSelected
                         && format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
-                        ? colors[theme].blueDark
-                        : colors[theme].blue,
-                    textColor: colors[theme].textSecundary
+                        ? themes[theme].blueDark
+                        : themes[theme].blue,
+                    textColor: themes[theme].textSecundary
                 }
             }
         });
@@ -165,36 +166,36 @@ const styles = (theme: string) => StyleSheet.create({
         paddingTop: getStatusBarHeight(),
         paddingVertical: 23,
         paddingHorizontal: 10,
-        backgroundColor: colors[theme].backgroundPrimary
+        backgroundColor: themes[theme].backgroundPrimary
     },
     modalTitle: {
         fontSize: 24,
         fontFamily: fonts.title,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         paddingVertical: 40
     },
     calendar: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors[theme].backgroundPrimary
+        backgroundColor: themes[theme].backgroundPrimary
     },
     subtitle: {
         fontSize: 18,
         fontFamily: fonts.subtitle,
-        color: colors[theme].textUnfocus,
+        color: themes[theme].textUnfocus,
         paddingLeft: 20,
     },
     disabledText: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors[theme].textUnfocus,
+        color: themes[theme].textUnfocus,
         paddingTop: 20,
         paddingLeft: 20,
     },
     button: {
         width: 100,
         height: 40,
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -203,6 +204,6 @@ const styles = (theme: string) => StyleSheet.create({
     textButton: {
         fontSize: 16,
         fontFamily: fonts.contentBold,
-        color: colors[theme].textPrimary
+        color: themes[theme].textPrimary
     },
 })

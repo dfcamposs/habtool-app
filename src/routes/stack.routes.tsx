@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
 
 import { Welcome } from '../pages/Welcome';
@@ -8,19 +8,21 @@ import { Settings } from '../pages/Settings';
 import { SortHabits } from '../pages/SortHabits';
 import AuthRoutes from './tab.routes';
 
-import colors from '../styles/colors';
+import { ThemeContext } from '../context/themes';
+
+import themes from '../styles/themes';
 
 const stackRoutes = createStackNavigator();
 
 const InitialRoutes: React.FC = () => {
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
     return (
         <stackRoutes.Navigator
             headerMode="none"
             initialRouteName="Welcome"
             screenOptions={{
                 cardStyle: {
-                    backgroundColor: colors[theme].backgroundPrimary,
+                    backgroundColor: themes[theme].backgroundPrimary,
                 }
             }}
         >
@@ -38,14 +40,14 @@ const InitialRoutes: React.FC = () => {
 }
 
 const AppRoutes: React.FC = () => {
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
     return (
         <stackRoutes.Navigator
             headerMode="none"
             initialRouteName="MyHabits"
             screenOptions={{
                 cardStyle: {
-                    backgroundColor: colors[theme].backgroundPrimary,
+                    backgroundColor: themes[theme].backgroundPrimary,
                 }
             }}
         >

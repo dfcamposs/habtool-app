@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
-import { format } from 'date-fns';
 
-import colors from '../styles/colors';
+import { ThemeContext } from '../context/themes';
+
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 import '../config/calendar';
@@ -24,7 +25,7 @@ interface HabitCalendar {
 }
 
 export function HabitCalendar({ calendarMarked, handleChangeSelectedDay }: HabitCalendar) {
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     return (
         <Calendar
@@ -33,14 +34,14 @@ export function HabitCalendar({ calendarMarked, handleChangeSelectedDay }: Habit
             onDayPress={(date) => handleChangeSelectedDay(date.timestamp)}
             style={styles(theme).container}
             theme={{
-                calendarBackground: colors[theme].backgroundPrimary,
-                arrowColor: colors[theme].textPrimary,
-                todayTextColor: colors[theme].blue,
-                dayTextColor: colors[theme].textPrimary,
-                dotColor: colors[theme].blue,
-                monthTextColor: colors[theme].textPrimary,
-                indicatorColor: colors[theme].textPrimary,
-                textDisabledColor: colors[theme].textUnfocus,
+                calendarBackground: themes[theme].backgroundPrimary,
+                arrowColor: themes[theme].textPrimary,
+                todayTextColor: themes[theme].blue,
+                dayTextColor: themes[theme].textPrimary,
+                dotColor: themes[theme].blue,
+                monthTextColor: themes[theme].textPrimary,
+                indicatorColor: themes[theme].textPrimary,
+                textDisabledColor: themes[theme].textUnfocus,
                 textDayFontFamily: fonts.content,
                 textMonthFontFamily: fonts.content,
                 textDayHeaderFontFamily: fonts.content,
@@ -54,7 +55,7 @@ export function HabitCalendar({ calendarMarked, handleChangeSelectedDay }: Habit
 
 const styles = (theme: string) => StyleSheet.create({
     container: {
-        backgroundColor: colors[theme].backgroundPrimary,
+        backgroundColor: themes[theme].backgroundPrimary,
         marginTop: 10,
         marginBottom: 20
     },

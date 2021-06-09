@@ -1,8 +1,10 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import colors from '../styles/colors';
+import { ThemeContext } from '../context/themes';
+
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 
@@ -13,7 +15,7 @@ interface DateButtonProps extends TouchableOpacityProps {
 }
 
 export function DateButton({ name, date, clear, ...rest }: DateButtonProps) {
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     return (
         <View style={styles(theme).container}>
@@ -22,15 +24,15 @@ export function DateButton({ name, date, clear, ...rest }: DateButtonProps) {
                     style={styles(theme).icon}
                     name="event"
                     size={28}
-                    color={date ? colors[theme].blue : colors[theme].textUnfocus}
+                    color={date ? themes[theme].blue : themes[theme].textUnfocus}
                 />
-                <Text style={[styles(theme).text, !!date && { color: colors[theme].textPrimary }]}>
+                <Text style={[styles(theme).text, !!date && { color: themes[theme].textPrimary }]}>
                     {date || "selecionar data fim"}
                 </Text>
             </TouchableOpacity>
             {!!clear && !!date && (
                 <TouchableOpacity style={styles(theme).button} activeOpacity={0.3} onPress={clear}>
-                    <Text style={[styles(theme).text, !!date && { color: colors[theme].textPrimary }]}>
+                    <Text style={[styles(theme).text, !!date && { color: themes[theme].textPrimary }]}>
                         clear
                     </Text>
                 </TouchableOpacity>
@@ -45,7 +47,7 @@ const styles = (theme: string) => StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderBottomWidth: 1,
-        borderColor: colors[theme].textUnfocus,
+        borderColor: themes[theme].textUnfocus,
         marginVertical: 15,
         paddingVertical: 10,
 
@@ -60,6 +62,6 @@ const styles = (theme: string) => StyleSheet.create({
     text: {
         fontSize: 15,
         fontFamily: fonts.content,
-        color: colors[theme].textUnfocus
+        color: themes[theme].textUnfocus
     }
 })

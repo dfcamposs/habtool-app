@@ -1,4 +1,4 @@
-interface Theme {
+export interface ThemeProps {
     [theme: string]: {
         gray: string,
         blue: string,
@@ -46,4 +46,4 @@ const darkTheme = {
     backgroundTertiary: '#495057',
 };
 
-export default { light: lightTheme, dark: darkTheme } as Theme;
+export default { light: lightTheme, dark: darkTheme } as ThemeProps;

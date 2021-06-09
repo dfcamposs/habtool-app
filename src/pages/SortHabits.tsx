@@ -9,16 +9,17 @@ import { isBefore } from 'date-fns';
 import { Button } from '../components/Button';
 
 import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
 import { HabitProps, StorageHabitSortProps, updateHabitsSort } from '../libs/storage';
 
-import colors from '../styles/colors';
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 export function SortHabits() {
     const { myHabits, handleUpdateMyHabits } = useContext(HabitsContext);
     const [habitsSorted, setHabitsSorted] = useState<HabitProps[]>(myHabits);
     const navigation = useNavigation();
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     async function handleDragEnd({ data }: DragEndParams<HabitProps>) {
         setHabitsSorted(data);
@@ -53,14 +54,14 @@ export function SortHabits() {
                             <MaterialIcons
                                 name="drag-indicator"
                                 size={25}
-                                color={colors[theme].textUnfocus}
+                                color={themes[theme].textUnfocus}
                             />
                             <Text
                                 style={[
                                     styles(theme).habitName,
                                     (habit.endDate !== undefined
                                         && isBefore(Number(habit.endDate), Date.now()))
-                                    && { color: colors[theme].textUnfocus }
+                                    && { color: themes[theme].textUnfocus }
                                 ]}
                             >
                                 {habit.name}
@@ -88,7 +89,7 @@ const styles = (theme: string) => StyleSheet.create({
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         paddingTop: 20
     },
     habitList: {
@@ -98,7 +99,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingHorizontal: 20
     },
     habit: {
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         flexDirection: 'row',
         alignItems: 'center',
         paddingVertical: 20,
@@ -109,7 +110,7 @@ const styles = (theme: string) => StyleSheet.create({
     habitName: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         paddingLeft: 10
     },
     footer: {

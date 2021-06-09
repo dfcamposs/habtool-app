@@ -27,8 +27,9 @@ import { DateButton } from '../components/DateButton';
 
 import { getHabitByName, HabitProps, saveHabit } from '../libs/storage';
 import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
 
-import colors from '../styles/colors';
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 interface Params {
@@ -58,7 +59,7 @@ export function HabitManager() {
     const navigation = useNavigation();
     const route = useRoute();
     const { habit } = route.params as Params;
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
         if (habit) {
@@ -228,7 +229,7 @@ export function HabitManager() {
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={handleChangeStartDate}
                                     style={styles(theme).dateTimePickerIos}
-                                    textColor={colors[theme].textPrimary}
+                                    textColor={themes[theme].textPrimary}
                                 />
                             )}
 
@@ -245,16 +246,16 @@ export function HabitManager() {
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={handleChangeEndDate}
                                     style={styles(theme).dateTimePickerIos}
-                                    textColor={colors[theme].textPrimary}
+                                    textColor={themes[theme].textPrimary}
                                 />
                             )}
 
                             <View style={styles(theme).scheduleLabel}>
                                 <Text style={styles(theme).subtitle}> lembrete </Text>
                                 <Switch
-                                    thumbColor={colors[theme].backgroundPrimary}
-                                    trackColor={{ true: colors[theme].blue, false: colors[theme].backgroundSecundary }}
-                                    ios_backgroundColor={colors[theme].backgroundSecundary}
+                                    thumbColor={themes[theme].backgroundPrimary}
+                                    trackColor={{ true: themes[theme].blue, false: themes[theme].backgroundSecundary }}
+                                    ios_backgroundColor={themes[theme].backgroundSecundary}
                                     onValueChange={changeScheduleSwitch}
                                     value={scheduleEnabled}
                                 />
@@ -267,7 +268,7 @@ export function HabitManager() {
                                     display={Platform.OS === 'ios' ? 'spinner' : 'default'}
                                     onChange={handleChangeTimeSchedule}
                                     style={styles(theme).dateTimePickerIos}
-                                    textColor={colors[theme].textPrimary}
+                                    textColor={themes[theme].textPrimary}
                                 />
                             )}
 
@@ -298,7 +299,7 @@ const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors[theme].backgroundSecundary
+        backgroundColor: themes[theme].backgroundSecundary
     },
     header: {
         height: 160,
@@ -310,19 +311,19 @@ const styles = (theme: string) => StyleSheet.create({
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         paddingBottom: 25
     },
     form: {
         flexGrow: 1,
-        backgroundColor: colors[theme].backgroundPrimary,
+        backgroundColor: themes[theme].backgroundPrimary,
         padding: 20,
         justifyContent: 'space-between'
     },
     subtitle: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         paddingRight: 20
     },
     week: {
@@ -346,12 +347,12 @@ const styles = (theme: string) => StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         paddingVertical: 20,
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         borderRadius: 10,
         marginTop: 20
     },
     dateTimePickerText: {
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         fontSize: 15,
         fontFamily: fonts.content,
     },

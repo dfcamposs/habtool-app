@@ -4,15 +4,18 @@ import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
 import { SettingsButton } from '../components/SettingsButton';
+
 import { HabitsContext } from '../context/habits';
+import { ThemeContext } from '../context/themes';
+
+import themes from '../styles/themes';
+import fonts from '../styles/fonts';
 
 export function Settings() {
     const { myHabits } = useContext(HabitsContext);
     const navigation = useNavigation();
-    const theme = "dark";
+    const { theme } = useContext(ThemeContext);
 
     return (
         <SafeAreaView style={styles(theme).container}>
@@ -44,20 +47,20 @@ const styles = (theme: string) => StyleSheet.create({
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         paddingTop: 20
     },
     subtitle: {
         fontSize: 16,
         fontFamily: fonts.content,
-        color: colors[theme].textPrimary,
+        color: themes[theme].textPrimary,
         paddingRight: 20,
         paddingVertical: 20
     },
     button: {
         width: 100,
         height: 40,
-        backgroundColor: colors[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
@@ -66,7 +69,7 @@ const styles = (theme: string) => StyleSheet.create({
     textButton: {
         fontSize: 16,
         fontFamily: fonts.contentBold,
-        color: colors[theme].textPrimary
+        color: themes[theme].textPrimary
     },
     menu: {
         flex: 1,
