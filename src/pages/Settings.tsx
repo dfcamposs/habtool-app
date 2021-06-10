@@ -52,7 +52,7 @@ export function Settings() {
                 <Text style={styles(theme).subtitle}>tema</Text>
                 <View style={styles(theme).themeContainer}>
                     <ThemeButton
-                        title="padrão"
+                        title="sistema"
                         selected={themeSelected === ThemeEnum.default}
                         onPress={() => handleChangeTheme(ThemeEnum.default)}
                     />
