@@ -1,40 +1,64 @@
 import { StatusBar } from 'expo-status-bar';
-import React, { createContext, useEffect, useState } from 'react';
+import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
-import { checkUserIsPro } from '../libs/storage';
+import { getCurrentTheme, setCurrentTheme } from '../libs/storage';
+import { UserContext } from './user';
 
 export enum ThemeEnum {
+    default = "default",
     light = "light",
     dark = "dark"
 }
 
 interface ThemeContextProps {
     theme: ThemeEnum;
-    setTheme: (theme: ThemeEnum) => void;
+    handleChange: (theme: ThemeEnum) => void;
 }
 
 export const ThemeContext = createContext<ThemeContextProps>({} as ThemeContextProps);
 
 export const ThemeProvider: React.FC = ({ children }) => {
-    const [theme, setTheme] = useState<ThemeEnum>(ThemeEnum.dark);
+    const [theme, setTheme] = useState<ThemeEnum>(ThemeEnum.light);
 
+    const { isPro } = useContext(UserContext);
     const deviceTheme = useColorScheme();
 
     useEffect(() => {
-        async function setDefaultTheme() {
-            const userIsPro = await checkUserIsPro();
-            if (userIsPro && deviceTheme)
-                setTheme(ThemeEnum[deviceTheme]);
+        async function setInitialTheme() {
+            if (!isPro) {
+                return;
+            }
+
+            const currentTheme = await getCurrentTheme();
+
+            if (currentTheme) {
+                if (currentTheme === ThemeEnum.default && deviceTheme) {
+                    setTheme(ThemeEnum[deviceTheme]);
+                } else {
+                    setTheme(currentTheme);
+                }
+            }
         }
 
-        setDefaultTheme();
-    }, [])
+
+        setInitialTheme();
+    }, []);
+
+    function handleChange(theme: ThemeEnum) {
+        if (theme === ThemeEnum.default) {
+            setTheme(deviceTheme ? ThemeEnum[deviceTheme] : ThemeEnum.light);
+        } else {
+            setTheme(theme);
+        }
+
+        setCurrentTheme(theme);
+    }
 
     return (
         <ThemeContext.Provider value={{
             theme,
-            setTheme
+            handleChange
         }}>
             <StatusBar style={theme === 'light' ? 'dark' : 'light'} />
             {children}

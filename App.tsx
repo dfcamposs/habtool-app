@@ -14,6 +14,7 @@ import { LogBox } from 'react-native';
 import Routes from './src/routes';
 import { HabitsProvider } from './src/context/habits';
 import { ThemeProvider } from './src/context/themes';
+import { UserProvider } from './src/context/user';
 
 export default function App() {
   LogBox.ignoreAllLogs();
@@ -46,10 +47,12 @@ export default function App() {
   }
 
   return (
-    <ThemeProvider>
-      <HabitsProvider>
-        <Routes />
-      </HabitsProvider>
-    </ThemeProvider>
+    <UserProvider>
+      <ThemeProvider>
+        <HabitsProvider>
+          <Routes />
+        </HabitsProvider>
+      </ThemeProvider>
+    </UserProvider>
   )
 }

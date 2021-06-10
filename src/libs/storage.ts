@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format, isAfter, isBefore } from 'date-fns';
 import * as Notifications from "expo-notifications";
+import { ThemeEnum } from '../context/themes';
 
 //Models
 export interface FrequencyProps {
@@ -120,6 +121,23 @@ export async function getUserName(): Promise<string> {
 
 export async function checkUserIsPro(): Promise<boolean> {
     return true;
+}
+
+//Theme
+export async function getCurrentTheme(): Promise<ThemeEnum | null> {
+    try {
+        return await AsyncStorage.getItem('@habto:currentTheme') as ThemeEnum;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function setCurrentTheme(theme: ThemeEnum): Promise<void> {
+    try {
+        await AsyncStorage.setItem('@habto:currentTheme', theme);
+    } catch (error) {
+        throw new Error(error);
+    }
 }
 
 //Habit
