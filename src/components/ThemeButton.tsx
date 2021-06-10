@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
-import { ThemeContext } from '../context/themes';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
@@ -35,17 +35,17 @@ export function ThemeButton({ title, selected = false, ...rest }: ThemeButtonPro
 
 const styles = (theme: string) => StyleSheet.create({
     container: {
-        width: 110,
+        width: '30%',
         padding: 10,
-        backgroundColor: themes[theme].gray,
+        backgroundColor: themes[theme].backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center',
         marginLeft: 2.5,
         borderRadius: 10
     },
     text: {
-        fontSize: 16,
-        fontFamily: fonts.contentBold,
+        fontSize: 14,
+        fontFamily: fonts.content,
         color: themes[theme].textPrimary
     }
 })

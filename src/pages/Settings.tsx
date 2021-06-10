@@ -9,9 +9,9 @@ import { ThemeButton } from '../components/ThemeButton';
 
 import { getCurrentTheme } from '../libs/storage';
 
-import { HabitsContext } from '../context/habits';
-import { ThemeContext, ThemeEnum } from '../context/themes';
-import { UserContext } from '../context/user';
+import { HabitsContext } from '../contexts/habits';
+import { ThemeContext, ThemeEnum } from '../contexts/themes';
+import { UserContext } from '../contexts/user';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
@@ -124,6 +124,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingHorizontal: 20,
     },
     themeContainer: {
+        width: '95%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',

@@ -1,7 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format, isAfter, isBefore } from 'date-fns';
 import * as Notifications from "expo-notifications";
-import { ThemeEnum } from '../context/themes';
+import { ThemeEnum } from '../contexts/themes';
 
 //Models
 export interface FrequencyProps {
@@ -33,7 +33,8 @@ export interface StorageHistoryHabitProps {
 }
 
 export interface StorageUserProps {
-    [name: string]: string;
+    name: string;
+    isPro: boolean;
 }
 
 export interface StorageHabitSortProps {
@@ -89,38 +90,33 @@ export async function cancelSchedulePushNotification(scheduleId: string) {
 
 
 //User
-export async function saveUserName(name: string): Promise<void> {
+export async function setUser(user: StorageUserProps): Promise<void> {
     try {
         await AsyncStorage
             .setItem('@habto:user',
-                JSON.stringify({
-                    name: name.trim()
-                })
+                JSON.stringify(user)
             );
-
     } catch (error) {
         throw new Error(error);
     }
 }
 
-export async function getUserName(): Promise<string> {
+export async function getUser(): Promise<StorageUserProps> {
     try {
         const data = await AsyncStorage.getItem('@habto:user');
-        const user = data ? (JSON.parse(data) as StorageUserProps) : {};
+        const user = data && JSON.parse(data) as StorageUserProps;
 
         if (user) {
-            return user.name;
+            return user;
         } else {
-            throw new Error("Nome do usuário não encontrado");
+            const newUser = { name: '', isPro: false };
+            await setUser(newUser);
+            return newUser;
         }
 
     } catch (error) {
         throw new Error(error);
     }
-}
-
-export async function checkUserIsPro(): Promise<boolean> {
-    return true;
 }
 
 //Theme

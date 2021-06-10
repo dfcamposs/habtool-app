@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { ThemeContext } from '../context/themes';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';

@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet } from 'react-native';
 import { Calendar } from 'react-native-calendars';
 
-import { ThemeContext } from '../context/themes';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';

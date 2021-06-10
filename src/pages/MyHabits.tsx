@@ -9,16 +9,18 @@ import pt from 'date-fns/locale/pt';
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
 
-import { HabitsContext } from '../context/habits';
-import { ThemeContext } from '../context/themes';
+import { HabitsContext } from '../contexts/habits';
+import { ThemeContext } from '../contexts/themes';
+import { UserContext } from '../contexts/user';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 export function MyHabits() {
-    const { userName, myHabits, motivationalPhrase } = useContext(HabitsContext);
-    const navigation = useNavigation();
+    const { myHabits, motivationalPhrase } = useContext(HabitsContext);
+    const { userName } = useContext(UserContext);
     const { theme } = useContext(ThemeContext);
+    const navigation = useNavigation();
 
     function handleOpenSettings() {
         navigation.navigate('Settings');

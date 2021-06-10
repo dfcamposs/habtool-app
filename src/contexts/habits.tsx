@@ -1,15 +1,13 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { getProgressStars, getUserName, HabitProps, loadHabits } from '../libs/storage';
+import { getProgressStars, HabitProps, loadHabits } from '../libs/storage';
 
 interface HabitsContextProps {
     myHabits: HabitProps[];
-    userName: string;
     percentageChecked: number;
     motivationalPhrase: string;
     refreshHistoryCalendar: number;
     handleUpdateMyHabits: (habits: HabitProps[]) => void;
     handleUpdatePercentageCheck: () => void;
-    handleUpdateUserName: (username: string) => void;
     handleRefreshHistoryCalendar: () => void;
 }
 
@@ -22,7 +20,6 @@ const motivationalPhrases = [
 export const HabitsContext = createContext<HabitsContextProps>({} as HabitsContextProps);
 
 export const HabitsProvider: React.FC = ({ children }) => {
-    const [userName, setUserName] = useState<string>('');
     const [myHabits, setMyHabits] = useState<HabitProps[]>([]);
     const [percentageChecked, setPercentageChecked] = useState<number>(0);
     const [motivationalPhrase, setMotivationalPhrase] = useState<string>(motivationalPhrases[0]);
@@ -34,11 +31,6 @@ export const HabitsProvider: React.FC = ({ children }) => {
     }
 
     useEffect(() => {
-        async function getUser() {
-            const user = await getUserName();
-            setUserName(user);
-        }
-
         async function getMyHabits() {
             const habitsStoraged = await loadHabits();
             const habitsSorted = habitsStoraged.sort((a, b) => a.order - b.order)
@@ -51,7 +43,6 @@ export const HabitsProvider: React.FC = ({ children }) => {
             );
         }
 
-        getUser();
         getMyHabits();
         getProgress();
         getMotivationalPhrase();
@@ -67,10 +58,6 @@ export const HabitsProvider: React.FC = ({ children }) => {
         getProgress();
     }
 
-    function handleUpdateUserName(username: string) {
-        setUserName(username);
-    }
-
     function handleRefreshHistoryCalendar() {
         setRefreshHistoryCalendar(oldState => oldState + 1);
     }
@@ -78,13 +65,11 @@ export const HabitsProvider: React.FC = ({ children }) => {
     return (
         <HabitsContext.Provider value={{
             myHabits,
-            userName,
             percentageChecked,
             motivationalPhrase,
             refreshHistoryCalendar,
             handleUpdateMyHabits,
             handleUpdatePercentageCheck,
-            handleUpdateUserName,
             handleRefreshHistoryCalendar
         }}>
             {children}

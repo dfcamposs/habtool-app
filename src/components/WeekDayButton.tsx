@@ -1,7 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
-import { ThemeContext } from '../context/themes';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';

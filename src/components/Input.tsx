@@ -2,7 +2,7 @@ import React, { useState, useContext } from 'react';
 import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { ThemeContext } from '../context/themes';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';

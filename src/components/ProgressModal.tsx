@@ -7,8 +7,8 @@ import * as Haptics from 'expo-haptics';
 import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
 
 import { loadHabitHistoryByHabitId, updateHabitHistory, HabitProps } from '../libs/storage';
-import { HabitsContext } from '../context/habits';
-import { ThemeContext } from '../context/themes';
+import { HabitsContext } from '../contexts/habits';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';

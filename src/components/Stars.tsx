@@ -2,8 +2,8 @@ import React, { useContext } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import { HabitsContext } from '../context/habits';
-import { ThemeContext } from '../context/themes';
+import { HabitsContext } from '../contexts/habits';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 

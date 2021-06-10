@@ -6,8 +6,8 @@ import { format } from 'date-fns';
 import { CalendarMarkedProps, HabitCalendar } from '../components/HabitCalendar';
 
 import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/storage';
-import { HabitsContext } from '../context/habits';
-import { ThemeContext } from '../context/themes';
+import { HabitsContext } from '../contexts/habits';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';

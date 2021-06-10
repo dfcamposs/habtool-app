@@ -12,9 +12,9 @@ import * as Notifications from "expo-notifications";
 import { LogBox } from 'react-native';
 
 import Routes from './src/routes';
-import { HabitsProvider } from './src/context/habits';
-import { ThemeProvider } from './src/context/themes';
-import { UserProvider } from './src/context/user';
+import { HabitsProvider } from './src/contexts/habits';
+import { ThemeProvider } from './src/contexts/themes';
+import { UserProvider } from './src/contexts/user';
 
 export default function App() {
   LogBox.ignoreAllLogs();

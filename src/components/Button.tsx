@@ -2,7 +2,7 @@ import React, { useContext } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
 
-import { ThemeContext } from '../context/themes';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';

@@ -7,7 +7,7 @@ import { MyHabits } from '../pages/MyHabits';
 import { HabitManager } from '../pages/HabitManager';
 import { Progress } from '../pages/Progress';
 
-import { ThemeContext } from '../context/themes';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';

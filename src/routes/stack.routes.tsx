@@ -8,7 +8,7 @@ import { Settings } from '../pages/Settings';
 import { SortHabits } from '../pages/SortHabits';
 import AuthRoutes from './tab.routes';
 
-import { ThemeContext } from '../context/themes';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 

@@ -18,9 +18,8 @@ import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import Logo from '../assets/logo.png';
 
-import { saveUserName } from '../libs/storage';
-import { HabitsContext } from '../context/habits';
-import { ThemeContext } from '../context/themes';
+import { UserContext } from '../contexts/user';
+import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
@@ -29,7 +28,7 @@ export function Welcome() {
     const [name, setName] = useState<string>();
 
     const navigation = useNavigation();
-    const { userName, handleUpdateUserName } = useContext(HabitsContext);
+    const { userName, handleUpdateUserName } = useContext(UserContext);
     const { theme } = useContext(ThemeContext);
 
     useEffect(() => {
@@ -42,7 +41,6 @@ export function Welcome() {
         if (!name)
             return Alert.alert('Não é possível deixar seu nome em branco!');
 
-        await saveUserName(name);
         handleUpdateUserName(name);
         navigation.navigate('AppRoutes');
     }

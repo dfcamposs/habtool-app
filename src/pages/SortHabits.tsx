@@ -8,8 +8,8 @@ import { isBefore } from 'date-fns';
 
 import { Button } from '../components/Button';
 
-import { HabitsContext } from '../context/habits';
-import { ThemeContext } from '../context/themes';
+import { HabitsContext } from '../contexts/habits';
+import { ThemeContext } from '../contexts/themes';
 import { HabitProps, StorageHabitSortProps, updateHabitsSort } from '../libs/storage';
 
 import themes from '../styles/themes';
