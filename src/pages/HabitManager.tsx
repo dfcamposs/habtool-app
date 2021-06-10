@@ -24,6 +24,7 @@ import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { WeekDayButton } from '../components/WeekDayButton';
 import { DateButton } from '../components/DateButton';
+import { ColorTrackList } from '../components/ColorTrackList';
 
 import { getHabitByName, HabitProps, saveHabit } from '../libs/storage';
 import { HabitsContext } from '../contexts/habits';
@@ -249,6 +250,11 @@ export function HabitManager() {
                                     textColor={themes[theme].textPrimary}
                                 />
                             )}
+
+                            <View style={{ paddingTop: 10 }}>
+                                <Text style={styles(theme).subtitle}>cor</Text>
+                                <ColorTrackList />
+                            </View>
 
                             <View style={styles(theme).scheduleLabel}>
                                 <Text style={styles(theme).subtitle}> lembrete </Text>
