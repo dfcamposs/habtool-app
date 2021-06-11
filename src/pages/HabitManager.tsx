@@ -24,7 +24,7 @@ import { Button } from '../components/Button';
 import { Input } from '../components/Input';
 import { WeekDayButton } from '../components/WeekDayButton';
 import { DateButton } from '../components/DateButton';
-import { ColorTrackList } from '../components/ColorTrackList';
+import { ColorEnum, ColorTrackList } from '../components/ColorTrackList';
 
 import { getHabitByName, HabitProps, saveHabit } from '../libs/storage';
 import { HabitsContext } from '../contexts/habits';
@@ -48,6 +48,8 @@ export function HabitManager() {
     const [selectedStartDateTime, setSelectedStartDateTime] = useState(new Date());
     const [showEndDate, setShowEndDate] = useState(false);
     const [selectedEndDateTime, setSelectedEndDateTime] = useState<Date>();
+
+    const [colorSelected, setColorSelected] = useState<ColorEnum>(ColorEnum.default);
 
     const [sundayEnabled, setSundayEnabled] = useState(false);
     const [mondayEnabled, setMondayEnabled] = useState(true);
@@ -78,6 +80,7 @@ export function HabitManager() {
             setSelectedScheduleDateTime(!!habit.notificationHour ? new Date(habit.notificationHour) : new Date());
             setScheduleEnabled(!!habit.notificationHour);
             setShowDatePicker(Platform.OS === 'ios');
+            setColorSelected(habit.trackColor ?? ColorEnum.default)
         }
     }, [habit]);
 
@@ -152,7 +155,8 @@ export function HabitManager() {
                 startDate: selectedStartDateTime.getTime(),
                 endDate: selectedEndDateTime?.getTime(),
                 notificationHour: scheduleEnabled ? selectedScheduleDateTime.getTime() : undefined,
-                order: habit?.order ?? 0
+                order: habit?.order ?? 0,
+                trackColor: colorSelected !== ColorEnum.default ? colorSelected : undefined
             }
 
             await saveHabit(newHabit);
@@ -253,7 +257,7 @@ export function HabitManager() {
 
                             <View style={{ paddingTop: 10 }}>
                                 <Text style={styles(theme).subtitle}>cor</Text>
-                                <ColorTrackList />
+                                <ColorTrackList colorSelected={colorSelected} handleColorChange={setColorSelected} />
                             </View>
 
                             <View style={styles(theme).scheduleLabel}>

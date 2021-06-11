@@ -1,10 +1,13 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, View, TouchableOpacity, FlatList } from 'react-native';
+import { MaterialIcons } from '@expo/vector-icons';
+import { useNavigation } from '@react-navigation/core';
 
 import { ThemeContext } from '../contexts/themes';
 import { UserContext } from '../contexts/user';
 
 import themes from '../styles/themes';
+
 
 export enum ColorEnum {
     default = '#00D95A',
@@ -15,10 +18,15 @@ export enum ColorEnum {
     red = '#e76f51'
 }
 
-export function ColorTrackList() {
-    const [colorSelected, setColorSelected] = useState<ColorEnum>();
-    const { theme } = useContext(ThemeContext);
+interface ColorTrackListProps {
+    colorSelected: ColorEnum,
+    handleColorChange: (color: ColorEnum) => void;
+}
+
+export function ColorTrackList({ colorSelected, handleColorChange }: ColorTrackListProps) {
     const { isPro } = useContext(UserContext);
+    const { theme } = useContext(ThemeContext);
+    const navigation = useNavigation();
 
     const colors = [
         ColorEnum.default,
@@ -29,14 +37,10 @@ export function ColorTrackList() {
         ColorEnum.red,
     ];
 
-    const activeColors = isPro ? [
-        ColorEnum.default,
-        ColorEnum.blue,
-        ColorEnum.green,
-        ColorEnum.yellow,
-        ColorEnum.orange,
-        ColorEnum.red,
-    ] : [ColorEnum.default];
+    function handleOpenProPage() {
+        //to-do enviar para pagina para adquirir pro
+        //navigation.navigate();
+    }
 
     return (
         <View style={styles(theme).container}>
@@ -49,9 +53,17 @@ export function ColorTrackList() {
                             activeOpacity={.7}
                             style={[
                                 styles(theme).color,
-                                { backgroundColor: item },
+                                { backgroundColor: item }
                             ]}
-                        />
+                            onPress={isPro ? () => handleColorChange(item) : handleOpenProPage}
+                        >
+                            {colorSelected === item &&
+                                <MaterialIcons
+                                    name="check"
+                                    size={20}
+                                    color={themes[theme].textSecundary} />
+                            }
+                        </TouchableOpacity>
                     </View>
                 )}
                 horizontal

@@ -6,6 +6,8 @@ import { updateHabitHistory } from '../libs/storage';
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
 
+import { ColorEnum } from './ColorTrackList';
+
 import themes from '../styles/themes';
 
 interface TrackerProps extends TouchableOpacityProps {
@@ -15,9 +17,10 @@ interface TrackerProps extends TouchableOpacityProps {
     };
     enabled?: boolean;
     checked?: boolean;
+    color?: ColorEnum;
 }
 
-export function Tracker({ data, checked = false, enabled = true, ...rest }: TrackerProps) {
+export function Tracker({ data, checked = false, enabled = true, color = ColorEnum.default, ...rest }: TrackerProps) {
     const { handleUpdatePercentageCheck, handleRefreshHistoryCalendar } = useContext(HabitsContext)
     const [trackerChecked, setTrackerChecked] = useState(checked);
     const { theme } = useContext(ThemeContext);
@@ -41,7 +44,7 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
                 style={[
                     styles(theme).dayCicle,
                     enabled && { backgroundColor: themes[theme].backgroundPrimary },
-                    trackerChecked && { backgroundColor: themes[theme].green },
+                    trackerChecked && { backgroundColor: color },
                 ]}
                 disabled={!enabled}
                 onPress={handleTrackerChecked}

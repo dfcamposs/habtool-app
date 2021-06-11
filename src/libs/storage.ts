@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format, isAfter, isBefore } from 'date-fns';
 import * as Notifications from "expo-notifications";
+import { ColorEnum } from '../components/ColorTrackList';
 import { ThemeEnum } from '../contexts/themes';
 
 //Models
@@ -17,6 +18,7 @@ export interface HabitProps {
     endDate?: number;
     notificationHour?: number;
     order: number;
+    trackColor?: ColorEnum
 }
 
 export interface HabitHistoryProps {
@@ -108,6 +110,7 @@ export async function getUser(): Promise<StorageUserProps> {
 
         if (user) {
             return user;
+            //return { ...user, isPro: true };
         } else {
             const newUser = { name: '', isPro: false };
             await setUser(newUser);

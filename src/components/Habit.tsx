@@ -177,6 +177,7 @@ export function Habit({ data: habit, ...rest }: HabitComponentProps) {
                                 data={{ habitId: habit.id, position: item.position }}
                                 enabled={verifyEnabledTracker(item.position)}
                                 checked={verifyEnabledTracker(item.position) && item.checked}
+                                color={habit.trackColor}
                             />
                         )}
                         showsHorizontalScrollIndicator={false}
