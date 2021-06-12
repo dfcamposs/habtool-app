@@ -38,8 +38,7 @@ export function ColorTrackList({ colorSelected, handleColorChange }: ColorTrackL
     ];
 
     function handleOpenProPage() {
-        //to-do enviar para pagina para adquirir pro
-        //navigation.navigate();
+        navigation.navigate('ProPurchase');
     }
 
     return (

@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
 import {
     StyleSheet,
     SafeAreaView,
@@ -17,6 +17,12 @@ import fonts from '../styles/fonts';
 import Logo from '../assets/logo.png';
 import { Button } from '../components/Button';
 
+enum PlanEnum {
+    good = "good",
+    veryGood = "very-good",
+    awesome = "awesome"
+}
+
 const features = [
     "tema escuro",
     "personalização de cores",
@@ -27,12 +33,14 @@ const features = [
 ];
 
 const prices = [
-    { price: "R$ 9.90", label: "gostei" },
-    { price: "R$ 14.90", label: "gostei muito" },
-    { price: "R$ 19.90", label: "sensacional" }
+    { id: PlanEnum.good, price: "R$ 9.90", label: "gostei" },
+    { id: PlanEnum.veryGood, price: "R$ 14.90", label: "gostei muito" },
+    { id: PlanEnum.awesome, price: "R$ 19.90", label: "incrível" }
 ]
 
 export function ProPurchase() {
+    const [planSelected, setPlanSelected] = useState<PlanEnum>(PlanEnum.awesome);
+
     const { theme } = useContext(ThemeContext);
     const navigation = useNavigation();
 
@@ -62,8 +70,25 @@ export function ProPurchase() {
 
             <View style={styles(theme).purchaseContainer}>
                 {prices.map(card =>
-                    <TouchableOpacity activeOpacity={.7} key={card.price} style={styles(theme).purchaseCard}>
-                        <Text style={styles(theme).price}>{card.price}</Text>
+                    <TouchableOpacity
+                        activeOpacity={.7}
+                        key={card.id}
+                        style={[
+                            styles(theme).purchaseCard,
+                            card.id === planSelected
+                            && { backgroundColor: themes[theme].blue }
+                        ]}
+                        onPress={() => setPlanSelected(card.id)}
+                    >
+                        <Text
+                            style={[
+                                styles(theme).price,
+                                card.id === planSelected
+                                && { color: themes[theme].textSecundary }
+                            ]}
+                        >
+                            {card.price}
+                        </Text>
                         <View style={styles(theme).legend}>
                             <Text style={styles(theme).legendText}>{card.label}</Text>
                         </View>

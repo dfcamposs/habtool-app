@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { createStackNavigator } from '@react-navigation/stack';
+import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
 
 import { Welcome } from '../pages/Welcome';
 import { HabitManager } from '../pages/HabitManager';
@@ -90,6 +90,9 @@ const AppRoutes: React.FC = () => {
             <stackRoutes.Screen
                 name="ProPurchase"
                 component={ProPurchase}
+                options={{
+                    ...TransitionPresets.ModalTransition
+                }}
             />
 
         </stackRoutes.Navigator>
