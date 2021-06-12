@@ -27,8 +27,7 @@ export function Settings() {
 
     function handleChangeTheme(theme: ThemeEnum) {
         if (!isPro) {
-            //to-do redirect to pro page
-            return Alert.alert('Você não pode alterar o tema, pois você não é PRO.')
+            return navigation.navigate('ProPurchase');
         }
 
         setThemeSelected(theme);

@@ -7,6 +7,7 @@ import { Confirmation } from '../pages/Confirmation';
 import { Settings } from '../pages/Settings';
 import { SortHabits } from '../pages/SortHabits';
 import AuthRoutes from './tab.routes';
+import { ProPurchase } from '../pages/ProPurchase';
 
 import { ThemeContext } from '../contexts/themes';
 
@@ -84,6 +85,11 @@ const AppRoutes: React.FC = () => {
             <stackRoutes.Screen
                 name="AppRoutes"
                 component={AuthRoutes}
+            />
+
+            <stackRoutes.Screen
+                name="ProPurchase"
+                component={ProPurchase}
             />
 
         </stackRoutes.Navigator>
