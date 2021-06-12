@@ -10,12 +10,12 @@ import themes from '../styles/themes';
 
 
 export enum ColorEnum {
-    default = '#00D95A',
-    blue = '#264653',
-    green = '#2a9d8f',
-    yellow = '#e9c46a',
-    orange = '#f4a261',
-    red = '#e76f51'
+    default = '#84EFA8',
+    blue = '#76CDEC',
+    green = '#DDEA7C',
+    pink = '#EE9BB4',
+    purple = '#8778E7',
+    red = '#E87A6D'
 }
 
 interface ColorTrackListProps {
@@ -32,8 +32,8 @@ export function ColorTrackList({ colorSelected, handleColorChange }: ColorTrackL
         ColorEnum.default,
         ColorEnum.blue,
         ColorEnum.green,
-        ColorEnum.yellow,
-        ColorEnum.orange,
+        ColorEnum.pink,
+        ColorEnum.purple,
         ColorEnum.red,
     ];
 

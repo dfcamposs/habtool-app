@@ -4,11 +4,15 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { format, isAfter, isBefore } from 'date-fns';
 import * as Haptics from 'expo-haptics';
 
+import { LightenDarkenColor } from '../utils/colors';
 import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
 
 import { loadHabitHistoryByHabitId, updateHabitHistory, HabitProps } from '../libs/storage';
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
+import { UserContext } from '../contexts/user';
+
+import { ColorEnum } from './ColorTrackList';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
@@ -21,10 +25,13 @@ interface ProgressModalProps extends ModalProps {
 
 export function ProgressModal({ data: habit, visible = false, closeModal, ...rest }: ProgressModalProps) {
     const { theme } = useContext(ThemeContext);
+    const { isPro } = useContext(UserContext);
+    const principalColor = isPro ? (habit.trackColor ? habit.trackColor : ColorEnum.default) : themes[theme].blue;
+
     const initialCalendarMarked = {
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
-            color: themes[theme].blue,
+            color: principalColor,
             textColor: themes[theme].textSecundary
         }
     }
@@ -118,8 +125,8 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                     endingDay: endingDate,
                     color: dateSelected
                         && format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
-                        ? themes[theme].blueDark
-                        : themes[theme].blue,
+                        ? LightenDarkenColor(principalColor, -50)
+                        : principalColor,
                     textColor: themes[theme].textSecundary
                 }
             }
