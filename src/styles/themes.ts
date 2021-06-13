@@ -41,7 +41,7 @@ const darkTheme = {
     textSecundary: '#F8F9FA',
     textUnfocus: '#C3C9CE',
 
-    backgroundPrimary: '#343A40',
+    backgroundPrimary: '#40474D',
     backgroundSecundary: '#495057',
     backgroundTertiary: '#495057',
 };

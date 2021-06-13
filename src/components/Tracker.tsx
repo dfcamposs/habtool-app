@@ -56,7 +56,7 @@ export function Tracker({ data, checked = false, enabled = true, color = ColorEn
 
 const styles = (theme: string) => StyleSheet.create({
     container: {
-        marginLeft: 7,
+        marginLeft: 10,
         alignItems: 'center',
         justifyContent: 'space-between'
     },

@@ -125,7 +125,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                     endingDay: endingDate,
                     color: dateSelected
                         && format(day, 'yyyy-MM-dd') === format(dateSelected, 'yyyy-MM-dd')
-                        ? LightenDarkenColor(principalColor, -50)
+                        ? LightenDarkenColor(principalColor, 20)
                         : principalColor,
                     textColor: themes[theme].textSecundary
                 }

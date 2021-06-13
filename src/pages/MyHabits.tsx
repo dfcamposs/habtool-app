@@ -113,7 +113,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingBottom: 15
     },
     weekLegend: {
-        width: 272,
+        width: 290,
         height: 20,
         backgroundColor: themes[theme].backgroundSecundary,
         borderBottomRightRadius: 10,
@@ -127,7 +127,7 @@ const styles = (theme: string) => StyleSheet.create({
         fontSize: 10,
         fontFamily: fonts.legend,
         minWidth: 30,
-        marginHorizontal: 3.5,
+        marginHorizontal: 5,
         textAlign: 'center'
     },
     content: {

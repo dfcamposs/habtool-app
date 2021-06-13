@@ -37,7 +37,7 @@ const styles = (theme: string) => StyleSheet.create({
         backgroundColor: themes[theme].backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: 2
+        marginHorizontal: 1.5
     },
     text: {
         fontSize: 12,

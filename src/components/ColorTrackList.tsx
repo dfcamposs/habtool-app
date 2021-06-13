@@ -10,12 +10,13 @@ import themes from '../styles/themes';
 
 
 export enum ColorEnum {
-    default = '#84EFA8',
-    blue = '#76CDEC',
-    green = '#DDEA7C',
-    pink = '#EE9BB4',
-    purple = '#8778E7',
-    red = '#E87A6D'
+    default = '#00d95a',
+    blue = '#00bbff',
+    orange = '#ff9843',
+    pink = '#ff5084',
+    purple = '#745fff',
+    red = '#ff4436',
+    yellow = '#ffcb49'
 }
 
 interface ColorTrackListProps {
@@ -31,10 +32,11 @@ export function ColorTrackList({ colorSelected, handleColorChange }: ColorTrackL
     const colors = [
         ColorEnum.default,
         ColorEnum.blue,
-        ColorEnum.green,
+        ColorEnum.orange,
         ColorEnum.pink,
         ColorEnum.purple,
         ColorEnum.red,
+        ColorEnum.yellow
     ];
 
     function handleOpenProPage() {
@@ -80,7 +82,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     tracker: {
         alignItems: 'center',
-        paddingHorizontal: 10
+        paddingHorizontal: 7
     },
     color: {
         height: 40,

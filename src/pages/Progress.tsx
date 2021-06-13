@@ -4,6 +4,7 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { format } from 'date-fns';
 
 import { CalendarMarkedProps, HabitCalendar } from '../components/HabitCalendar';
+import { ColorEnum } from '../components/ColorTrackList';
 
 import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/storage';
 import { HabitsContext } from '../contexts/habits';
@@ -18,6 +19,7 @@ interface HabitHistoryDayProps {
     id: string;
     name: string;
     checked: boolean;
+    trackColor?: ColorEnum
 }
 
 export function Progress() {
@@ -60,7 +62,8 @@ export function Progress() {
                 result.push({
                     id: habit.id,
                     name: habit.name,
-                    checked: !!history.find(item => item.id === habit.id)
+                    checked: !!history.find(item => item.id === habit.id),
+                    trackColor: habit.trackColor
                 })
             }
         });
@@ -174,7 +177,7 @@ export function Progress() {
                                 keyExtractor={(item) => String(item.id)}
                                 renderItem={({ item: habit }) => (
                                     <View style={styles(theme).historyLine}>
-                                        <View style={[styles(theme).circle, { backgroundColor: habit.checked ? themes[theme].green : themes[theme].backgroundPrimary }]} />
+                                        <View style={[styles(theme).circle, { backgroundColor: habit.checked ? (habit.trackColor ?? ColorEnum.default) : themes[theme].backgroundPrimary }]} />
                                         <Text style={styles(theme).historyLineText}>{habit.name}</Text>
                                     </View>
                                 )}
