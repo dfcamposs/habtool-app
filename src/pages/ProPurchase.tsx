@@ -47,7 +47,7 @@ export function ProPurchase() {
     return (
         <SafeAreaView style={styles(theme).container}>
             <TouchableOpacity activeOpacity={.7} onPress={navigation.goBack}>
-                <MaterialIcons style={styles(theme).close} name="close" size={30} color={themes[theme].textPrimary} />
+                <MaterialIcons style={styles(theme).close} name="close" size={30} color={themes[theme].textUnfocus} />
             </TouchableOpacity>
             <View style={styles(theme).content}>
                 <Text style={styles(theme).title}>Seja PRO</Text>
@@ -68,6 +68,7 @@ export function ProPurchase() {
                 }
             </View>
 
+            <Text style={styles(theme).subtitle}>selecione o plano</Text>
             <View style={styles(theme).purchaseContainer}>
                 {prices.map(card =>
                     <TouchableOpacity
@@ -116,7 +117,6 @@ const styles = (theme: string) => StyleSheet.create({
     },
     close: {
         alignSelf: 'flex-end',
-        marginTop: '10%',
         paddingBottom: 20
     },
     title: {
@@ -124,6 +124,12 @@ const styles = (theme: string) => StyleSheet.create({
         textAlign: 'center',
         fontSize: 24,
         color: themes[theme].textPrimary
+    },
+    subtitle: {
+        fontFamily: fonts.content,
+        fontSize: 18,
+        color: themes[theme].textPrimary,
+        paddingVertical: 20
     },
     logo: {
         width: 110,
@@ -153,14 +159,13 @@ const styles = (theme: string) => StyleSheet.create({
     featureText: {
         fontFamily: fonts.content,
         padding: 10,
-        fontSize: 16,
+        fontSize: 15,
         color: themes[theme].textPrimary
     },
     purchaseContainer: {
         flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
-        marginVertical: 20
     },
     purchaseCard: {
         width: '30%',
