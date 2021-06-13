@@ -263,7 +263,7 @@ export function HabitManager() {
                             <View style={styles(theme).scheduleLabel}>
                                 <Text style={styles(theme).subtitle}> lembrete </Text>
                                 <Switch
-                                    thumbColor={themes[theme].backgroundPrimary}
+                                    thumbColor={themes[theme].textSecundary}
                                     trackColor={{ true: themes[theme].blue, false: themes[theme].backgroundSecundary }}
                                     ios_backgroundColor={themes[theme].backgroundSecundary}
                                     onValueChange={changeScheduleSwitch}
