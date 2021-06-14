@@ -91,7 +91,7 @@ export async function cancelSchedulePushNotification(scheduleId: string) {
 export async function saveUserName(name: string): Promise<void> {
     try {
         await AsyncStorage
-            .setItem('@habto:user',
+            .setItem('@habtool:user',
                 JSON.stringify({
                     name: name.trim()
                 })
@@ -104,7 +104,7 @@ export async function saveUserName(name: string): Promise<void> {
 
 export async function getUserName(): Promise<string> {
     try {
-        const data = await AsyncStorage.getItem('@habto:user');
+        const data = await AsyncStorage.getItem('@habtool:user');
         const user = data ? (JSON.parse(data) as StorageUserProps) : {};
 
         if (user) {
@@ -122,7 +122,7 @@ export async function getUserName(): Promise<string> {
 //Habit
 export async function saveHabit(habit: HabitProps): Promise<void> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habits');
+        const data = await AsyncStorage.getItem('@habtool:habits');
         const oldHabits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
         delete oldHabits[habit.id];
@@ -132,7 +132,7 @@ export async function saveHabit(habit: HabitProps): Promise<void> {
         };
 
         await AsyncStorage
-            .setItem('@habto:habits',
+            .setItem('@habtool:habits',
                 JSON.stringify({
                     ...newHabit,
                     ...oldHabits
@@ -150,7 +150,7 @@ export async function saveHabit(habit: HabitProps): Promise<void> {
 
 export async function getHabitByName(name: string): Promise<HabitProps | undefined> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habits');
+        const data = await AsyncStorage.getItem('@habtool:habits');
         const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
         const result = Object.values(habits).find((item) => item.name === name);
@@ -165,7 +165,7 @@ export async function getHabitByName(name: string): Promise<HabitProps | undefin
 
 export async function getHabitById(id: string): Promise<HabitProps | undefined> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habits');
+        const data = await AsyncStorage.getItem('@habtool:habits');
         const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
         const result = Object.values(habits).find((item) => item.id === id);
@@ -180,10 +180,10 @@ export async function getHabitById(id: string): Promise<HabitProps | undefined> 
 
 export async function loadHabits(): Promise<HabitProps[]> {
     try {
-        const dataHabits = await AsyncStorage.getItem('@habto:habits');
+        const dataHabits = await AsyncStorage.getItem('@habtool:habits');
         const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
 
-        const dataSort = await AsyncStorage.getItem('@habto:habitsSorted');
+        const dataSort = await AsyncStorage.getItem('@habtool:habitsSorted');
         const habitsSorted = dataSort ? (JSON.parse(dataSort) as StorageHabitSortProps) : {};
 
         return Object
@@ -205,13 +205,13 @@ export async function loadHabits(): Promise<HabitProps[]> {
 
 export async function deleteHabit(habitId: string): Promise<void> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habits');
+        const data = await AsyncStorage.getItem('@habtool:habits');
         const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 
         delete habits[habitId];
 
         await AsyncStorage
-            .setItem('@habto:habits',
+            .setItem('@habtool:habits',
                 JSON.stringify(habits)
             );
 
@@ -227,7 +227,7 @@ export async function deleteHabit(habitId: string): Promise<void> {
 //Habit Sort
 export async function createHabitSort(habitId: string, position?: number): Promise<void> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habitsSorted');
+        const data = await AsyncStorage.getItem('@habtool:habitsSorted');
         const habitsSorted = data ? (JSON.parse(data) as StorageHabitSortProps) : {};
 
         const newSort = {
@@ -235,7 +235,7 @@ export async function createHabitSort(habitId: string, position?: number): Promi
         };
 
         await AsyncStorage
-            .setItem('@habto:habitsSorted',
+            .setItem('@habtool:habitsSorted',
                 JSON.stringify({
                     ...newSort,
                     ...habitsSorted
@@ -250,7 +250,7 @@ export async function createHabitSort(habitId: string, position?: number): Promi
 export async function updateHabitsSort(order: StorageHabitSortProps): Promise<void> {
     try {
         await AsyncStorage
-            .setItem('@habto:habitsSorted',
+            .setItem('@habtool:habitsSorted',
                 JSON.stringify(order)
             );
 
@@ -263,10 +263,10 @@ export async function updateHabitsSort(order: StorageHabitSortProps): Promise<vo
 //History Habits
 export async function loadHabitsHistory(): Promise<HabitHistoryProps[]> {
     try {
-        const dataHabits = await AsyncStorage.getItem('@habto:habits');
+        const dataHabits = await AsyncStorage.getItem('@habtool:habits');
         const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
 
-        const dataHistory = await AsyncStorage.getItem('@habto:habitsHistory');
+        const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
 
         return Object
@@ -285,7 +285,7 @@ export async function loadHabitsHistory(): Promise<HabitHistoryProps[]> {
 
 export async function getHabitWeekHistory(habitId: string): Promise<number[] | []> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habitsHistory');
+        const data = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = data ? (JSON.parse(data) as StorageHistoryHabitProps) : {};
 
         if (habitsHistory && habitsHistory[habitId]) {
@@ -304,13 +304,13 @@ export async function getHabitWeekHistory(habitId: string): Promise<number[] | [
 
 export async function createHabitHistory(habitId: string): Promise<void> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habitsHistory');
+        const data = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = data ? (JSON.parse(data) as StorageHistoryHabitProps) : {};
 
         if (habitsHistory[habitId]) return;
 
         await AsyncStorage
-            .setItem('@habto:habitsHistory',
+            .setItem('@habtool:habitsHistory',
                 JSON.stringify({
                     ...habitsHistory,
                     [habitId]: []
@@ -324,7 +324,7 @@ export async function createHabitHistory(habitId: string): Promise<void> {
 
 export async function updateHabitHistory(habitId: string, date: number): Promise<void> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habitsHistory');
+        const data = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = data ? (JSON.parse(data) as StorageHistoryHabitProps) : {};
         const history = habitsHistory[habitId];
 
@@ -338,7 +338,7 @@ export async function updateHabitHistory(habitId: string, date: number): Promise
             habit && await addSchedulePushNotification(habit);
 
             await AsyncStorage
-                .setItem('@habto:habitsHistory',
+                .setItem('@habtool:habitsHistory',
                     JSON.stringify({
                         ...habitsHistory,
                         [habitId]: history
@@ -346,7 +346,7 @@ export async function updateHabitHistory(habitId: string, date: number): Promise
                 );
         } else {
             await AsyncStorage
-                .setItem('@habto:habitsHistory',
+                .setItem('@habtool:habitsHistory',
                     JSON.stringify({
                         ...habitsHistory,
                         [habitId]: [...history, date]
@@ -360,13 +360,13 @@ export async function updateHabitHistory(habitId: string, date: number): Promise
 
 export async function deleteHabitHistory(habitId: string): Promise<void> {
     try {
-        const data = await AsyncStorage.getItem('@habto:habitsHistory');
+        const data = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = data ? (JSON.parse(data) as StorageHistoryHabitProps) : {};
 
         delete habitsHistory[habitId];
 
         await AsyncStorage
-            .setItem('@habto:habitsHistory',
+            .setItem('@habtool:habitsHistory',
                 JSON.stringify(habitsHistory)
             );
 
@@ -377,7 +377,7 @@ export async function deleteHabitHistory(habitId: string): Promise<void> {
 
 export async function loadHabitHistoryByHabitId(habitId: string): Promise<number[]> {
     try {
-        const dataHistory = await AsyncStorage.getItem('@habto:habitsHistory');
+        const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
 
         return habitsHistory[habitId];
@@ -389,10 +389,10 @@ export async function loadHabitHistoryByHabitId(habitId: string): Promise<number
 
 export async function loadHabitsHistoryCheckedByDay(day: number): Promise<HabitProps[]> {
     try {
-        const dataHabits = await AsyncStorage.getItem('@habto:habits');
+        const dataHabits = await AsyncStorage.getItem('@habtool:habits');
         const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
 
-        const dataHistory = await AsyncStorage.getItem('@habto:habitsHistory');
+        const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
 
         return Object
@@ -413,7 +413,7 @@ export async function loadHabitsHistoryCheckedByDay(day: number): Promise<HabitP
 //Stars Progress
 export async function getProgressStars(): Promise<number> {
     try {
-        const dataHabits = await AsyncStorage.getItem('@habto:habits');
+        const dataHabits = await AsyncStorage.getItem('@habtool:habits');
         const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
 
         if (!Object.values(habits).length) {
@@ -431,7 +431,7 @@ export async function getProgressStars(): Promise<number> {
             return 0;
         }
 
-        const dataHistory = await AsyncStorage.getItem('@habto:habitsHistory');
+        const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
 
         const countHabitsCheckedToday = Object
