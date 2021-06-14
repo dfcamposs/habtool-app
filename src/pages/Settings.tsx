@@ -15,7 +15,7 @@ export function Settings() {
     const navigation = useNavigation();
 
     function handleRateApp() {
-        const storeId = "com.dfcamposs.habtool";
+        const storeId = "com.dfcamposs.habto";
 
         if (Platform.OS === 'android') {
             return Linking.openURL(`https://play.google.com/store/apps/details?id=${storeId}&showAllReviews=true`)
