@@ -3,6 +3,7 @@ import { Text, StyleSheet, SafeAreaView, View, Platform } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import * as Linking from 'expo-linking';
 
 import colors from '../styles/colors';
 import fonts from '../styles/fonts';
@@ -12,6 +13,16 @@ import { HabitsContext } from '../context/habits';
 export function Settings() {
     const { myHabits } = useContext(HabitsContext);
     const navigation = useNavigation();
+
+    function handleRateApp() {
+        const storeId = "com.dfcamposs.habto";
+
+        if (Platform.OS === 'android') {
+            return Linking.openURL(`https://play.google.com/store/apps/details?id=${storeId}&showAllReviews=true`)
+        }
+
+        return Linking.openURL(`https://apps.apple.com/app/apple-store/id${storeId}?action=write-review`);
+    }
 
     return (
         <SafeAreaView style={styles.container}>
@@ -23,8 +34,8 @@ export function Settings() {
                 <SettingsButton title="alterar como deseja ser chamado" onPress={() => navigation.navigate('Rename')} />
 
                 <Text style={styles.subtitle}>suporte</Text>
-                <SettingsButton title="avaliar app" onPress={() => { }} />
-                <SettingsButton title="contatar desenvolvedor" onPress={() => { }} />
+                <SettingsButton title="avaliar app" onPress={handleRateApp} />
+                <SettingsButton title="contatar desenvolvedor" onPress={() => Linking.openURL('mailto:fernandesc.david@gmail.com')} />
             </View>
             <RectButton style={styles.button} onPress={() => navigation.goBack()}>
                 <Text style={styles.textButton}>cancelar</Text>
