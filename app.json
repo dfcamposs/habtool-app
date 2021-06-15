@@ -1,8 +1,8 @@
 {
   "expo": {
     "name": "HabTool",
-    "slug": "habto",
-    "version": "1.0.2",
+    "slug": "habtool",
+    "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -23,12 +23,12 @@
       "permissions": [
         "NOTIFICATIONS"
       ],
-      "versionCode": 5,
+      "versionCode": 1,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F8F9FA"
       },
-      "package": "com.dfcamposs.habto"
+      "package": "com.dfcamposs.habtool"
     },
     "web": {
       "favicon": "./assets/favicon.png"
