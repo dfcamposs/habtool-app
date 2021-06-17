@@ -1,5 +1,5 @@
 import React, { useContext } from 'react';
-import { createStackNavigator, TransitionPresets } from '@react-navigation/stack';
+import { CardStyleInterpolators, createStackNavigator, TransitionPresets, TransitionSpecs } from '@react-navigation/stack';
 
 import { Welcome } from '../pages/Welcome';
 import { HabitManager } from '../pages/HabitManager';
@@ -12,6 +12,7 @@ import { ProPurchase } from '../pages/ProPurchase';
 import { ThemeContext } from '../contexts/themes';
 
 import themes from '../styles/themes';
+import { Platform } from 'react-native';
 
 const stackRoutes = createStackNavigator();
 
@@ -24,7 +25,18 @@ const InitialRoutes: React.FC = () => {
             screenOptions={{
                 cardStyle: {
                     backgroundColor: themes[theme].backgroundPrimary,
-                }
+                },
+                cardStyleInterpolator: Platform.OS === 'android'
+                    ? ({ current: { progress } }) => ({
+                        overlayStyle: {
+                            opacity: progress.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0, 1],
+                                extrapolate: 'clamp',
+                            }),
+                        },
+                    })
+                    : undefined
             }}
         >
             <stackRoutes.Screen
@@ -49,7 +61,19 @@ const AppRoutes: React.FC = () => {
             screenOptions={{
                 cardStyle: {
                     backgroundColor: themes[theme].backgroundPrimary,
-                }
+                },
+                cardStyleInterpolator: Platform.OS === 'android'
+                    ? ({ current: { progress } }) => ({
+                        overlayStyle: {
+                            opacity: progress.interpolate({
+                                inputRange: [0, 1],
+                                outputRange: [0, 1],
+                                extrapolate: 'clamp',
+                            }),
+                        },
+                    })
+                    : undefined
+
             }}
         >
             <stackRoutes.Screen
