@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, StyleSheet, SafeAreaView, View, Platform, Alert } from 'react-native';
+import { Text, StyleSheet, SafeAreaView, View, Platform } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
@@ -15,7 +15,6 @@ import { UserContext } from '../contexts/user';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
-
 
 export function Settings() {
     const [themeSelected, setThemeSelected] = useState<ThemeEnum>();

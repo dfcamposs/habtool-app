@@ -5,17 +5,20 @@ import {
     View,
     TouchableOpacity,
     Text,
-    Image
+    Image,
+    Platform
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 import { ThemeContext } from '../contexts/themes';
+
+import { Button } from '../components/Button';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 import Logo from '../assets/logo.png';
-import { Button } from '../components/Button';
 
 enum PlanEnum {
     good = "good",
@@ -108,6 +111,7 @@ const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         marginHorizontal: 20,
+        paddingTop: Platform.OS === 'android' ? getStatusBarHeight() : 0
     },
     content: {
         width: '100%',
@@ -158,7 +162,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     featureText: {
         fontFamily: fonts.content,
-        padding: 10,
+        padding: 5,
         fontSize: 15,
         color: themes[theme].textPrimary
     },
