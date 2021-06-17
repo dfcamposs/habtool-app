@@ -43,7 +43,7 @@ export function DateButton({ name, date, clear, ...rest }: DateButtonProps) {
 
 const styles = (theme: string) => StyleSheet.create({
     container: {
-        width: '100%',
+        width: '50%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderBottomWidth: 1,

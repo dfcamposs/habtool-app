@@ -16,7 +16,7 @@ export interface HabitProps {
     frequency: FrequencyProps;
     startDate: number;
     endDate?: number;
-    notificationHour?: number;
+    notificationHours: number[];
     order: number;
     trackColor?: ColorEnum
 }
@@ -57,9 +57,9 @@ export function formatWeekDay(weekDay: number): string | undefined {
 
 //Notifications
 export async function addSchedulePushNotification(habit: HabitProps): Promise<void> {
-    const schedule = habit.notificationHour;
+    const schedules = habit.notificationHours;
 
-    if (!schedule) return;
+    if (!schedules?.length) return;
 
     for (let i = 1; i <= 7; i++) {
         await cancelSchedulePushNotification(habit.id + i);
@@ -67,21 +67,23 @@ export async function addSchedulePushNotification(habit: HabitProps): Promise<vo
         if (!weekDay) continue;
 
         if (habit.frequency[weekDay]) {
-            await Notifications.scheduleNotificationAsync({
-                identifier: habit.id + i,
-                content: {
-                    title: habit.name,
-                    body: habit.motivation ?? 'Já executou este hábito hoje?',
-                    sound: true,
-                    priority: Notifications.AndroidNotificationPriority.HIGH,
-                },
-                trigger: {
-                    hour: Number(format(schedule, "HH")),
-                    minute: Number(format(schedule, "mm")),
-                    repeats: true,
-                    weekday: i
-                },
-            });
+            for (const schedule of schedules) {
+                await Notifications.scheduleNotificationAsync({
+                    identifier: habit.id + i,
+                    content: {
+                        title: habit.name,
+                        body: habit.motivation ?? 'Já executou este hábito hoje?',
+                        sound: true,
+                        priority: Notifications.AndroidNotificationPriority.HIGH,
+                    },
+                    trigger: {
+                        hour: Number(format(schedule, "HH")),
+                        minute: Number(format(schedule, "mm")),
+                        repeats: true,
+                        weekday: i
+                    },
+                });
+            }
         }
     }
 }
@@ -110,7 +112,6 @@ export async function getUser(): Promise<StorageUserProps> {
 
         if (user) {
             return user;
-            //return { ...user, isPro: true };
         } else {
             const newUser = { name: '', isPro: false };
             await setUser(newUser);

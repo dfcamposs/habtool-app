@@ -11,7 +11,8 @@ import {
     Keyboard,
     ScrollView,
     Alert,
-    TouchableOpacity
+    TouchableOpacity,
+    FlatList
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
@@ -19,6 +20,8 @@ import { format, isBefore } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { v4 as uuid } from 'uuid';
 import { useNavigation, useRoute } from '@react-navigation/native';
+import { MaterialIcons } from '@expo/vector-icons';
+import DateTimePickerModal from "react-native-modal-datetime-picker";
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -42,8 +45,8 @@ export function HabitManager() {
     const [habitName, setHabitName] = useState<string>();
     const [habitMotivation, setHabitMotivation] = useState<string>();
     const [scheduleEnabled, setScheduleEnabled] = useState(false);
-    const [selectedScheduleDateTime, setSelectedScheduleDateTime] = useState(new Date());
-    const [showDatePicker, setShowDatePicker] = useState(Platform.OS === 'ios');
+    const [selectedScheduleDateTime, setSelectedScheduleDateTime] = useState<Date[]>([new Date(), new Date(2021, 3, 12), new Date(2021, 4, 16)]);
+    const [showDatePicker, setShowDatePicker] = useState(false);
     const [showStartDate, setShowStartDate] = useState(false);
     const [selectedStartDateTime, setSelectedStartDateTime] = useState(new Date());
     const [showEndDate, setShowEndDate] = useState(false);
@@ -77,9 +80,8 @@ export function HabitManager() {
             setSaturdayEnabled(habit.frequency["sat"]);
             setSelectedStartDateTime(new Date(habit.startDate));
             setSelectedEndDateTime(habit.endDate ? new Date(habit.endDate) : undefined);
-            setSelectedScheduleDateTime(!!habit.notificationHour ? new Date(habit.notificationHour) : new Date());
-            setScheduleEnabled(!!habit.notificationHour);
-            setShowDatePicker(Platform.OS === 'ios');
+            setSelectedScheduleDateTime(habit.notificationHours.map(hour => new Date(hour)));
+            setScheduleEnabled(!!habit.notificationHours.length);
             setColorSelected(habit.trackColor ?? ColorEnum.default)
         }
     }, [habit]);
@@ -88,14 +90,13 @@ export function HabitManager() {
         setScheduleEnabled((oldValue) => !oldValue);
     }
 
-    function handleChangeTimeSchedule(event: Event, dateTime: Date | undefined): void {
-        if (Platform.OS === 'android') {
-            setShowDatePicker(oldState => !oldState);
-        }
+    function handleDeleteSchedule(schedule: Date) {
+        setSelectedScheduleDateTime(oldState => oldState.filter(item => item !== schedule))
+    }
 
-        if (dateTime) {
-            setSelectedScheduleDateTime(dateTime);
-        }
+    function handleAddTimeSchedule(dateTime: Date): void {
+        setSelectedScheduleDateTime(oldState => [...oldState, dateTime]);
+        setShowDatePicker(false);
     }
 
     function handleChangeStartDate(event: Event, dateTime: Date | undefined): void {
@@ -121,10 +122,6 @@ export function HabitManager() {
         if (dateTime) {
             setSelectedEndDateTime(dateTime);
         }
-    }
-
-    function handleOpenDatetimePickerScheduleForAndroid(): void {
-        setShowDatePicker(oldState => !oldState);
     }
 
     async function handleSaveHabit(): Promise<void> {
@@ -154,7 +151,7 @@ export function HabitManager() {
                 },
                 startDate: selectedStartDateTime.getTime(),
                 endDate: selectedEndDateTime?.getTime(),
-                notificationHour: scheduleEnabled ? selectedScheduleDateTime.getTime() : undefined,
+                notificationHours: selectedScheduleDateTime ? selectedScheduleDateTime.map(schedule => schedule.getTime()) : [],
                 order: habit?.order ?? 0,
                 trackColor: colorSelected !== ColorEnum.default ? colorSelected : undefined
             }
@@ -183,7 +180,7 @@ export function HabitManager() {
                     <View style={styles(theme).header}>
                         <Text style={styles(theme).title}>
                             criar um hábito
-                            </Text>
+                        </Text>
 
                         <Input
                             name="habitName"
@@ -221,40 +218,40 @@ export function HabitManager() {
                                 defaultValue={habitMotivation}
                                 onChangeText={(text: string) => setHabitMotivation(text)}
                             />
-
-                            <DateButton
-                                name="habitStartDate"
-                                date={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
-                                onPress={() => setShowStartDate((oldValue) => !oldValue)}
-                            />
-                            {showStartDate && (
-                                <DateTimePicker
-                                    value={selectedStartDateTime}
-                                    mode="date"
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleChangeStartDate}
-                                    style={styles(theme).dateTimePickerIos}
-                                    textColor={themes[theme].textPrimary}
+                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                                <DateButton
+                                    name="habitStartDate"
+                                    date={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                    onPress={() => setShowStartDate((oldValue) => !oldValue)}
                                 />
-                            )}
+                                {showStartDate && (
+                                    <DateTimePicker
+                                        value={selectedStartDateTime}
+                                        mode="date"
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        onChange={handleChangeStartDate}
+                                        style={styles(theme).dateTimePickerIos}
+                                        textColor={themes[theme].textPrimary}
+                                    />
+                                )}
 
-                            <DateButton
-                                name="habitStartDate"
-                                date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
-                                onPress={() => setShowEndDate((oldValue) => !oldValue)}
-                                clear={() => setSelectedEndDateTime(undefined)}
-                            />
-                            {showEndDate && (
-                                <DateTimePicker
-                                    value={selectedEndDateTime ?? new Date()}
-                                    mode="date"
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleChangeEndDate}
-                                    style={styles(theme).dateTimePickerIos}
-                                    textColor={themes[theme].textPrimary}
+                                <DateButton
+                                    name="habitStartDate"
+                                    date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                    onPress={() => setShowEndDate((oldValue) => !oldValue)}
+                                    clear={() => setSelectedEndDateTime(undefined)}
                                 />
-                            )}
-
+                                {showEndDate && (
+                                    <DateTimePicker
+                                        value={selectedEndDateTime ?? new Date()}
+                                        mode="date"
+                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
+                                        onChange={handleChangeEndDate}
+                                        style={styles(theme).dateTimePickerIos}
+                                        textColor={themes[theme].textPrimary}
+                                    />
+                                )}
+                            </View>
                             <View style={{ paddingTop: 10 }}>
                                 <Text style={styles(theme).subtitle}>cor</Text>
                                 <ColorTrackList colorSelected={colorSelected} handleColorChange={setColorSelected} />
@@ -271,29 +268,43 @@ export function HabitManager() {
                                 />
                             </View>
 
-                            {scheduleEnabled && showDatePicker && (
-                                <DateTimePicker
-                                    value={selectedScheduleDateTime}
-                                    mode="time"
-                                    display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                    onChange={handleChangeTimeSchedule}
-                                    style={styles(theme).dateTimePickerIos}
-                                    textColor={themes[theme].textPrimary}
-                                />
-                            )}
-
-                            {
-                                scheduleEnabled && Platform.OS === 'android' && (
-                                    <TouchableOpacity
-                                        style={styles(theme).dateTimePickerButton}
-                                        onPress={handleOpenDatetimePickerScheduleForAndroid}
-                                    >
-                                        <Text style={styles(theme).dateTimePickerText}>
-                                            {`alterar ${format(selectedScheduleDateTime, 'HH:mm')}`}
-                                        </Text>
+                            {scheduleEnabled &&
+                                <View style={styles(theme).scheduleContainer}>
+                                    {selectedScheduleDateTime.length ?
+                                        <FlatList
+                                            data={selectedScheduleDateTime}
+                                            keyExtractor={(item) => String(item)}
+                                            renderItem={({ item }) => (
+                                                <View style={styles(theme).scheduleCard}>
+                                                    <Text style={styles(theme).dateTimePickerText}>
+                                                        {format(item, 'HH:mm')}
+                                                    </Text>
+                                                    <TouchableOpacity onPress={() => handleDeleteSchedule(item)}>
+                                                        <MaterialIcons name="clear" size={16} color={themes[theme].textPrimary} />
+                                                    </TouchableOpacity>
+                                                </View>
+                                            )}
+                                            showsHorizontalScrollIndicator={false}
+                                            horizontal
+                                        />
+                                        : <Text style={styles(theme).scheduleLegend}>adicione um horário</Text>}
+                                    <TouchableOpacity style={styles(theme).addScheduleButton} onPress={() => setShowDatePicker(true)}>
+                                        <MaterialIcons name="add" size={20} color={themes[theme].textPrimary} />
                                     </TouchableOpacity>
-                                )
+                                </View>
                             }
+
+                            <DateTimePickerModal
+                                isVisible={scheduleEnabled && showDatePicker}
+                                mode="time"
+                                onConfirm={handleAddTimeSchedule}
+                                onCancel={() => setShowDatePicker(false)}
+                                style={styles(theme).dateTimePickerIos}
+                                textColor={themes[theme].textPrimary}
+                                cancelTextIOS="cancelar"
+                                confirmTextIOS="confirmar"
+                            />
+
                         </View>
                         <View style={styles(theme).footer}>
                             <Button title="salvar" onPress={handleSaveHabit} />
@@ -340,26 +351,44 @@ const styles = (theme: string) => StyleSheet.create({
         paddingTop: 15,
         paddingBottom: 5
     },
+    scheduleContainer: {
+        flex: 1,
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginVertical: 20
+    },
     scheduleLabel: {
         flexDirection: 'row',
         alignItems: 'center',
         paddingTop: 20
+    },
+    addScheduleButton: {
+        padding: 10,
+        backgroundColor: themes[theme].backgroundSecundary,
+        borderRadius: 50
+    },
+    scheduleLegend: {
+        fontSize: 13,
+        fontFamily: fonts.content,
+        color: themes[theme].textPrimary,
+        paddingRight: 10
     },
     dateTimePickerIos: {
         width: '100%',
         height: 100,
         marginVertical: 10,
     },
-    dateTimePickerButton: {
-        alignSelf: 'center',
-        width: 150,
+    scheduleCard: {
+        flexDirection: 'row',
+        width: 100,
         height: 50,
         alignItems: 'center',
-        justifyContent: 'center',
-        paddingVertical: 20,
+        justifyContent: 'space-between',
         backgroundColor: themes[theme].backgroundSecundary,
         borderRadius: 10,
-        marginTop: 20
+        marginRight: 10,
+        paddingHorizontal: 15
     },
     dateTimePickerText: {
         color: themes[theme].textPrimary,
