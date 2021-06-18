@@ -15,7 +15,6 @@ import {
     FlatList
 } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import DateTimePicker, { Event } from '@react-native-community/datetimepicker';
 import { format, isBefore } from 'date-fns';
 import pt from 'date-fns/locale/pt';
 import { v4 as uuid } from 'uuid';
@@ -45,7 +44,7 @@ export function HabitManager() {
     const [habitName, setHabitName] = useState<string>();
     const [habitMotivation, setHabitMotivation] = useState<string>();
     const [scheduleEnabled, setScheduleEnabled] = useState(false);
-    const [selectedScheduleDateTime, setSelectedScheduleDateTime] = useState<Date[]>([new Date(), new Date(2021, 3, 12), new Date(2021, 4, 16)]);
+    const [selectedScheduleDateTime, setSelectedScheduleDateTime] = useState<Date[]>([]);
     const [showDatePicker, setShowDatePicker] = useState(false);
     const [showStartDate, setShowStartDate] = useState(false);
     const [selectedStartDateTime, setSelectedStartDateTime] = useState(new Date());
@@ -95,45 +94,44 @@ export function HabitManager() {
     }
 
     function handleAddTimeSchedule(dateTime: Date): void {
+        if (selectedScheduleDateTime.find(item => item.getTime() === dateTime.getTime())) {
+            return Alert.alert('você já adicionou este horário!');
+        }
         setSelectedScheduleDateTime(oldState => [...oldState, dateTime]);
         setShowDatePicker(false);
     }
 
-    function handleChangeStartDate(event: Event, dateTime: Date | undefined): void {
-        if (Platform.OS === 'android') {
-            setShowStartDate(oldState => !oldState);
-        }
-
+    function handleChangeStartDate(dateTime: Date | undefined): void {
         if (dateTime) {
             setSelectedStartDateTime(dateTime);
         }
+
+        setShowStartDate(false);
     }
 
-    function handleChangeEndDate(event: Event, dateTime: Date | undefined): void {
-        if (Platform.OS === 'android') {
-            setShowEndDate(oldState => !oldState);
-        }
-
+    function handleChangeEndDate(dateTime: Date | undefined): void {
         if (dateTime && isBefore(dateTime, selectedStartDateTime)) {
             setSelectedEndDateTime(selectedStartDateTime);
-            return Alert.alert('Escolha uma data maior que a de início! 📅')
+            return Alert.alert('escolha uma data maior que a de início!')
         }
 
         if (dateTime) {
             setSelectedEndDateTime(dateTime);
         }
+
+        setShowEndDate(false);
     }
 
     async function handleSaveHabit(): Promise<void> {
         try {
             if (!habitName) {
-                return Alert.alert('Não é possível criar um hábito sem nome!');
+                return Alert.alert('não é possível criar um hábito sem nome!');
             }
 
             const verifyHabitExists = await getHabitByName(habitName.trim());
 
             if (verifyHabitExists && !(habit && (verifyHabitExists.id === habit.id))) {
-                return Alert.alert('Hábito com este nome já cadastrado!');
+                return Alert.alert('hábito com este nome já cadastrado!');
             }
 
             const newHabit: HabitProps = {
@@ -166,7 +164,7 @@ export function HabitManager() {
             navigation.navigate('Confirmation');
 
         } catch {
-            Alert.alert('Não foi possível salvar!');
+            Alert.alert('não foi possível salvar!');
         }
     }
 
@@ -221,36 +219,38 @@ export function HabitManager() {
                             <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
                                 <DateButton
                                     name="habitStartDate"
-                                    date={format(selectedStartDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                    date={format(selectedStartDateTime, "dd 'de' LLL',' yyyy", { locale: pt })}
                                     onPress={() => setShowStartDate((oldValue) => !oldValue)}
                                 />
-                                {showStartDate && (
-                                    <DateTimePicker
-                                        value={selectedStartDateTime}
-                                        mode="date"
-                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                        onChange={handleChangeStartDate}
-                                        style={styles(theme).dateTimePickerIos}
-                                        textColor={themes[theme].textPrimary}
-                                    />
-                                )}
+                                <DateTimePickerModal
+                                    isVisible={showStartDate}
+                                    mode="date"
+                                    date={selectedStartDateTime}
+                                    onConfirm={handleChangeStartDate}
+                                    onCancel={() => setShowStartDate(false)}
+                                    style={styles(theme).dateTimePickerIos}
+                                    textColor={themes[theme].textPrimary}
+                                    cancelTextIOS="cancelar"
+                                    confirmTextIOS="confirmar"
+                                />
 
                                 <DateButton
                                     name="habitStartDate"
-                                    date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLLL',' yyyy", { locale: pt })}
+                                    date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLL',' yyyy", { locale: pt })}
                                     onPress={() => setShowEndDate((oldValue) => !oldValue)}
                                     clear={() => setSelectedEndDateTime(undefined)}
                                 />
-                                {showEndDate && (
-                                    <DateTimePicker
-                                        value={selectedEndDateTime ?? new Date()}
-                                        mode="date"
-                                        display={Platform.OS === 'ios' ? 'spinner' : 'default'}
-                                        onChange={handleChangeEndDate}
-                                        style={styles(theme).dateTimePickerIos}
-                                        textColor={themes[theme].textPrimary}
-                                    />
-                                )}
+                                <DateTimePickerModal
+                                    isVisible={showEndDate}
+                                    mode="date"
+                                    date={selectedEndDateTime ?? new Date()}
+                                    onConfirm={handleChangeEndDate}
+                                    onCancel={() => setShowEndDate(false)}
+                                    style={styles(theme).dateTimePickerIos}
+                                    textColor={themes[theme].textPrimary}
+                                    cancelTextIOS="cancelar"
+                                    confirmTextIOS="confirmar"
+                                />
                             </View>
                             <View style={{ paddingTop: 10 }}>
                                 <Text style={styles(theme).subtitle}>cor</Text>
@@ -289,7 +289,7 @@ export function HabitManager() {
                                         />
                                         : <Text style={styles(theme).scheduleLegend}>adicione um horário</Text>}
                                     <TouchableOpacity style={styles(theme).addScheduleButton} onPress={() => setShowDatePicker(true)}>
-                                        <MaterialIcons name="add" size={20} color={themes[theme].textPrimary} />
+                                        <MaterialIcons name="add" size={20} color={themes[theme].textSecundary} />
                                     </TouchableOpacity>
                                 </View>
                             }
@@ -365,8 +365,9 @@ const styles = (theme: string) => StyleSheet.create({
     },
     addScheduleButton: {
         padding: 10,
-        backgroundColor: themes[theme].backgroundSecundary,
-        borderRadius: 50
+        backgroundColor: themes[theme].blue,
+        borderRadius: 50,
+        marginLeft: 10
     },
     scheduleLegend: {
         fontSize: 13,
@@ -382,7 +383,7 @@ const styles = (theme: string) => StyleSheet.create({
     scheduleCard: {
         flexDirection: 'row',
         width: 100,
-        height: 50,
+        height: 40,
         alignItems: 'center',
         justifyContent: 'space-between',
         backgroundColor: themes[theme].backgroundSecundary,

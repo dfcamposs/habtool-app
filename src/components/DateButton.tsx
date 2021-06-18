@@ -7,7 +7,6 @@ import { ThemeContext } from '../contexts/themes';
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
-
 interface DateButtonProps extends TouchableOpacityProps {
     name: string;
     date?: string;
@@ -32,9 +31,12 @@ export function DateButton({ name, date, clear, ...rest }: DateButtonProps) {
             </TouchableOpacity>
             {!!clear && !!date && (
                 <TouchableOpacity style={styles(theme).button} activeOpacity={0.3} onPress={clear}>
-                    <Text style={[styles(theme).text, !!date && { color: themes[theme].textPrimary }]}>
-                        clear
-                    </Text>
+                    <MaterialIcons
+                        style={styles(theme).icon}
+                        name="clear"
+                        size={15}
+                        color={themes[theme].textPrimary}
+                    />
                 </TouchableOpacity>
             )}
         </View>
@@ -50,7 +52,6 @@ const styles = (theme: string) => StyleSheet.create({
         borderColor: themes[theme].textUnfocus,
         marginVertical: 15,
         paddingVertical: 10,
-
     },
     button: {
         flexDirection: 'row',

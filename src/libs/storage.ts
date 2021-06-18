@@ -18,7 +18,8 @@ export interface HabitProps {
     endDate?: number;
     notificationHours: number[];
     order: number;
-    trackColor?: ColorEnum
+    trackColor?: ColorEnum,
+    notificationIds?: string[];
 }
 
 export interface HabitHistoryProps {
@@ -58,18 +59,21 @@ export function formatWeekDay(weekDay: number): string | undefined {
 //Notifications
 export async function addSchedulePushNotification(habit: HabitProps): Promise<void> {
     const schedules = habit.notificationHours;
+    const newNotifications: string[] = [];
 
     if (!schedules?.length) return;
 
+    if (habit.notificationIds) {
+        await cancelSchedulePushNotifications(habit.notificationIds);
+    }
+
     for (let i = 1; i <= 7; i++) {
-        await cancelSchedulePushNotification(habit.id + i);
         const weekDay = formatWeekDay(i);
         if (!weekDay) continue;
 
         if (habit.frequency[weekDay]) {
             for (const schedule of schedules) {
-                await Notifications.scheduleNotificationAsync({
-                    identifier: habit.id + i,
+                const notificationId = await Notifications.scheduleNotificationAsync({
                     content: {
                         title: habit.name,
                         body: habit.motivation ?? 'Já executou este hábito hoje?',
@@ -83,13 +87,31 @@ export async function addSchedulePushNotification(habit: HabitProps): Promise<vo
                         weekday: i
                     },
                 });
+
+                newNotifications.push(notificationId);
             }
         }
     }
+
+    console.log(newNotifications);
+
+    const data = await AsyncStorage.getItem('@habtool:habits');
+    const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
+
+    await AsyncStorage
+        .setItem('@habtool:habits',
+            JSON.stringify({
+                [habit.id]: {
+                    ...habits[habit.id],
+                    notificationIds: newNotifications
+                },
+                ...habits
+            })
+        );
 }
 
-export async function cancelSchedulePushNotification(scheduleId: string) {
-    await Notifications.cancelScheduledNotificationAsync(scheduleId);
+export async function cancelSchedulePushNotifications(notificationIds: string[]) {
+    notificationIds.forEach(notification => Notifications.cancelScheduledNotificationAsync(notification));
 }
 
 
@@ -211,7 +233,7 @@ export async function loadHabits(): Promise<HabitProps[]> {
             .keys(habits)
             .map((habit) => {
                 if (habits[habit].endDate && isBefore(Number(habits[habit].endDate), Date.now())) {
-                    Array.of(1, 2, 3, 4, 5, 6, 7).forEach(dayWeek => cancelSchedulePushNotification(habits[habit].id + dayWeek));
+                    cancelSchedulePushNotifications(habits[habit].notificationIds ?? []);
                 }
                 return {
                     ...habits[habit],
@@ -228,6 +250,7 @@ export async function deleteHabit(habitId: string): Promise<void> {
     try {
         const data = await AsyncStorage.getItem('@habtool:habits');
         const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
+        const notificationIds = habits[habitId].notificationIds ?? [];
 
         delete habits[habitId];
 
@@ -237,9 +260,10 @@ export async function deleteHabit(habitId: string): Promise<void> {
             );
 
         await deleteHabitHistory(habitId);
-        Array.of(1, 2, 3, 4, 5, 6, 7).forEach(dayWeek => cancelSchedulePushNotification(habitId + dayWeek));
+        cancelSchedulePushNotifications(notificationIds);
 
     } catch (error) {
+        console.log(error);
         throw new Error(error);
     }
 }
