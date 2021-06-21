@@ -31,6 +31,7 @@ import { ColorEnum, ColorTrackList } from '../components/ColorTrackList';
 import { getHabitByName, HabitProps, saveHabit } from '../libs/storage';
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
+import { UserContext } from '../contexts/user';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
@@ -65,6 +66,7 @@ export function HabitManager() {
     const route = useRoute();
     const { habit } = route.params as Params;
     const { theme } = useContext(ThemeContext);
+    const { isPro } = useContext(UserContext);
 
     useEffect(() => {
         if (habit) {
@@ -99,6 +101,14 @@ export function HabitManager() {
         }
         setSelectedScheduleDateTime(oldState => [...oldState, dateTime]);
         setShowDatePicker(false);
+    }
+
+    function handleAddNewSchedule() {
+        if (selectedScheduleDateTime.length === 0 || isPro) {
+            setShowDatePicker(true);
+        } else {
+            navigation.navigate('ProPurchase');
+        }
     }
 
     function handleChangeStartDate(dateTime: Date | undefined): void {
@@ -288,7 +298,7 @@ export function HabitManager() {
                                             horizontal
                                         />
                                         : <Text style={styles(theme).scheduleLegend}>adicione um horário</Text>}
-                                    <TouchableOpacity style={styles(theme).addScheduleButton} onPress={() => setShowDatePicker(true)}>
+                                    <TouchableOpacity style={styles(theme).addScheduleButton} onPress={handleAddNewSchedule}>
                                         <MaterialIcons name="add" size={20} color={themes[theme].textSecundary} />
                                     </TouchableOpacity>
                                 </View>
