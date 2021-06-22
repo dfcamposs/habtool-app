@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, StyleSheet, SafeAreaView, View, Platform } from 'react-native';
+import { Text, StyleSheet, SafeAreaView, View, Platform, Image, TouchableOpacity } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
@@ -15,6 +15,7 @@ import { UserContext } from '../contexts/user';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
+import Logo from '../assets/logo.png';
 
 export function Settings() {
     const [themeSelected, setThemeSelected] = useState<ThemeEnum>();
@@ -46,7 +47,11 @@ export function Settings() {
         <SafeAreaView style={styles(theme).container}>
             <Text style={styles(theme).title}>configurações</Text>
             <View style={styles(theme).menu}>
-
+                <Text style={styles(theme).subtitle}>assinatura</Text>
+                <TouchableOpacity style={styles(theme).menuPro} activeOpacity={.7} onPress={!isPro ? () => navigation.navigate('ProPurchase') : () => { }}>
+                    <Image style={styles(theme).logo} source={Logo} />
+                    <Text style={styles(theme).menuProText}>{isPro ? "você é um usuário pro 😊" : "migrar para o plano pro"}</Text>
+                </TouchableOpacity>
                 <Text style={styles(theme).subtitle}>tema</Text>
                 <View style={styles(theme).themeContainer}>
                     <ThemeButton
@@ -77,7 +82,7 @@ export function Settings() {
             <RectButton style={styles(theme).button} onPress={() => navigation.goBack()}>
                 <Text style={styles(theme).textButton}>cancelar</Text>
             </RectButton>
-        </SafeAreaView>
+        </SafeAreaView >
     )
 }
 
@@ -127,5 +132,26 @@ const styles = (theme: string) => StyleSheet.create({
         justifyContent: 'space-between',
         alignItems: 'center',
         marginLeft: 20
+    },
+    menuPro: {
+        height: 60,
+        backgroundColor: themes[theme].backgroundPro,
+        borderRadius: 10,
+        flexDirection: 'row',
+        alignItems: 'center',
+        marginLeft: 20,
+        paddingLeft: 10
+    },
+    logo: {
+        width: 60,
+        height: 40,
+        marginRight: 7
+    },
+    menuProText: {
+        fontSize: 14,
+        fontFamily: fonts.content,
+        color: themes[theme].textSecundary,
+        paddingRight: 20,
+        paddingVertical: 20
     }
 })

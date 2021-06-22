@@ -11,6 +11,7 @@ export interface ThemeProps {
         backgroundPrimary: string,
         backgroundSecundary: string,
         backgroundTertiary: string,
+        backgroundPro: string,
     };
 }
 
@@ -28,6 +29,8 @@ const lightTheme = {
     backgroundPrimary: '#F8F9FA',
     backgroundSecundary: '#E9ECEF',
     backgroundTertiary: '#FFFFFF',
+
+    backgroundPro: '#495057'
 };
 
 const darkTheme = {
@@ -44,6 +47,8 @@ const darkTheme = {
     backgroundPrimary: '#40474D',
     backgroundSecundary: '#495057',
     backgroundTertiary: '#495057',
+
+    backgroundPro: '#495057'
 };
 
 export default { light: lightTheme, dark: darkTheme } as ThemeProps;

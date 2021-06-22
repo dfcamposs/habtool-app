@@ -53,14 +53,12 @@ export function ProPurchase() {
                 <MaterialIcons style={styles(theme).close} name="close" size={30} color={themes[theme].textUnfocus} />
             </TouchableOpacity>
             <View style={styles(theme).content}>
-                <Text style={styles(theme).title}>Seja PRO</Text>
                 <View style={styles(theme).labelContainer}>
                     <Image style={styles(theme).logo} source={Logo} />
+                    <Text style={styles(theme).title}>HabTool PRO</Text>
                 </View>
 
-                <View style={styles(theme).labelContainer}>
-                    <Text style={styles(theme).labelText}>pagamento único</Text>
-                </View>
+                <Text style={styles(theme).labelText}>pagamento único</Text>
 
                 {features.map(feature =>
                     <View key={feature} style={styles(theme).featureContainer}>
@@ -115,7 +113,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     content: {
         width: '100%',
-        backgroundColor: themes[theme].backgroundSecundary,
+        backgroundColor: themes[theme].backgroundPro,
         borderRadius: 10,
         paddingVertical: 20
     },
@@ -127,7 +125,7 @@ const styles = (theme: string) => StyleSheet.create({
         fontFamily: fonts.subtitle,
         textAlign: 'center',
         fontSize: 24,
-        color: themes[theme].textPrimary
+        color: themes[theme].textSecundary
     },
     subtitle: {
         fontFamily: fonts.content,
@@ -136,21 +134,19 @@ const styles = (theme: string) => StyleSheet.create({
         paddingVertical: 20
     },
     logo: {
-        width: 110,
-        height: 60,
-        padding: 10
+        width: 70,
+        height: 40,
+        padding: 10,
+        alignSelf: 'center'
     },
     labelContainer: {
-        backgroundColor: themes[theme].textPrimary,
         alignItems: 'center',
-        justifyContent: 'center',
-        alignSelf: 'center',
-        borderRadius: 10,
-        marginVertical: 20
+        justifyContent: 'space-between',
+        height: 100,
     },
     labelText: {
-        fontFamily: fonts.content,
-        padding: 10,
+        fontFamily: fonts.contentBold,
+        paddingVertical: 30,
         textAlign: 'center',
         fontSize: 14,
         color: themes[theme].textSecundary
@@ -162,9 +158,9 @@ const styles = (theme: string) => StyleSheet.create({
     },
     featureText: {
         fontFamily: fonts.content,
-        padding: 5,
+        padding: 10,
         fontSize: 15,
-        color: themes[theme].textPrimary
+        color: themes[theme].textSecundary
     },
     purchaseContainer: {
         flex: 1,
@@ -187,7 +183,7 @@ const styles = (theme: string) => StyleSheet.create({
         color: themes[theme].textPrimary
     },
     legend: {
-        backgroundColor: themes[theme].textPrimary,
+        backgroundColor: themes[theme].backgroundPro,
         alignItems: 'center',
         justifyContent: 'center',
         borderRadius: 50
