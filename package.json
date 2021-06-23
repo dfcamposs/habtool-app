@@ -32,12 +32,14 @@
     "react-dom": "16.13.1",
     "react-native": "https://github.com/expo/react-native/archive/sdk-41.0.0.tar.gz",
     "react-native-calendars": "^1.1260.0",
+    "react-native-chart-kit": "^6.11.0",
     "react-native-draggable-flatlist": "^2.6.1",
     "react-native-gesture-handler": "^1.10.3",
     "react-native-modal-datetime-picker": "^10.0.0",
     "react-native-reanimated": "^2.1.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "~3.0.0",
+    "react-native-svg": "^12.1.1",
     "react-native-web": "~0.13.12"
   },
   "devDependencies": {

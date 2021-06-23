@@ -149,13 +149,24 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
         >
             <View style={styles(theme).container}>
                 <Text style={styles(theme).modalTitle}>{habit.name}</Text>
-
                 <View style={styles(theme).calendar}>
                     <Text style={styles(theme).subtitle}>histórico</Text>
                     <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleChangeSelectedDay} />
                     {habit.endDate && isBefore(habit.endDate, Date.now()) &&
                         <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
                     }
+                </View>
+
+                <Text style={styles(theme).subtitle}>score</Text>
+                <View style={styles(theme).cards}>
+                    <View style={styles(theme).card}>
+                        <Text style={styles(theme).score}>6</Text>
+                        <Text style={styles(theme).cardLegend}>seq. atual</Text>
+                    </View>
+                    <View style={styles(theme).card}>
+                        <Text style={styles(theme).score}>18</Text>
+                        <Text style={styles(theme).cardLegend}>melhor seq.</Text>
+                    </View>
                 </View>
 
                 <TouchableOpacity style={styles(theme).button} onPress={closeModal} activeOpacity={0.5}>
@@ -182,7 +193,6 @@ const styles = (theme: string) => StyleSheet.create({
         paddingVertical: 40
     },
     calendar: {
-        flex: 1,
         width: '100%',
         backgroundColor: themes[theme].backgroundPrimary
     },
@@ -191,6 +201,7 @@ const styles = (theme: string) => StyleSheet.create({
         fontFamily: fonts.subtitle,
         color: themes[theme].textUnfocus,
         paddingLeft: 20,
+        alignSelf: 'flex-start'
     },
     disabledText: {
         fontSize: 16,
@@ -198,6 +209,34 @@ const styles = (theme: string) => StyleSheet.create({
         color: themes[theme].textUnfocus,
         paddingTop: 20,
         paddingLeft: 20,
+    },
+    cards: {
+        flex: 1,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        paddingVertical: 20,
+        paddingLeft: 20,
+        paddingRight: 10
+    },
+    card: {
+        width: '50%',
+        height: 80,
+        backgroundColor: themes[theme].backgroundSecundary,
+        borderRadius: 10,
+        marginRight: 10,
+        alignItems: 'center',
+        justifyContent: 'center'
+    },
+    score: {
+        fontSize: 24,
+        fontFamily: fonts.contentBold,
+        color: themes[theme].textPrimary,
+        paddingBottom: 5
+    },
+    cardLegend: {
+        fontSize: 14,
+        fontFamily: fonts.content,
+        color: themes[theme].textPrimary,
     },
     button: {
         width: 100,
