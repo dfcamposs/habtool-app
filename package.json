@@ -11,7 +11,7 @@
     "@expo-google-fonts/nunito": "^0.1.0",
     "@expo-google-fonts/poppins": "^0.1.0",
     "@react-native-async-storage/async-storage": "^1.13.0",
-    "@react-native-community/datetimepicker": "^3.5.2",
+    "@react-native-community/datetimepicker": "3.2.0",
     "@react-native-community/masked-view": "0.1.10",
     "@react-navigation/bottom-tabs": "^5.11.10",
     "@react-navigation/native": "^5.9.4",
@@ -26,7 +26,9 @@
     "expo-haptics": "~10.0.0",
     "expo-linking": "~2.2.3",
     "expo-notifications": "~0.11.6",
+    "expo-splash-screen": "~0.10.2",
     "expo-status-bar": "~1.0.4",
+    "expo-updates": "~0.5.4",
     "formik": "^2.2.6",
     "react": "16.13.1",
     "react-dom": "16.13.1",
@@ -39,11 +41,9 @@
     "react-native-reanimated": "^2.1.0",
     "react-native-safe-area-context": "^3.2.0",
     "react-native-screens": "~3.0.0",
-    "react-native-svg": "^12.1.1",
-    "react-native-web": "~0.13.12",
-    "expo-splash-screen": "~0.10.2",
-    "expo-updates": "~0.5.4",
-    "react-native-unimodules": "~0.13.3"
+    "react-native-svg": "12.1.0",
+    "react-native-unimodules": "~0.13.3",
+    "react-native-web": "~0.13.12"
   },
   "devDependencies": {
     "@babel/core": "^7.9.0",
