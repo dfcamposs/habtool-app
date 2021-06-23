@@ -1,8 +1,9 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Modal, ModalProps, TouchableOpacity, Alert } from 'react-native';
+import { StyleSheet, View, Text, Modal, ModalProps, TouchableOpacity, Alert, Dimensions, ScrollView } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { format, isAfter, isBefore } from 'date-fns';
 import * as Haptics from 'expo-haptics';
+import { LineChart } from "react-native-chart-kit";
 
 import { LightenDarkenColor } from '../utils/colors';
 import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
@@ -147,32 +148,59 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
             visible={visible}
             statusBarTranslucent={true}
         >
-            <View style={styles(theme).container}>
-                <Text style={styles(theme).modalTitle}>{habit.name}</Text>
-                <View style={styles(theme).calendar}>
-                    <Text style={styles(theme).subtitle}>histórico</Text>
-                    <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleChangeSelectedDay} />
-                    {habit.endDate && isBefore(habit.endDate, Date.now()) &&
-                        <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
-                    }
-                </View>
-
-                <Text style={styles(theme).subtitle}>score</Text>
-                <View style={styles(theme).cards}>
-                    <View style={styles(theme).card}>
-                        <Text style={styles(theme).score}>6</Text>
-                        <Text style={styles(theme).cardLegend}>seq. atual</Text>
+            <ScrollView showsVerticalScrollIndicator={false}>
+                <View style={styles(theme).container}>
+                    <Text style={styles(theme).modalTitle}>{habit.name}</Text>
+                    <View style={styles(theme).calendar}>
+                        <Text style={styles(theme).subtitle}>histórico</Text>
+                        <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleChangeSelectedDay} />
+                        {habit.endDate && isBefore(habit.endDate, Date.now()) &&
+                            <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
+                        }
                     </View>
-                    <View style={styles(theme).card}>
-                        <Text style={styles(theme).score}>18</Text>
-                        <Text style={styles(theme).cardLegend}>melhor seq.</Text>
-                    </View>
-                </View>
 
-                <TouchableOpacity style={styles(theme).button} onPress={closeModal} activeOpacity={0.5}>
-                    <Text style={styles(theme).textButton}>voltar</Text>
-                </TouchableOpacity>
-            </View>
+                    <Text style={styles(theme).subtitle}>score</Text>
+                    <View style={styles(theme).cards}>
+                        <View style={styles(theme).card}>
+                            <Text style={styles(theme).score}>6</Text>
+                            <Text style={styles(theme).cardLegend}>seq. atual</Text>
+                        </View>
+                        <View style={styles(theme).card}>
+                            <Text style={styles(theme).score}>18</Text>
+                            <Text style={styles(theme).cardLegend}>melhor seq.</Text>
+                        </View>
+                    </View>
+
+                    <Text style={styles(theme).subtitle}>progresso</Text>
+                    <LineChart
+                        style={styles(theme).chart}
+                        data={{
+                            labels: ["jan", "fev", "mar", "abr", "mai", "jun"],
+                            datasets: [
+                                {
+                                    data: [4, 8, 15, 18, 30, 30],
+                                    color: () => themes[theme].blue,
+                                }
+                            ]
+                        }}
+                        width={Dimensions.get("window").width}
+                        height={180}
+                        chartConfig={{
+                            backgroundGradientFrom: themes[theme].backgroundPrimary,
+                            backgroundGradientTo: themes[theme].backgroundPrimary,
+                            color: () => themes[theme].backgroundSecundary,
+                            labelColor: () => themes[theme].textPrimary,
+                            barPercentage: 0,
+                            useShadowColorFromDataset: false,
+                        }}
+                    />
+
+
+                    <TouchableOpacity style={styles(theme).button} onPress={closeModal} activeOpacity={0.5}>
+                        <Text style={styles(theme).textButton}>voltar</Text>
+                    </TouchableOpacity>
+                </View>
+            </ScrollView>
         </Modal>
     )
 }
@@ -182,8 +210,9 @@ const styles = (theme: string) => StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingTop: getStatusBarHeight(),
-        paddingVertical: 23,
-        paddingHorizontal: 10,
+        paddingVertical: 20,
+        paddingLeft: 20,
+        paddingRight: 10,
         backgroundColor: themes[theme].backgroundPrimary
     },
     modalTitle: {
@@ -193,14 +222,12 @@ const styles = (theme: string) => StyleSheet.create({
         paddingVertical: 40
     },
     calendar: {
-        width: '100%',
-        backgroundColor: themes[theme].backgroundPrimary
+        width: '100%'
     },
     subtitle: {
         fontSize: 18,
         fontFamily: fonts.subtitle,
         color: themes[theme].textUnfocus,
-        paddingLeft: 20,
         alignSelf: 'flex-start'
     },
     disabledText: {
@@ -211,12 +238,10 @@ const styles = (theme: string) => StyleSheet.create({
         paddingLeft: 20,
     },
     cards: {
-        flex: 1,
         flexDirection: 'row',
         justifyContent: 'space-between',
         paddingVertical: 20,
-        paddingLeft: 20,
-        paddingRight: 10
+        paddingHorizontal: 10
     },
     card: {
         width: '50%',
@@ -238,6 +263,10 @@ const styles = (theme: string) => StyleSheet.create({
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
     },
+    chart: {
+        marginVertical: 20,
+        marginHorizontal: 30
+    },
     button: {
         width: 100,
         height: 40,
@@ -245,7 +274,7 @@ const styles = (theme: string) => StyleSheet.create({
         borderRadius: 10,
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 20
+        marginVertical: 20
     },
     textButton: {
         fontSize: 16,
