@@ -35,7 +35,7 @@ export function Settings() {
 
                 <Text style={styles.subtitle}>suporte</Text>
                 <SettingsButton title="avaliar app" onPress={handleRateApp} />
-                <SettingsButton title="contatar desenvolvedor" onPress={() => Linking.openURL('mailto:fernandesc.david@gmail.com')} />
+                <SettingsButton title="contatar desenvolvedor" onPress={() => Linking.openURL('mailto:habtool.app@gmail.com')} />
             </View>
             <RectButton style={styles.button} onPress={() => navigation.goBack()}>
                 <Text style={styles.textButton}>cancelar</Text>
