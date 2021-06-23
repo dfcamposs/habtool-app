@@ -150,7 +150,12 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
         >
             <ScrollView showsVerticalScrollIndicator={false}>
                 <View style={styles(theme).container}>
-                    <Text style={styles(theme).modalTitle}>{habit.name}</Text>
+                    <View style={styles(theme).header}>
+                        <Text style={styles(theme).modalTitle}>{habit.name}</Text>
+                        <View style={styles(theme).countContainer}>
+                            <Text style={styles(theme).scoreCountText}>35%</Text>
+                        </View>
+                    </View>
                     <View style={styles(theme).calendar}>
                         <Text style={styles(theme).subtitle}>histórico</Text>
                         <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleChangeSelectedDay} />
@@ -164,6 +169,10 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                         <View style={styles(theme).card}>
                             <Text style={styles(theme).score}>6</Text>
                             <Text style={styles(theme).cardLegend}>seq. atual</Text>
+                        </View>
+                        <View style={styles(theme).card}>
+                            <Text style={styles(theme).score}>50</Text>
+                            <Text style={styles(theme).cardLegend}>realizado</Text>
                         </View>
                         <View style={styles(theme).card}>
                             <Text style={styles(theme).score}>18</Text>
@@ -215,11 +224,30 @@ const styles = (theme: string) => StyleSheet.create({
         paddingRight: 10,
         backgroundColor: themes[theme].backgroundPrimary
     },
+    header: {
+        width: '100%',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginVertical: 30
+    },
     modalTitle: {
         fontSize: 24,
         fontFamily: fonts.title,
-        color: themes[theme].textPrimary,
-        paddingVertical: 40
+        color: themes[theme].textPrimary
+    },
+    countContainer: {
+        width: '20%',
+        height: 30,
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: themes[theme].blue,
+        borderRadius: 10
+    },
+    scoreCountText: {
+        fontSize: 20,
+        fontFamily: fonts.contentBold,
+        color: themes[theme].textSecundary
     },
     calendar: {
         width: '100%'
@@ -244,7 +272,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingHorizontal: 10
     },
     card: {
-        width: '50%',
+        width: '30%',
         height: 80,
         backgroundColor: themes[theme].backgroundSecundary,
         borderRadius: 10,
