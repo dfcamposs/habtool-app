@@ -120,7 +120,9 @@ export async function setUser(user: StorageUserProps): Promise<void> {
     try {
         await AsyncStorage
             .setItem('@habtool:user',
-                JSON.stringify(user)
+                JSON.stringify({
+                    name: user.name.trim()
+                })
             );
     } catch (error) {
         throw new Error(error);

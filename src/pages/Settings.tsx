@@ -3,6 +3,7 @@ import { Text, StyleSheet, SafeAreaView, View, Platform, Image, TouchableOpacity
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import * as Linking from 'expo-linking';
 
 import { SettingsButton } from '../components/SettingsButton';
 import { ThemeButton } from '../components/ThemeButton';
@@ -25,6 +26,16 @@ export function Settings() {
     const { isPro } = useContext(UserContext);
     const navigation = useNavigation();
 
+    function handleRateApp() {
+        const storeId = "com.dfcamposs.habtool";
+
+        if (Platform.OS === 'android') {
+            return Linking.openURL(`https://play.google.com/store/apps/details?id=${storeId}&showAllReviews=true`)
+        }
+
+        return Linking.openURL(`https://apps.apple.com/app/apple-store/id${storeId}?action=write-review`);
+    }
+
     function handleChangeTheme(theme: ThemeEnum) {
         if (!isPro) {
             return navigation.navigate('ProPurchase');
@@ -42,6 +53,8 @@ export function Settings() {
 
         getTheme();
     }, [])
+
+
 
     return (
         <SafeAreaView style={styles(theme).container}>
@@ -76,8 +89,8 @@ export function Settings() {
                 <SettingsButton title="alterar como deseja ser chamado" onPress={() => navigation.navigate('Rename')} />
 
                 <Text style={styles(theme).subtitle}>suporte</Text>
-                <SettingsButton title="avaliar app" onPress={() => { }} />
-                <SettingsButton title="contatar desenvolvedor" onPress={() => { }} />
+                <SettingsButton title="avaliar app" onPress={handleRateApp} />
+                <SettingsButton title="contatar desenvolvedor" onPress={() => Linking.openURL('mailto:habtool.app@gmail.com')} />
             </View>
             <RectButton style={styles(theme).button} onPress={() => navigation.goBack()}>
                 <Text style={styles(theme).textButton}>cancelar</Text>

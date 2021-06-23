@@ -17,8 +17,7 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": true,
-      "bundleIdentifier": "com.dfcamposs.habtool"
+      "supportsTablet": false
     },
     "android": {
       "permissions": [
