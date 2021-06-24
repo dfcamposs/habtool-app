@@ -48,6 +48,7 @@ export function HabitCalendar({ calendarMarked, handleChangeSelectedDay }: Habit
                 textDayFontSize: 12,
                 textDayHeaderFontSize: 12,
                 textMonthFontSize: 15,
+
             }}
         />
     )

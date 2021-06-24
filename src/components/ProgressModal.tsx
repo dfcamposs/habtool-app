@@ -156,8 +156,8 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                             <Text style={styles(theme).scoreCountText}>35%</Text>
                         </View>
                     </View>
+                    <Text style={styles(theme).subtitle}>histórico</Text>
                     <View style={styles(theme).calendar}>
-                        <Text style={styles(theme).subtitle}>histórico</Text>
                         <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleChangeSelectedDay} />
                         {habit.endDate && isBefore(habit.endDate, Date.now()) &&
                             <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
@@ -165,45 +165,45 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                     </View>
 
                     <Text style={styles(theme).subtitle}>score</Text>
-                    <View style={styles(theme).cards}>
+                    <ScrollView style={styles(theme).cards} horizontal>
                         <View style={styles(theme).card}>
                             <Text style={styles(theme).score}>6</Text>
                             <Text style={styles(theme).cardLegend}>seq. atual</Text>
                         </View>
                         <View style={styles(theme).card}>
-                            <Text style={styles(theme).score}>50</Text>
+                            <Text style={styles(theme).score}>50x</Text>
                             <Text style={styles(theme).cardLegend}>realizado</Text>
                         </View>
                         <View style={styles(theme).card}>
                             <Text style={styles(theme).score}>18</Text>
                             <Text style={styles(theme).cardLegend}>melhor seq.</Text>
                         </View>
-                    </View>
+                    </ScrollView>
 
                     <Text style={styles(theme).subtitle}>progresso</Text>
-                    <LineChart
-                        style={styles(theme).chart}
-                        data={{
-                            labels: ["jan", "fev", "mar", "abr", "mai", "jun"],
-                            datasets: [
-                                {
-                                    data: [4, 8, 15, 18, 30, 30],
-                                    color: () => themes[theme].blue,
-                                }
-                            ]
-                        }}
-                        width={Dimensions.get("window").width}
-                        height={180}
-                        chartConfig={{
-                            backgroundGradientFrom: themes[theme].backgroundPrimary,
-                            backgroundGradientTo: themes[theme].backgroundPrimary,
-                            color: () => themes[theme].backgroundSecundary,
-                            labelColor: () => themes[theme].textPrimary,
-                            barPercentage: 0,
-                            useShadowColorFromDataset: false,
-                        }}
-                    />
-
+                    <View style={styles(theme).chart}>
+                        <LineChart
+                            data={{
+                                labels: ["jan", "fev", "mar", "abr", "mai", "jun"],
+                                datasets: [
+                                    {
+                                        data: [4, 8, 15, 18, 30, 30],
+                                        color: () => themes[theme].blue,
+                                    }
+                                ]
+                            }}
+                            width={Dimensions.get("screen").width - 20}
+                            height={180}
+                            chartConfig={{
+                                backgroundGradientFrom: themes[theme].backgroundPrimary,
+                                backgroundGradientTo: themes[theme].backgroundPrimary,
+                                color: () => themes[theme].gray,
+                                labelColor: () => themes[theme].textPrimary,
+                                barPercentage: 0,
+                                useShadowColorFromDataset: false,
+                            }}
+                        />
+                    </View>
 
                     <TouchableOpacity style={styles(theme).button} onPress={closeModal} activeOpacity={0.5}>
                         <Text style={styles(theme).textButton}>voltar</Text>
@@ -219,9 +219,7 @@ const styles = (theme: string) => StyleSheet.create({
         flex: 1,
         alignItems: 'center',
         paddingTop: getStatusBarHeight(),
-        paddingVertical: 20,
-        paddingLeft: 20,
-        paddingRight: 10,
+        paddingBottom: 20,
         backgroundColor: themes[theme].backgroundPrimary
     },
     header: {
@@ -229,7 +227,8 @@ const styles = (theme: string) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'space-between',
-        marginVertical: 30
+        marginVertical: 20,
+        paddingHorizontal: 20
     },
     modalTitle: {
         fontSize: 24,
@@ -256,24 +255,26 @@ const styles = (theme: string) => StyleSheet.create({
         fontSize: 18,
         fontFamily: fonts.subtitle,
         color: themes[theme].textUnfocus,
-        alignSelf: 'flex-start'
+        alignSelf: 'flex-start',
+        paddingHorizontal: 20
     },
     disabledText: {
         fontSize: 16,
         fontFamily: fonts.content,
         color: themes[theme].textUnfocus,
-        paddingTop: 20,
         paddingLeft: 20,
+        alignSelf: 'flex-start',
+        paddingBottom: 10
     },
     cards: {
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        paddingVertical: 20,
-        paddingHorizontal: 10
+        flexGrow: 1,
+        paddingHorizontal: 20,
+        paddingVertical: 15,
+        marginRight: 20
     },
     card: {
-        width: '30%',
-        height: 80,
+        width: 120,
+        height: 60,
         backgroundColor: themes[theme].backgroundSecundary,
         borderRadius: 10,
         marginRight: 10,
@@ -281,22 +282,21 @@ const styles = (theme: string) => StyleSheet.create({
         justifyContent: 'center'
     },
     score: {
-        fontSize: 24,
+        fontSize: 20,
         fontFamily: fonts.contentBold,
         color: themes[theme].textPrimary,
-        paddingBottom: 5
+        paddingBottom: 3
     },
     cardLegend: {
-        fontSize: 14,
+        fontSize: 12,
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
     },
     chart: {
-        marginVertical: 20,
-        marginHorizontal: 30
+        marginVertical: 10,
     },
     button: {
-        width: 100,
+        width: 120,
         height: 40,
         backgroundColor: themes[theme].backgroundSecundary,
         borderRadius: 10,
