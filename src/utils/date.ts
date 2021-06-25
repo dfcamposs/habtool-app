@@ -42,7 +42,11 @@ export function calculateSequence(habit: HabitProps, data: number[]): SequencePr
         const [year, month, day] = date.split("-");
         const weekDay = weekDays[new Date(Number(year), Number(month) - 1, Number(day)).getDay()];
 
-        if (dates.includes(date) || (currentSequence > 0 && (weekDay && !habit.frequency[weekDay]))) {
+        if ((currentSequence > 0 && (weekDay && !habit.frequency[weekDay]))) {
+            continue;
+        }
+
+        if (dates.includes(date)) {
             currentSequence++;
         } else {
             currentSequence = 0;

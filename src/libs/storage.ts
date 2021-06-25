@@ -3,7 +3,7 @@ import { format, isAfter, isBefore } from 'date-fns';
 import * as Notifications from "expo-notifications";
 import { ColorEnum } from '../components/ColorTrackList';
 import { ThemeEnum } from '../contexts/themes';
-import { calculateSequence, getDates } from '../utils/date';
+import { calculateSequence } from '../utils/date';
 
 //Models
 export interface FrequencyProps {
@@ -516,6 +516,30 @@ export async function getHabitScore(habit: HabitProps): Promise<HabitScoreProps>
             doneCount: habitsHistory[habit.id].length ?? 0
         }
 
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function getHabitHistoryCountByMonths(habit: HabitProps): Promise<number[]> {
+    try {
+        const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
+        const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
+
+        const currentDate = new Date(), y = currentDate.getFullYear(), m = currentDate.getMonth();
+        const firstDay = new Date(y, m - 11, 1).getTime();
+
+        const dates = habitsHistory[habit.id].filter(date => date > firstDay);
+
+        console.log(dates);
+        const monthsCount = Array.from({ length: 12 }, () => 0);
+
+        for (const date of dates) {
+            const monthDate = new Date(date).getMonth();
+            monthsCount[monthDate] = monthsCount[monthDate] + 1;
+        }
+
+        return monthsCount;
     } catch (error) {
         throw new Error(error);
     }

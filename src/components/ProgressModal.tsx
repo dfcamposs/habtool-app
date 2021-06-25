@@ -1,5 +1,15 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { StyleSheet, View, Text, Modal, ModalProps, TouchableOpacity, Alert, Dimensions, ScrollView } from 'react-native';
+import {
+    StyleSheet,
+    View,
+    Text,
+    Modal,
+    ModalProps,
+    TouchableOpacity,
+    Alert,
+    Dimensions,
+    ScrollView
+} from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { format, isAfter, isBefore } from 'date-fns';
 import * as Haptics from 'expo-haptics';
@@ -8,7 +18,14 @@ import { LineChart } from "react-native-chart-kit";
 import { LightenDarkenColor } from '../utils/colors';
 import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
 
-import { loadHabitHistoryByHabitId, updateHabitHistory, HabitProps, getHabitScore, HabitScoreProps } from '../libs/storage';
+import {
+    loadHabitHistoryByHabitId,
+    updateHabitHistory,
+    HabitProps,
+    getHabitScore,
+    HabitScoreProps,
+    getHabitHistoryCountByMonths
+} from '../libs/storage';
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
 import { UserContext } from '../contexts/user';
@@ -30,6 +47,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
         bestSequence: 0,
         doneCount: 0,
     });
+    const [progressByMonth, setProgressByMonth] = useState(Array.from({ length: 12 }, () => 0));
     const { theme } = useContext(ThemeContext);
     const { isPro } = useContext(UserContext);
     const principalColor = isPro ? (habit.trackColor ? habit.trackColor : ColorEnum.default) : themes[theme].blue;
@@ -147,7 +165,13 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
         setScore(score);
     }
 
+    async function handleSetDataProgressByMonth() {
+        const data = await getHabitHistoryCountByMonths(habit);
+        setProgressByMonth(data);
+    }
+
     useEffect(() => {
+        handleSetDataProgressByMonth();
         handleSetScore();
         handleMarkedDate(Date.now());
     }, [refreshHistoryCalendar]);
@@ -194,17 +218,21 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                     <Text style={styles(theme).subtitle}>progresso</Text>
                     <View style={styles(theme).chart}>
                         <LineChart
+                            segments={3}
+                            fromZero
                             data={{
-                                labels: ["jan", "fev", "mar", "abr", "mai", "jun"],
+                                labels: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dec"],
                                 datasets: [
                                     {
-                                        data: [4, 8, 15, 18, 30, 30],
+                                        data: progressByMonth,
                                         color: () => themes[theme].blue,
                                     }
                                 ]
                             }}
                             width={Dimensions.get("screen").width - 20}
                             height={180}
+                            withVerticalLines={false}
+                            withHorizontalLines={false}
                             chartConfig={{
                                 backgroundGradientFrom: themes[theme].backgroundPrimary,
                                 backgroundGradientTo: themes[theme].backgroundPrimary,
@@ -212,6 +240,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                                 labelColor: () => themes[theme].textPrimary,
                                 barPercentage: 0,
                                 useShadowColorFromDataset: false,
+                                decimalPlaces: 0
                             }}
                         />
                     </View>
