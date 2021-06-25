@@ -2,7 +2,7 @@ import { StatusBar } from 'expo-status-bar';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
-import { getCurrentTheme, setCurrentTheme } from '../libs/storage';
+import { getCurrentTheme, getUser, setCurrentTheme } from '../libs/storage';
 import { UserContext } from './user';
 
 export enum ThemeEnum {
@@ -20,17 +20,16 @@ export const ThemeContext = createContext<ThemeContextProps>({} as ThemeContextP
 
 export const ThemeProvider: React.FC = ({ children }) => {
     const [theme, setTheme] = useState<ThemeEnum>(ThemeEnum.light);
-
-    const { isPro } = useContext(UserContext);
     const deviceTheme = useColorScheme();
 
     useEffect(() => {
         async function setInitialTheme() {
+            const { isPro } = await getUser();
+            const currentTheme = await getCurrentTheme();
+
             if (!isPro) {
                 return;
             }
-
-            const currentTheme = await getCurrentTheme();
 
             if (currentTheme) {
                 if (currentTheme === ThemeEnum.default && deviceTheme) {

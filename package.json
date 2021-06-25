@@ -22,6 +22,7 @@
     "date-fns-tz": "^1.1.4",
     "expo": "~41.0.1",
     "expo-app-loading": "^1.0.3",
+    "expo-blur": "~9.0.3",
     "expo-font": "~9.1.0",
     "expo-haptics": "~10.0.0",
     "expo-linking": "~2.2.3",
