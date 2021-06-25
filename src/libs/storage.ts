@@ -3,6 +3,7 @@ import { format, isAfter, isBefore } from 'date-fns';
 import * as Notifications from "expo-notifications";
 import { ColorEnum } from '../components/ColorTrackList';
 import { ThemeEnum } from '../contexts/themes';
+import { getDates } from '../utils/date';
 
 //Models
 export interface FrequencyProps {
@@ -25,6 +26,12 @@ export interface HabitProps {
 export interface HabitHistoryProps {
     habit: HabitProps,
     history: number[]
+}
+
+export interface HabitScoreProps {
+    currentSequence: number;
+    bestSequence: number;
+    doneCount: number;
 }
 
 export interface StorageHabitProps {
@@ -492,5 +499,47 @@ export async function getProgressStars(): Promise<number> {
 
     } catch (error) {
         throw new Error();
+    }
+}
+
+//Habit Score
+export async function getHabitScore(habit: HabitProps): Promise<HabitScoreProps> {
+    try {
+        const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
+        const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
+
+        const dates = habitsHistory[habit.id]
+            .sort()
+            .map(date => format(date, 'yyyy-MM-dd'));
+        const sequeceDates = getDates(
+            new Date(habitsHistory[habit.id][0]),
+            new Date(Date.now())
+        );
+
+        let bestSequence = 0;
+        let currentSequence = 0;
+        const weekDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
+
+        for (const date of sequeceDates) {
+            const [year, month, day] = date.split("-");
+            const weekDay = weekDays[new Date(Number(year), Number(month) - 1, Number(day)).getDay()];
+
+            if (dates.includes(date) || (currentSequence > 0 && (weekDay && !habit.frequency[weekDay]))) {
+                currentSequence++;
+            } else {
+                currentSequence = 0;
+            }
+
+            bestSequence = (currentSequence > bestSequence) ? currentSequence : bestSequence
+        }
+
+        return {
+            currentSequence,
+            bestSequence,
+            doneCount: habitsHistory[habit.id].length ?? 0
+        }
+
+    } catch (error) {
+        throw new Error(error);
     }
 }

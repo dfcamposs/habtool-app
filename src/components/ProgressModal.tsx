@@ -8,7 +8,7 @@ import { LineChart } from "react-native-chart-kit";
 import { LightenDarkenColor } from '../utils/colors';
 import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
 
-import { loadHabitHistoryByHabitId, updateHabitHistory, HabitProps } from '../libs/storage';
+import { loadHabitHistoryByHabitId, updateHabitHistory, HabitProps, getHabitScore, HabitScoreProps } from '../libs/storage';
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
 import { UserContext } from '../contexts/user';
@@ -25,6 +25,11 @@ interface ProgressModalProps extends ModalProps {
 }
 
 export function ProgressModal({ data: habit, visible = false, closeModal, ...rest }: ProgressModalProps) {
+    const [score, setScore] = useState<HabitScoreProps>({
+        currentSequence: 0,
+        bestSequence: 0,
+        doneCount: 0,
+    });
     const { theme } = useContext(ThemeContext);
     const { isPro } = useContext(UserContext);
     const principalColor = isPro ? (habit.trackColor ? habit.trackColor : ColorEnum.default) : themes[theme].blue;
@@ -137,7 +142,13 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
         setCalendarMarked(result);
     }
 
+    async function handleSetScore() {
+        const score = await getHabitScore(habit);
+        setScore(score);
+    }
+
     useEffect(() => {
+        handleSetScore();
         handleMarkedDate(Date.now());
     }, [refreshHistoryCalendar]);
 
@@ -167,15 +178,15 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                     <Text style={styles(theme).subtitle}>score</Text>
                     <ScrollView style={styles(theme).cards} horizontal>
                         <View style={styles(theme).card}>
-                            <Text style={styles(theme).score}>6</Text>
+                            <Text style={styles(theme).score}>{score.currentSequence}</Text>
                             <Text style={styles(theme).cardLegend}>seq. atual</Text>
                         </View>
                         <View style={styles(theme).card}>
-                            <Text style={styles(theme).score}>50x</Text>
+                            <Text style={styles(theme).score}>{score.doneCount}x</Text>
                             <Text style={styles(theme).cardLegend}>realizado</Text>
                         </View>
                         <View style={styles(theme).card}>
-                            <Text style={styles(theme).score}>18</Text>
+                            <Text style={styles(theme).score}>{score.bestSequence}</Text>
                             <Text style={styles(theme).cardLegend}>melhor seq.</Text>
                         </View>
                     </ScrollView>
