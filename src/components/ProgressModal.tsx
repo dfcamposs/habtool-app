@@ -198,7 +198,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                 </TouchableOpacity>
                 <View style={styles(theme).header}>
                     <Text style={styles(theme).modalTitle}>{habit.name}</Text>
-                    <View style={styles(theme).countContainer}>
+                    <View style={[styles(theme).countContainer, { backgroundColor: principalColor }]}>
                         <Text style={styles(theme).scoreCountText}>{score.amountPercentage}%</Text>
                     </View>
                 </View>
@@ -236,7 +236,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                             datasets: [
                                 {
                                     data: progressByMonth,
-                                    color: () => themes[theme].blue,
+                                    color: () => principalColor,
                                 }
                             ]
                         }}
