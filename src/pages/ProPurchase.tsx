@@ -30,7 +30,7 @@ const features = [
     "tema escuro",
     "personalização de cores",
     "backup em nuvem",
-    "estatísticas detalhadas",
+    "novos relatórios",
     "múltiplos lembretes",
     "suporte preferencial"
 ];
@@ -55,7 +55,7 @@ export function ProPurchase() {
             <View style={styles(theme).content}>
                 <View style={styles(theme).labelContainer}>
                     <Image style={styles(theme).logo} source={Logo} />
-                    <Text style={styles(theme).title}>HabTool PRO</Text>
+                    <Text style={styles(theme).title}>HabTool Pro</Text>
                 </View>
 
                 <Text style={styles(theme).labelText}>pagamento único</Text>
