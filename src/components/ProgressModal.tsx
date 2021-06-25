@@ -57,6 +57,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
     const [score, setScore] = useState<HabitScoreProps>({
         currentSequence: 0,
         bestSequence: 0,
+        amountPercentage: 0,
         doneCount: 0,
     });
     const [progressByMonth, setProgressByMonth] = useState(Array.from({ length: 12 }, () => 0));
@@ -198,7 +199,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                 <View style={styles(theme).header}>
                     <Text style={styles(theme).modalTitle}>{habit.name}</Text>
                     <View style={styles(theme).countContainer}>
-                        <Text style={styles(theme).scoreCountText}>35%</Text>
+                        <Text style={styles(theme).scoreCountText}>{score.amountPercentage}%</Text>
                     </View>
                 </View>
                 <Text style={styles(theme).subtitle}>histórico</Text>

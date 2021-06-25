@@ -4,6 +4,7 @@ import { HabitProps } from "../libs/storage";
 interface SequenceProps {
     currentSequence: number;
     bestSequence: number;
+    amountPercentage: number;
 }
 
 export function addDaysDate(date: number, days: number): Date {
@@ -36,6 +37,7 @@ export function calculateSequence(habit: HabitProps, data: number[]): SequencePr
 
     let bestSequence = 0;
     let currentSequence = 0;
+    let amountPercentage = 0;
     const weekDays = ['sun', 'mon', 'tue', 'wed', 'thu', 'fri', 'sat'];
 
     for (const date of sequeceDates) {
@@ -48,12 +50,18 @@ export function calculateSequence(habit: HabitProps, data: number[]): SequencePr
 
         if (dates.includes(date)) {
             currentSequence++;
+            amountPercentage++;
         } else {
             currentSequence = 0;
+            amountPercentage = amountPercentage > 0 ? amountPercentage-- : 0;
         }
 
         bestSequence = (currentSequence > bestSequence) ? currentSequence : bestSequence;
     }
 
-    return { currentSequence, bestSequence }
+    return {
+        currentSequence,
+        bestSequence,
+        amountPercentage: Math.round((amountPercentage * 100) / 66)
+    }
 }

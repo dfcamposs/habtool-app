@@ -32,6 +32,7 @@ export interface HabitScoreProps {
     currentSequence: number;
     bestSequence: number;
     doneCount: number;
+    amountPercentage: number;
 }
 
 export interface StorageHabitProps {
@@ -507,12 +508,13 @@ export async function getHabitScore(habit: HabitProps): Promise<HabitScoreProps>
         const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
 
-        const { currentSequence, bestSequence } = calculateSequence(habit, habitsHistory[habit.id]);
+        const { currentSequence, bestSequence, amountPercentage } = calculateSequence(habit, habitsHistory[habit.id]);
 
         return {
             currentSequence,
             bestSequence,
-            doneCount: habitsHistory[habit.id].length ?? 0
+            amountPercentage,
+            doneCount: habitsHistory[habit.id].length ?? 0,
         }
 
     } catch (error) {
