@@ -14,6 +14,7 @@ import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { format, isAfter, isBefore } from 'date-fns';
 import * as Haptics from 'expo-haptics';
 import { LineChart } from "react-native-chart-kit";
+import { MaterialIcons } from '@expo/vector-icons';
 
 import { LightenDarkenColor } from '../utils/colors';
 import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
@@ -42,26 +43,30 @@ interface ProgressModalProps extends ModalProps {
 }
 
 export function ProgressModal({ data: habit, visible = false, closeModal, ...rest }: ProgressModalProps) {
+    const { theme } = useContext(ThemeContext);
+    const { isPro } = useContext(UserContext);
+    const { refreshHistoryCalendar } = useContext(HabitsContext);
+    const principalColor =
+        isPro
+            ? (habit.trackColor
+                ? habit.trackColor
+                : ColorEnum.default
+            )
+            : themes[theme].blue;
+
     const [score, setScore] = useState<HabitScoreProps>({
         currentSequence: 0,
         bestSequence: 0,
         doneCount: 0,
     });
     const [progressByMonth, setProgressByMonth] = useState(Array.from({ length: 12 }, () => 0));
-    const { theme } = useContext(ThemeContext);
-    const { isPro } = useContext(UserContext);
-    const principalColor = isPro ? (habit.trackColor ? habit.trackColor : ColorEnum.default) : themes[theme].blue;
-
-    const initialCalendarMarked = {
+    const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>({
         [format(new Date(), 'yyyy-MM-dd')]: {
             selected: true,
             color: principalColor,
             textColor: themes[theme].textSecundary
         }
-    }
-    const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>(initialCalendarMarked);
-
-    const { refreshHistoryCalendar } = useContext(HabitsContext);
+    });
 
     async function handleChangeSelectedDay(date: number) {
 
@@ -171,10 +176,13 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
     }
 
     useEffect(() => {
-        handleSetDataProgressByMonth();
-        handleSetScore();
         handleMarkedDate(Date.now());
     }, [refreshHistoryCalendar]);
+
+    useEffect(() => {
+        handleSetDataProgressByMonth();
+        handleSetScore();
+    }, [calendarMarked])
 
     return (
         <Modal
@@ -183,71 +191,68 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
             visible={visible}
             statusBarTranslucent={true}
         >
-            <ScrollView showsVerticalScrollIndicator={false}>
-                <View style={styles(theme).container}>
-                    <View style={styles(theme).header}>
-                        <Text style={styles(theme).modalTitle}>{habit.name}</Text>
-                        <View style={styles(theme).countContainer}>
-                            <Text style={styles(theme).scoreCountText}>35%</Text>
-                        </View>
+            <ScrollView showsVerticalScrollIndicator={false} style={styles(theme).container}>
+                <TouchableOpacity style={styles(theme).button} onPress={closeModal} activeOpacity={0.5}>
+                    <MaterialIcons name="close" size={30} color={themes[theme].textPrimary} />
+                </TouchableOpacity>
+                <View style={styles(theme).header}>
+                    <Text style={styles(theme).modalTitle}>{habit.name}</Text>
+                    <View style={styles(theme).countContainer}>
+                        <Text style={styles(theme).scoreCountText}>35%</Text>
                     </View>
-                    <Text style={styles(theme).subtitle}>histórico</Text>
-                    <View style={styles(theme).calendar}>
-                        <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleChangeSelectedDay} />
-                        {habit.endDate && isBefore(habit.endDate, Date.now()) &&
-                            <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
-                        }
+                </View>
+                <Text style={styles(theme).subtitle}>histórico</Text>
+                <View style={styles(theme).calendar}>
+                    <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleChangeSelectedDay} />
+                    {habit.endDate && isBefore(habit.endDate, Date.now()) &&
+                        <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
+                    }
+                </View>
+
+                <Text style={styles(theme).subtitle}>score</Text>
+                <ScrollView style={styles(theme).cards} horizontal>
+                    <View style={styles(theme).card}>
+                        <Text style={styles(theme).score}>{score.currentSequence}</Text>
+                        <Text style={styles(theme).cardLegend}>seq. atual</Text>
                     </View>
-
-                    <Text style={styles(theme).subtitle}>score</Text>
-                    <ScrollView style={styles(theme).cards} horizontal>
-                        <View style={styles(theme).card}>
-                            <Text style={styles(theme).score}>{score.currentSequence}</Text>
-                            <Text style={styles(theme).cardLegend}>seq. atual</Text>
-                        </View>
-                        <View style={styles(theme).card}>
-                            <Text style={styles(theme).score}>{score.doneCount}x</Text>
-                            <Text style={styles(theme).cardLegend}>realizado</Text>
-                        </View>
-                        <View style={styles(theme).card}>
-                            <Text style={styles(theme).score}>{score.bestSequence}</Text>
-                            <Text style={styles(theme).cardLegend}>melhor seq.</Text>
-                        </View>
-                    </ScrollView>
-
-                    <Text style={styles(theme).subtitle}>progresso</Text>
-                    <View style={styles(theme).chart}>
-                        <LineChart
-                            segments={3}
-                            fromZero
-                            data={{
-                                labels: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dec"],
-                                datasets: [
-                                    {
-                                        data: progressByMonth,
-                                        color: () => themes[theme].blue,
-                                    }
-                                ]
-                            }}
-                            width={Dimensions.get("screen").width - 20}
-                            height={180}
-                            withVerticalLines={false}
-                            withHorizontalLines={false}
-                            chartConfig={{
-                                backgroundGradientFrom: themes[theme].backgroundPrimary,
-                                backgroundGradientTo: themes[theme].backgroundPrimary,
-                                color: () => themes[theme].gray,
-                                labelColor: () => themes[theme].textPrimary,
-                                barPercentage: 0,
-                                useShadowColorFromDataset: false,
-                                decimalPlaces: 0
-                            }}
-                        />
+                    <View style={styles(theme).card}>
+                        <Text style={styles(theme).score}>{score.doneCount}x</Text>
+                        <Text style={styles(theme).cardLegend}>realizado</Text>
                     </View>
+                    <View style={styles(theme).card}>
+                        <Text style={styles(theme).score}>{score.bestSequence}</Text>
+                        <Text style={styles(theme).cardLegend}>melhor seq.</Text>
+                    </View>
+                </ScrollView>
 
-                    <TouchableOpacity style={styles(theme).button} onPress={closeModal} activeOpacity={0.5}>
-                        <Text style={styles(theme).textButton}>voltar</Text>
-                    </TouchableOpacity>
+                <Text style={styles(theme).subtitle}>progresso</Text>
+                <View style={styles(theme).chart}>
+                    <LineChart
+                        segments={3}
+                        fromZero
+                        data={{
+                            labels: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dec"],
+                            datasets: [
+                                {
+                                    data: progressByMonth,
+                                    color: () => themes[theme].blue,
+                                }
+                            ]
+                        }}
+                        width={Dimensions.get("screen").width}
+                        height={180}
+                        withVerticalLines={false}
+                        withHorizontalLines={false}
+                        chartConfig={{
+                            backgroundGradientFrom: themes[theme].backgroundPrimary,
+                            backgroundGradientTo: themes[theme].backgroundPrimary,
+                            color: () => themes[theme].gray,
+                            labelColor: () => themes[theme].textPrimary,
+                            barPercentage: 0,
+                            useShadowColorFromDataset: false,
+                            decimalPlaces: 0
+                        }}
+                    />
                 </View>
             </ScrollView>
         </Modal>
@@ -256,35 +261,33 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
 
 const styles = (theme: string) => StyleSheet.create({
     container: {
-        flex: 1,
-        alignItems: 'center',
         paddingTop: getStatusBarHeight(),
-        paddingBottom: 20,
         backgroundColor: themes[theme].backgroundPrimary
     },
     header: {
         width: '100%',
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between',
-        marginVertical: 20,
+        justifyContent: 'center',
+        marginBottom: 20,
         paddingHorizontal: 20
     },
     modalTitle: {
-        fontSize: 24,
+        fontSize: 20,
         fontFamily: fonts.title,
-        color: themes[theme].textPrimary
+        color: themes[theme].textPrimary,
+        marginRight: 10,
     },
     countContainer: {
         width: '20%',
-        height: 30,
+        height: 20,
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: themes[theme].blue,
         borderRadius: 10
     },
     scoreCountText: {
-        fontSize: 20,
+        fontSize: 14,
         fontFamily: fonts.contentBold,
         color: themes[theme].textSecundary
     },
@@ -309,7 +312,7 @@ const styles = (theme: string) => StyleSheet.create({
     cards: {
         flexGrow: 1,
         paddingHorizontal: 20,
-        paddingVertical: 15,
+        paddingVertical: 20,
         marginRight: 20
     },
     card: {
@@ -333,20 +336,12 @@ const styles = (theme: string) => StyleSheet.create({
         color: themes[theme].textPrimary,
     },
     chart: {
-        marginVertical: 10,
+        marginTop: 20
     },
     button: {
-        width: 120,
-        height: 40,
-        backgroundColor: themes[theme].backgroundSecundary,
-        borderRadius: 10,
-        alignItems: 'center',
-        justifyContent: 'center',
-        marginVertical: 20
-    },
-    textButton: {
-        fontSize: 16,
-        fontFamily: fonts.contentBold,
-        color: themes[theme].textPrimary
-    },
+        alignSelf: 'flex-end',
+        marginHorizontal: 20,
+        marginTop: 20,
+        marginBottom: 10
+    }
 })

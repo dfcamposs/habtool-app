@@ -272,7 +272,6 @@ export async function deleteHabit(habitId: string): Promise<void> {
         cancelSchedulePushNotifications(notificationIds);
 
     } catch (error) {
-        console.log(error);
         throw new Error(error);
     }
 }
@@ -530,8 +529,6 @@ export async function getHabitHistoryCountByMonths(habit: HabitProps): Promise<n
         const firstDay = new Date(y, m - 11, 1).getTime();
 
         const dates = habitsHistory[habit.id].filter(date => date > firstDay);
-
-        console.log(dates);
         const monthsCount = Array.from({ length: 12 }, () => 0);
 
         for (const date of dates) {

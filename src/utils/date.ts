@@ -31,7 +31,7 @@ export function calculateSequence(habit: HabitProps, data: number[]): SequencePr
         .map(date => format(date, 'yyyy-MM-dd'));
     const sequeceDates = getDates(
         new Date(data[0]),
-        new Date(Date.now())
+        addDaysDate(Date.now(), 1)
     );
 
     let bestSequence = 0;
@@ -52,7 +52,7 @@ export function calculateSequence(habit: HabitProps, data: number[]): SequencePr
             currentSequence = 0;
         }
 
-        bestSequence = (currentSequence > bestSequence) ? currentSequence : bestSequence
+        bestSequence = (currentSequence > bestSequence) ? currentSequence : bestSequence;
     }
 
     return { currentSequence, bestSequence }
