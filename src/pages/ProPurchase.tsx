@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     StyleSheet,
     SafeAreaView,
@@ -11,6 +11,7 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import * as InAppPurchases from 'expo-in-app-purchases';
 
 import { ThemeContext } from '../contexts/themes';
 
@@ -46,6 +47,18 @@ export function ProPurchase() {
 
     const { theme } = useContext(ThemeContext);
     const navigation = useNavigation();
+
+    async function handleConnectIapAndroid() {
+        await InAppPurchases.connectAsync();
+    }
+
+    async function handlePurchase() {
+        await InAppPurchases.purchaseItemAsync(planSelected);
+    }
+
+    useEffect(() => {
+        handleConnectIapAndroid();
+    }, [])
 
     return (
         <SafeAreaView style={styles(theme).container}>
@@ -99,7 +112,7 @@ export function ProPurchase() {
                 }
             </View>
             <View style={styles(theme).footer}>
-                <Button title="continuar" onPress={() => { }} />
+                <Button title="continuar" onPress={handlePurchase} />
             </View>
         </SafeAreaView>
     )

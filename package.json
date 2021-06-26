@@ -25,6 +25,7 @@
     "expo-blur": "~9.0.3",
     "expo-font": "~9.1.0",
     "expo-haptics": "~10.0.0",
+    "expo-in-app-purchases": "^10.1.1",
     "expo-linking": "~2.2.3",
     "expo-notifications": "~0.11.6",
     "expo-splash-screen": "~0.10.2",
