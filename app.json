@@ -2,7 +2,7 @@
   "expo": {
     "name": "HabTool",
     "slug": "habtool",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "splash": {
@@ -17,13 +17,15 @@
       "**/*"
     ],
     "ios": {
-      "supportsTablet": false
+      "supportsTablet": false,
+      "bundleIdentifier": "com.dfcamposs.habtool"
     },
     "android": {
       "permissions": [
-        "NOTIFICATIONS"
+        "NOTIFICATIONS",
+        "BILLING"
       ],
-      "versionCode": 1,
+      "versionCode": 3,
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-icon.png",
         "backgroundColor": "#F8F9FA"
