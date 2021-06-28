@@ -49,11 +49,11 @@ export function ProPurchase() {
     const navigation = useNavigation();
 
     async function handleConnectIapAndroid() {
-        await InAppPurchases.connectAsync();
+        //await InAppPurchases.connectAsync();
     }
 
     async function handlePurchase() {
-        await InAppPurchases.purchaseItemAsync(planSelected);
+        //await InAppPurchases.purchaseItemAsync(planSelected);
     }
 
     useEffect(() => {
