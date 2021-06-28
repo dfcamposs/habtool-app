@@ -1,5 +1,5 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { finishTransactionAsync, IAPResponseCode, setPurchaseListener } from 'expo-in-app-purchases';
+import { connectAsync, finishTransactionAsync, IAPResponseCode, setPurchaseListener } from 'expo-in-app-purchases';
 
 import { getUser, setUser } from '../libs/storage';
 
@@ -17,23 +17,25 @@ export const UserProvider: React.FC = ({ children }) => {
     const [isPro, setIsPro] = useState<boolean>(false);
 
     useEffect(() => {
-        // setPurchaseListener(({ responseCode, results, errorCode }) => {
-        //     if (responseCode === IAPResponseCode.OK) {
-        //         results.forEach((purchase: any) => {
-        //             if (!purchase.acknowledged) {
-        //                 console.log(`Successfully purchased ${purchase.productId}`);
-        //                 handleUpdateIsPro(true);
-        //                 finishTransactionAsync(purchase, true);
-        //             }
-        //         });
-        //     } else if (responseCode === IAPResponseCode.USER_CANCELED) {
-        //         console.log('User canceled the transaction');
-        //     } else if (responseCode === IAPResponseCode.DEFERRED) {
-        //         console.log('User does not have permissions to buy but requested parental approval (iOS only)');
-        //     } else {
-        //         console.warn(`Something went wrong with the purchase. Received errorCode ${errorCode}`);
-        //     }
-        // });
+        connectAsync().then(() => {
+            setPurchaseListener(({ responseCode, results, errorCode }) => {
+                if (responseCode === IAPResponseCode.OK) {
+                    results.forEach((purchase: any) => {
+                        if (!purchase.acknowledged) {
+                            console.log(`Successfully purchased ${purchase.productId}`);
+                            handleUpdateIsPro(true);
+                            finishTransactionAsync(purchase, true);
+                        }
+                    });
+                } else if (responseCode === IAPResponseCode.USER_CANCELED) {
+                    console.log('User canceled the transaction');
+                } else if (responseCode === IAPResponseCode.DEFERRED) {
+                    console.log('User does not have permissions to buy but requested parental approval (iOS only)');
+                } else {
+                    console.warn(`Something went wrong with the purchase. Received errorCode ${errorCode}`);
+                }
+            })
+        });
 
         async function initializeData() {
             const user = await getUser();

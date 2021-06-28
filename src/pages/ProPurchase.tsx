@@ -11,7 +11,7 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import * as InAppPurchases from 'expo-in-app-purchases';
+import { getProductsAsync, IAPResponseCode, purchaseItemAsync, IAPItemDetails } from 'expo-in-app-purchases';
 
 import { ThemeContext } from '../contexts/themes';
 
@@ -22,9 +22,9 @@ import fonts from '../styles/fonts';
 import Logo from '../assets/logo.png';
 
 enum PlanEnum {
-    good = "good",
-    veryGood = "very-good",
-    awesome = "awesome"
+    good = "habtool_good",
+    veryGood = "habtool_very_good",
+    awesome = "habtool_amazing"
 }
 
 const features = [
@@ -36,28 +36,55 @@ const features = [
     "suporte preferencial"
 ];
 
-const prices = [
-    { id: PlanEnum.good, price: "R$ 9.90", label: "gostei" },
-    { id: PlanEnum.veryGood, price: "R$ 14.90", label: "gostei muito" },
-    { id: PlanEnum.awesome, price: "R$ 19.90", label: "incrível" }
+interface PlanProps {
+    productId: PlanEnum;
+    price: string;
+    title: string;
+}
+
+const initialPrices: PlanProps[] = [
+    { productId: PlanEnum.good, price: "R$ 9.90", title: "gostei" },
+    { productId: PlanEnum.veryGood, price: "R$ 14.90", title: "gostei muito" },
+    { productId: PlanEnum.awesome, price: "R$ 19.90", title: "incrível" }
 ]
 
 export function ProPurchase() {
     const [planSelected, setPlanSelected] = useState<PlanEnum>(PlanEnum.awesome);
+    const [prices, setPrices] = useState<PlanProps[]>(initialPrices);
 
     const { theme } = useContext(ThemeContext);
     const navigation = useNavigation();
 
-    async function handleConnectIapAndroid() {
-        //await InAppPurchases.connectAsync();
+    async function getProductsAppStore() {
+        const items = Platform.select({
+            ios: [
+                'dev.products.habtool_good',
+                'dev.products.habtool_very_good',
+                'dev.products.habtool_amazing',
+            ],
+            android: ['habtool_good', 'habtool_very_good', 'habtool_amazing'],
+        }) as string[];
+
+        const { responseCode, results } = await getProductsAsync(items);
+        if (responseCode === IAPResponseCode.OK) {
+            if (results) {
+                const plans = results as PlanProps[];
+
+                setPrices(plans.map(item => ({
+                    productId: item.productId,
+                    price: item.price,
+                    title: item.title
+                })))
+            }
+        }
     }
 
     async function handlePurchase() {
-        //await InAppPurchases.purchaseItemAsync(planSelected);
+        await purchaseItemAsync(planSelected);
     }
 
     useEffect(() => {
-        handleConnectIapAndroid();
+        getProductsAppStore();
     }, [])
 
     return (
@@ -87,25 +114,25 @@ export function ProPurchase() {
                 {prices.map(card =>
                     <TouchableOpacity
                         activeOpacity={.7}
-                        key={card.id}
+                        key={card.productId}
                         style={[
                             styles(theme).purchaseCard,
-                            card.id === planSelected
+                            card.productId === planSelected
                             && { backgroundColor: themes[theme].blue }
                         ]}
-                        onPress={() => setPlanSelected(card.id)}
+                        onPress={() => setPlanSelected(card.productId)}
                     >
                         <Text
                             style={[
                                 styles(theme).price,
-                                card.id === planSelected
+                                card.productId === planSelected
                                 && { color: themes[theme].textSecundary }
                             ]}
                         >
                             {card.price}
                         </Text>
                         <View style={styles(theme).legend}>
-                            <Text style={styles(theme).legendText}>{card.label}</Text>
+                            <Text style={styles(theme).legendText}>{card.title}</Text>
                         </View>
                     </TouchableOpacity>
                 )
