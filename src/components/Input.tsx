@@ -56,8 +56,7 @@ const styles = (theme: string) => StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: 1,
         borderColor: themes[theme].textUnfocus,
-        marginVertical: 15,
-        paddingVertical: 10
+        marginVertical: 15
     },
     icon: {
         paddingRight: 10

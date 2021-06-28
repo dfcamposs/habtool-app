@@ -205,7 +205,11 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                     </View>
                     <Text style={styles(theme).subtitle}>histórico</Text>
                     <View style={styles(theme).calendar}>
-                        <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleChangeSelectedDay} />
+                        <HabitCalendar
+                            calendarMarked={calendarMarked}
+                            handleChangeSelectedDay={handleChangeSelectedDay}
+                            color={principalColor}
+                        />
                         {habit.endDate && isBefore(habit.endDate, Date.now()) &&
                             <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
                         }
@@ -281,7 +285,7 @@ const styles = (theme: string) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         justifyContent: 'center',
-        marginBottom: 40,
+        marginBottom: 20,
         paddingHorizontal: 20
     },
     modalTitle: {

@@ -22,9 +22,10 @@ export interface CalendarMarkedProps {
 interface HabitCalendar {
     calendarMarked: CalendarMarkedProps,
     handleChangeSelectedDay: (date: number) => void;
+    color: string;
 }
 
-export function HabitCalendar({ calendarMarked, handleChangeSelectedDay }: HabitCalendar) {
+export function HabitCalendar({ calendarMarked, handleChangeSelectedDay, color }: HabitCalendar) {
     const { theme } = useContext(ThemeContext);
 
     return (
@@ -36,9 +37,9 @@ export function HabitCalendar({ calendarMarked, handleChangeSelectedDay }: Habit
             theme={{
                 calendarBackground: themes[theme].backgroundPrimary,
                 arrowColor: themes[theme].textPrimary,
-                todayTextColor: themes[theme].blue,
+                todayTextColor: color,
                 dayTextColor: themes[theme].textPrimary,
-                dotColor: themes[theme].blue,
+                dotColor: color,
                 monthTextColor: themes[theme].textPrimary,
                 indicatorColor: themes[theme].textPrimary,
                 textDisabledColor: themes[theme].textUnfocus,

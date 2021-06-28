@@ -32,7 +32,7 @@ export function calculateSequence(habit: HabitProps, data: number[]): SequencePr
         .map(date => format(date, 'yyyy-MM-dd'));
     const sequeceDates = getDates(
         new Date(data[0]),
-        addDaysDate(Date.now(), 1)
+        new Date(Date.now()),
     );
 
     let bestSequence = 0;
@@ -57,6 +57,9 @@ export function calculateSequence(habit: HabitProps, data: number[]): SequencePr
         }
 
         bestSequence = (currentSequence > bestSequence) ? currentSequence : bestSequence;
+
+        console.log(sequeceDates);
+        console.log(new Date(Date.now()));
     }
 
     return {

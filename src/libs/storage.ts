@@ -126,12 +126,7 @@ export async function cancelSchedulePushNotifications(notificationIds: string[])
 //User
 export async function setUser(user: StorageUserProps): Promise<void> {
     try {
-        await AsyncStorage
-            .setItem('@habtool:user',
-                JSON.stringify({
-                    name: user.name.trim()
-                })
-            );
+        await AsyncStorage.setItem('@habtool:user', JSON.stringify(user));
     } catch (error) {
         throw new Error(error);
     }

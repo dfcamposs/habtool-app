@@ -155,7 +155,7 @@ const styles = (theme: string) => StyleSheet.create({
         fontFamily: fonts.title
     },
     subtitle: {
-        fontSize: 15,
+        fontSize: 13,
         color: themes[theme].textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 5,

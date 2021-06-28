@@ -87,7 +87,7 @@ export function Settings() {
                 </View>
 
                 <Text style={styles(theme).subtitle}>sistema</Text>
-                <SettingsButton title="ordenar hábitos" onPress={() => myHabits.length && navigation.navigate('SortHabits')} disabled={!myHabits.length} />
+                <SettingsButton title="ordenar hábitos" onPress={() => myHabits.length && navigation.navigate('SortHabits')} disabled={myHabits.length < 2} />
                 <SettingsButton title="alterar como deseja ser chamado" onPress={() => navigation.navigate('Rename')} />
 
                 <Text style={styles(theme).subtitle}>suporte</Text>
