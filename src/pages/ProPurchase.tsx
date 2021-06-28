@@ -12,7 +12,14 @@ import {
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { getProductsAsync, IAPResponseCode, purchaseItemAsync, IAPItemDetails, connectAsync, setPurchaseListener, finishTransactionAsync } from 'expo-in-app-purchases';
+import {
+    getProductsAsync,
+    IAPResponseCode,
+    purchaseItemAsync,
+    connectAsync,
+    setPurchaseListener,
+    finishTransactionAsync
+} from 'expo-in-app-purchases';
 
 import { ThemeContext } from '../contexts/themes';
 import { UserContext } from '../contexts/user';
