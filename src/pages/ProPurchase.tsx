@@ -6,14 +6,16 @@ import {
     TouchableOpacity,
     Text,
     Image,
-    Platform
+    Platform,
+    Alert
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
-import { getProductsAsync, IAPResponseCode, purchaseItemAsync, IAPItemDetails } from 'expo-in-app-purchases';
+import { getProductsAsync, IAPResponseCode, purchaseItemAsync, IAPItemDetails, connectAsync, setPurchaseListener, finishTransactionAsync } from 'expo-in-app-purchases';
 
 import { ThemeContext } from '../contexts/themes';
+import { UserContext } from '../contexts/user';
 
 import { Button } from '../components/Button';
 
@@ -36,13 +38,7 @@ const features = [
     "suporte preferencial"
 ];
 
-interface PlanProps {
-    productId: PlanEnum;
-    price: string;
-    title: string;
-}
-
-const initialPrices: PlanProps[] = [
+const prices = [
     { productId: PlanEnum.good, price: "R$ 9.90", title: "gostei" },
     { productId: PlanEnum.veryGood, price: "R$ 14.90", title: "gostei muito" },
     { productId: PlanEnum.awesome, price: "R$ 19.90", title: "incrível" }
@@ -50,12 +46,34 @@ const initialPrices: PlanProps[] = [
 
 export function ProPurchase() {
     const [planSelected, setPlanSelected] = useState<PlanEnum>(PlanEnum.awesome);
-    const [prices, setPrices] = useState<PlanProps[]>(initialPrices);
 
     const { theme } = useContext(ThemeContext);
+    const { handleUpdateIsPro } = useContext(UserContext);
     const navigation = useNavigation();
 
     async function getProductsAppStore() {
+        await connectAsync().then(() => {
+            setPurchaseListener(({ responseCode, results, errorCode }) => {
+                if (responseCode === IAPResponseCode.OK) {
+                    results.forEach((purchase: any) => {
+                        if (!purchase.acknowledged) {
+                            console.log(`Successfully purchased ${purchase.productId}`);
+                            handleUpdateIsPro(true);
+                            finishTransactionAsync(purchase, true);
+                        }
+                    });
+                } else if (responseCode === IAPResponseCode.USER_CANCELED) {
+                    console.log('User canceled the transaction');
+                } else if (responseCode === IAPResponseCode.DEFERRED) {
+                    console.log('User does not have permissions to buy but requested parental approval (iOS only)');
+                } else {
+                    console.warn(`Something went wrong with the purchase. Received errorCode ${errorCode}`);
+                }
+
+                navigation.navigate('ConfirmationPurchase');
+            })
+        });
+
         const items = Platform.select({
             ios: [
                 'dev.products.habtool_good',
@@ -65,22 +83,15 @@ export function ProPurchase() {
             android: ['habtool_good', 'habtool_very_good', 'habtool_amazing'],
         }) as string[];
 
-        const { responseCode, results } = await getProductsAsync(items);
-        if (responseCode === IAPResponseCode.OK) {
-            if (results) {
-                const plans = results as PlanProps[];
-
-                setPrices(plans.map(item => ({
-                    productId: item.productId,
-                    price: item.price,
-                    title: item.title
-                })))
-            }
+        const { responseCode } = await getProductsAsync(items);
+        if (responseCode !== IAPResponseCode.OK) {
+            Alert.alert("Serviço Indisponível", "tente novamente mais tarde");
         }
     }
 
     async function handlePurchase() {
         await purchaseItemAsync(planSelected);
+        navigation.goBack();
     }
 
     useEffect(() => {

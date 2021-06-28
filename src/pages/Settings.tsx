@@ -60,11 +60,14 @@ export function Settings() {
         <SafeAreaView style={styles(theme).container}>
             <Text style={styles(theme).title}>configurações</Text>
             <View style={styles(theme).menu}>
-                <Text style={styles(theme).subtitle}>assinatura</Text>
-                <TouchableOpacity style={styles(theme).menuPro} activeOpacity={.7} onPress={!isPro ? () => navigation.navigate('ProPurchase') : () => { }}>
-                    <Image style={styles(theme).logo} source={Logo} />
-                    <Text style={styles(theme).menuProText}>{isPro ? "você é um usuário pro 😊" : "HabTool Pro"}</Text>
-                </TouchableOpacity>
+                {isPro &&
+                    <>
+                        <Text style={styles(theme).subtitle}>assinatura</Text>
+                        <TouchableOpacity style={styles(theme).menuPro} activeOpacity={.7} onPress={!isPro ? () => navigation.navigate('ProPurchase') : () => { }}>
+                            <Text style={styles(theme).menuProText}>HabTool Pro</Text>
+                        </TouchableOpacity>
+                    </>
+                }
                 <Text style={styles(theme).subtitle}>tema</Text>
                 <View style={styles(theme).themeContainer}>
                     <ThemeButton
@@ -153,18 +156,12 @@ const styles = (theme: string) => StyleSheet.create({
         flexDirection: 'row',
         alignItems: 'center',
         marginLeft: 20,
-        paddingLeft: 10
-    },
-    logo: {
-        width: 60,
-        height: 40,
-        marginRight: 7
+        paddingLeft: 20
     },
     menuProText: {
         fontSize: 14,
         fontFamily: fonts.content,
         color: themes[theme].textSecundary,
-        paddingRight: 20,
-        paddingVertical: 20
+        paddingRight: 20
     }
 })
