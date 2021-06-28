@@ -8,6 +8,7 @@ import { Settings } from '../pages/Settings';
 import { SortHabits } from '../pages/SortHabits';
 import AuthRoutes from './tab.routes';
 import { ProPurchase } from '../pages/ProPurchase';
+import { ConfirmationPurchase } from '../pages/ConfirmationPurchase';
 
 import { ThemeContext } from '../contexts/themes';
 
@@ -117,6 +118,11 @@ const AppRoutes: React.FC = () => {
                 options={{
                     ...TransitionPresets.ModalTransition
                 }}
+            />
+
+            <stackRoutes.Screen
+                name="ConfirmationPurchase"
+                component={ConfirmationPurchase}
             />
 
         </stackRoutes.Navigator>

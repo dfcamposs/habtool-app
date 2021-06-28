@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import {
     StyleSheet,
     SafeAreaView,
@@ -6,13 +6,23 @@ import {
     TouchableOpacity,
     Text,
     Image,
-    Platform
+    Platform,
+    Alert
 } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import {
+    getProductsAsync,
+    IAPResponseCode,
+    purchaseItemAsync,
+    connectAsync,
+    setPurchaseListener,
+    finishTransactionAsync
+} from 'expo-in-app-purchases';
 
 import { ThemeContext } from '../contexts/themes';
+import { UserContext } from '../contexts/user';
 
 import { Button } from '../components/Button';
 
@@ -21,9 +31,9 @@ import fonts from '../styles/fonts';
 import Logo from '../assets/logo.png';
 
 enum PlanEnum {
-    good = "good",
-    veryGood = "very-good",
-    awesome = "awesome"
+    good = "habtool_good",
+    veryGood = "habtool_very_good",
+    awesome = "habtool_amazing"
 }
 
 const features = [
@@ -36,16 +46,64 @@ const features = [
 ];
 
 const prices = [
-    { id: PlanEnum.good, price: "R$ 9.90", label: "gostei" },
-    { id: PlanEnum.veryGood, price: "R$ 14.90", label: "gostei muito" },
-    { id: PlanEnum.awesome, price: "R$ 19.90", label: "incrível" }
+    { productId: PlanEnum.good, price: "R$ 9.90", title: "gostei" },
+    { productId: PlanEnum.veryGood, price: "R$ 14.90", title: "gostei muito" },
+    { productId: PlanEnum.awesome, price: "R$ 19.90", title: "incrível" }
 ]
 
 export function ProPurchase() {
     const [planSelected, setPlanSelected] = useState<PlanEnum>(PlanEnum.awesome);
 
     const { theme } = useContext(ThemeContext);
+    const { handleUpdateIsPro } = useContext(UserContext);
     const navigation = useNavigation();
+
+    async function getProductsAppStore() {
+        await connectAsync().then(() => {
+            setPurchaseListener(({ responseCode, results, errorCode }) => {
+                if (responseCode === IAPResponseCode.OK) {
+                    results.forEach((purchase: any) => {
+                        if (!purchase.acknowledged) {
+                            console.log(`Successfully purchased ${purchase.productId}`);
+                            handleUpdateIsPro(true);
+                            finishTransactionAsync(purchase, true);
+                        }
+                    });
+                } else if (responseCode === IAPResponseCode.USER_CANCELED) {
+                    console.log('User canceled the transaction');
+                } else if (responseCode === IAPResponseCode.DEFERRED) {
+                    console.log('User does not have permissions to buy but requested parental approval (iOS only)');
+                } else {
+                    console.warn(`Something went wrong with the purchase. Received errorCode ${errorCode}`);
+                }
+
+                navigation.navigate('ConfirmationPurchase');
+            })
+        });
+
+        const items = Platform.select({
+            ios: [
+                'dev.products.habtool_good',
+                'dev.products.habtool_very_good',
+                'dev.products.habtool_amazing',
+            ],
+            android: ['habtool_good', 'habtool_very_good', 'habtool_amazing'],
+        }) as string[];
+
+        const { responseCode } = await getProductsAsync(items);
+        if (responseCode !== IAPResponseCode.OK) {
+            Alert.alert("Serviço Indisponível", "tente novamente mais tarde");
+        }
+    }
+
+    async function handlePurchase() {
+        await purchaseItemAsync(planSelected);
+        navigation.goBack();
+    }
+
+    useEffect(() => {
+        getProductsAppStore();
+    }, [])
 
     return (
         <SafeAreaView style={styles(theme).container}>
@@ -74,32 +132,32 @@ export function ProPurchase() {
                 {prices.map(card =>
                     <TouchableOpacity
                         activeOpacity={.7}
-                        key={card.id}
+                        key={card.productId}
                         style={[
                             styles(theme).purchaseCard,
-                            card.id === planSelected
+                            card.productId === planSelected
                             && { backgroundColor: themes[theme].blue }
                         ]}
-                        onPress={() => setPlanSelected(card.id)}
+                        onPress={() => setPlanSelected(card.productId)}
                     >
                         <Text
                             style={[
                                 styles(theme).price,
-                                card.id === planSelected
+                                card.productId === planSelected
                                 && { color: themes[theme].textSecundary }
                             ]}
                         >
                             {card.price}
                         </Text>
                         <View style={styles(theme).legend}>
-                            <Text style={styles(theme).legendText}>{card.label}</Text>
+                            <Text style={styles(theme).legendText}>{card.title}</Text>
                         </View>
                     </TouchableOpacity>
                 )
                 }
             </View>
             <View style={styles(theme).footer}>
-                <Button title="continuar" onPress={() => { }} />
+                <Button title="continuar" onPress={handlePurchase} />
             </View>
         </SafeAreaView>
     )

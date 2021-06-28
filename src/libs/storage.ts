@@ -143,7 +143,6 @@ export async function getUser(): Promise<StorageUserProps> {
         const user = data && JSON.parse(data) as StorageUserProps;
 
         if (user) {
-            //return { name: user.name, isPro: true };
             return user;
         } else {
             const newUser = { name: '', isPro: false };
