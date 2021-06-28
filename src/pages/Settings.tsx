@@ -16,7 +16,6 @@ import { UserContext } from '../contexts/user';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
-import Logo from '../assets/logo.png';
 
 export function Settings() {
     const [themeSelected, setThemeSelected] = useState<ThemeEnum>();
@@ -60,7 +59,7 @@ export function Settings() {
         <SafeAreaView style={styles(theme).container}>
             <Text style={styles(theme).title}>configurações</Text>
             <View style={styles(theme).menu}>
-                {isPro &&
+                {!isPro &&
                     <>
                         <Text style={styles(theme).subtitle}>assinatura</Text>
                         <TouchableOpacity style={styles(theme).menuPro} activeOpacity={.7} onPress={!isPro ? () => navigation.navigate('ProPurchase') : () => { }}>
