@@ -64,17 +64,10 @@ export function ProPurchase() {
                 if (responseCode === IAPResponseCode.OK) {
                     results.forEach((purchase: any) => {
                         if (!purchase.acknowledged) {
-                            console.log(`Successfully purchased ${purchase.productId}`);
                             handleUpdateIsPro(true);
                             finishTransactionAsync(purchase, true);
                         }
                     });
-                } else if (responseCode === IAPResponseCode.USER_CANCELED) {
-                    console.log('User canceled the transaction');
-                } else if (responseCode === IAPResponseCode.DEFERRED) {
-                    console.log('User does not have permissions to buy but requested parental approval (iOS only)');
-                } else {
-                    console.warn(`Something went wrong with the purchase. Received errorCode ${errorCode}`);
                 }
 
                 navigation.navigate('ConfirmationPurchase');

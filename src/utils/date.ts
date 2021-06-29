@@ -57,9 +57,6 @@ export function calculateSequence(habit: HabitProps, data: number[]): SequencePr
         }
 
         bestSequence = (currentSequence > bestSequence) ? currentSequence : bestSequence;
-
-        console.log(sequeceDates);
-        console.log(new Date(Date.now()));
     }
 
     return {

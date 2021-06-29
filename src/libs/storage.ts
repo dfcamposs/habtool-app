@@ -101,8 +101,6 @@ export async function addSchedulePushNotification(habit: HabitProps): Promise<vo
         }
     }
 
-    console.log(newNotifications);
-
     const data = await AsyncStorage.getItem('@habtool:habits');
     const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
 

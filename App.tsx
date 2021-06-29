@@ -27,11 +27,6 @@ export default function App() {
         shouldSetBadge: false,
       }),
     });
-
-    const subscription = Notifications.addNotificationReceivedListener(notification => {
-      console.log(notification);
-    });
-    return () => subscription.remove();
   }, []);
 
   const [fontsLoaded] = useFonts({
