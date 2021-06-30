@@ -10,7 +10,7 @@ import {
     Dimensions,
     ScrollView
 } from 'react-native';
-import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { getStatusBarHeight, getBottomSpace } from 'react-native-iphone-x-helper';
 import { format, isAfter, isBefore } from 'date-fns';
 import * as Haptics from 'expo-haptics';
 import { LineChart } from "react-native-chart-kit";
@@ -192,94 +192,95 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
             visible={visible}
             statusBarTranslucent={true}
         >
-            <ScrollView showsVerticalScrollIndicator={false} style={styles(theme).container}>
-                <View style={{ marginBottom: 70 }}>
-                    <TouchableOpacity style={styles(theme).button} onPress={closeModal} activeOpacity={0.5}>
-                        <MaterialIcons name="close" size={30} color={themes[theme].textPrimary} />
-                    </TouchableOpacity>
-                    <View style={styles(theme).header}>
-                        <Text style={styles(theme).modalTitle}>{habit.name}</Text>
-                        <View style={[styles(theme).countContainer, { backgroundColor: principalColor }]}>
-                            <Text style={styles(theme).scoreCountText}>{score.amountPercentage}%</Text>
-                        </View>
+            <ScrollView
+                showsVerticalScrollIndicator={false}
+                contentContainerStyle={{
+                    paddingTop: getStatusBarHeight(),
+                    paddingBottom: getBottomSpace() + 20,
+                    backgroundColor: themes[theme].backgroundPrimary
+                }}
+            >
+                <TouchableOpacity style={styles(theme).button} onPress={closeModal} activeOpacity={0.5}>
+                    <MaterialIcons name="close" size={30} color={themes[theme].textPrimary} />
+                </TouchableOpacity>
+                <View style={styles(theme).header}>
+                    <Text style={styles(theme).modalTitle}>{habit.name}</Text>
+                    <View style={[styles(theme).countContainer, { backgroundColor: principalColor }]}>
+                        <Text style={styles(theme).scoreCountText}>{score.amountPercentage}%</Text>
                     </View>
-                    <Text style={styles(theme).subtitle}>histórico</Text>
-                    <View style={styles(theme).calendar}>
-                        <HabitCalendar
-                            calendarMarked={calendarMarked}
-                            handleChangeSelectedDay={handleChangeSelectedDay}
-                            color={principalColor}
-                        />
-                        {habit.endDate && isBefore(habit.endDate, Date.now()) &&
-                            <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
-                        }
-                    </View>
-                    {isPro ?
-                        <View>
-                            <Text style={styles(theme).subtitle}>score</Text>
-                            <ScrollView style={styles(theme).cards} horizontal>
-                                <View style={styles(theme).card}>
-                                    <Text style={styles(theme).score}>{score.currentSequence}</Text>
-                                    <Text style={styles(theme).cardLegend}>seq. atual</Text>
-                                </View>
-                                <View style={styles(theme).card}>
-                                    <Text style={styles(theme).score}>{score.doneCount}x</Text>
-                                    <Text style={styles(theme).cardLegend}>realizado</Text>
-                                </View>
-                                <View style={styles(theme).card}>
-                                    <Text style={styles(theme).score}>{score.bestSequence}</Text>
-                                    <Text style={styles(theme).cardLegend}>melhor seq.</Text>
-                                </View>
-                            </ScrollView>
-
-                            <Text style={styles(theme).subtitle}>progresso</Text>
-                            <View style={styles(theme).chart}>
-                                <LineChart
-                                    segments={3}
-                                    fromZero
-                                    data={{
-                                        labels: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dec"],
-                                        datasets: [
-                                            {
-                                                data: progressByMonth,
-                                                color: () => principalColor,
-                                            }
-                                        ]
-                                    }}
-                                    width={Dimensions.get("screen").width}
-                                    height={180}
-                                    withVerticalLines={false}
-                                    withHorizontalLines={false}
-                                    chartConfig={{
-                                        backgroundGradientFrom: themes[theme].backgroundPrimary,
-                                        backgroundGradientTo: themes[theme].backgroundPrimary,
-                                        color: () => themes[theme].gray,
-                                        labelColor: () => themes[theme].textPrimary,
-                                        barPercentage: 0,
-                                        useShadowColorFromDataset: false,
-                                        decimalPlaces: 0
-                                    }}
-                                />
-                            </View>
-                        </View>
-                        :
-                        <View style={styles(theme).proPurchaseContainer}>
-                            <Text style={styles(theme).proPurchaseText}>
-                                adquira o HabTool Pro e desbloqueie novos relatórios
-                            </Text>
-                        </View>
+                </View>
+                <Text style={styles(theme).subtitle}>histórico</Text>
+                <View style={styles(theme).calendar}>
+                    <HabitCalendar
+                        calendarMarked={calendarMarked}
+                        handleChangeSelectedDay={handleChangeSelectedDay}
+                        color={principalColor}
+                    />
+                    {habit.endDate && isBefore(habit.endDate, Date.now()) &&
+                        <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
                     }
                 </View>
+                {isPro ?
+                    <View>
+                        <Text style={styles(theme).subtitle}>score</Text>
+                        <ScrollView style={styles(theme).cards} horizontal>
+                            <View style={styles(theme).card}>
+                                <Text style={styles(theme).score}>{score.currentSequence}</Text>
+                                <Text style={styles(theme).cardLegend}>seq. atual</Text>
+                            </View>
+                            <View style={styles(theme).card}>
+                                <Text style={styles(theme).score}>{score.doneCount}x</Text>
+                                <Text style={styles(theme).cardLegend}>realizado</Text>
+                            </View>
+                            <View style={styles(theme).card}>
+                                <Text style={styles(theme).score}>{score.bestSequence}</Text>
+                                <Text style={styles(theme).cardLegend}>melhor seq.</Text>
+                            </View>
+                        </ScrollView>
+
+                        <Text style={styles(theme).subtitle}>progresso</Text>
+                        <View style={styles(theme).chart}>
+                            <LineChart
+                                segments={3}
+                                fromZero
+                                data={{
+                                    labels: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dec"],
+                                    datasets: [
+                                        {
+                                            data: progressByMonth,
+                                            color: () => principalColor,
+                                        }
+                                    ]
+                                }}
+                                width={Dimensions.get("screen").width}
+                                height={180}
+                                withVerticalLines={false}
+                                withHorizontalLines={false}
+                                chartConfig={{
+                                    backgroundGradientFrom: themes[theme].backgroundPrimary,
+                                    backgroundGradientTo: themes[theme].backgroundPrimary,
+                                    color: () => themes[theme].gray,
+                                    labelColor: () => themes[theme].textPrimary,
+                                    barPercentage: 0,
+                                    useShadowColorFromDataset: false,
+                                    decimalPlaces: 0
+                                }}
+                            />
+                        </View>
+                    </View>
+                    :
+                    <View style={styles(theme).proPurchaseContainer}>
+                        <Text style={styles(theme).proPurchaseText}>
+                            adquira o HabTool Pro e desbloqueie novos relatórios
+                        </Text>
+                    </View>
+                }
             </ScrollView>
         </Modal>
     )
 }
 
 const styles = (theme: string) => StyleSheet.create({
-    container: {
-        paddingTop: getStatusBarHeight(),
-        backgroundColor: themes[theme].backgroundPrimary
-    },
     header: {
         width: '100%',
         flexDirection: 'row',

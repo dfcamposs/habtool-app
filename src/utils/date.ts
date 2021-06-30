@@ -1,4 +1,4 @@
-import { format } from "date-fns";
+import { addDays, format } from "date-fns";
 import { HabitProps } from "../libs/storage";
 
 interface SequenceProps {
@@ -19,11 +19,14 @@ export function removeDaysDate(date: number, days: number): Date {
     return newDate;
 }
 
-export function getDates(start: Date, end: Date): string[] {
-    for (var arr = [], dt = new Date(start); dt <= end; dt.setDate(dt.getDate() + 1)) {
-        arr.push(format(new Date(dt), 'yyyy-MM-dd'));
+export function getDates(start: number, end: number): string[] {
+    const result: string[] = [];
+
+    for (let i = start; i <= end; i = addDays(i, 1).getTime()) {
+        result.push(format(new Date(i), 'yyyy-MM-dd'));
     }
-    return arr;
+
+    return result;
 };
 
 export function calculateSequence(habit: HabitProps, data: number[]): SequenceProps {
@@ -31,8 +34,8 @@ export function calculateSequence(habit: HabitProps, data: number[]): SequencePr
         .sort()
         .map(date => format(date, 'yyyy-MM-dd'));
     const sequeceDates = getDates(
-        new Date(data[0]),
-        new Date(Date.now()),
+        new Date(dates[0]).getTime(),
+        addDays(new Date(dates[dates.length - 1]), 1).getTime(),
     );
 
     let bestSequence = 0;
