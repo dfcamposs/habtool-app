@@ -63,7 +63,7 @@ export function Settings() {
                     <>
                         <Text style={styles(theme).subtitle}>assinatura</Text>
                         <TouchableOpacity style={styles(theme).menuPro} activeOpacity={.7} onPress={!isPro ? () => navigation.navigate('ProPurchase') : () => { }}>
-                            <Text style={styles(theme).menuProText}>HabTool Pro</Text>
+                            <Text style={styles(theme).menuProText}>👑  HabTool Pro</Text>
                         </TouchableOpacity>
                     </>
                 }
