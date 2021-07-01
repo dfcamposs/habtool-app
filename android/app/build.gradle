@@ -135,13 +135,8 @@ android {
         applicationId 'com.dfcamposs.habtool'
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-<<<<<<< HEAD
         versionCode 4
         versionName "1.0.1"
-=======
-        versionCode 1
-        versionName "1.0.0"
->>>>>>> 3158f9cc2c53a3698bf5fc4e800c111eeb3e2c7b
     }
     splits {
         abi {
