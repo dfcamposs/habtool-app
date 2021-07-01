@@ -2,10 +2,10 @@ import React, { useContext } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 
 import StackRoutes from './stack.routes';
-import { HabitsContext } from '../context/habits';
+import { UserContext } from '../contexts/user';
 
 const Routes = () => {
-    const { userName } = useContext(HabitsContext);
+    const { userName } = useContext(UserContext);
 
     return (
         <NavigationContainer>

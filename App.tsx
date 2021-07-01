@@ -8,12 +8,13 @@ import {
   Poppins_900Black
 } from '@expo-google-fonts/poppins';
 import AppLoading from 'expo-app-loading';
-import { StatusBar } from 'expo-status-bar';
 import * as Notifications from "expo-notifications";
 import { LogBox } from 'react-native';
 
 import Routes from './src/routes';
-import { HabitsProvider } from './src/context/habits';
+import { HabitsProvider } from './src/contexts/habits';
+import { ThemeProvider } from './src/contexts/themes';
+import { UserProvider } from './src/contexts/user';
 
 export default function App() {
   LogBox.ignoreAllLogs();
@@ -26,11 +27,6 @@ export default function App() {
         shouldSetBadge: false,
       }),
     });
-
-    const subscription = Notifications.addNotificationReceivedListener(notification => {
-      console.log(notification);
-    });
-    return () => subscription.remove();
   }, []);
 
   const [fontsLoaded] = useFonts({
@@ -46,9 +42,12 @@ export default function App() {
   }
 
   return (
-    <HabitsProvider>
-      <StatusBar style="dark" />
-      <Routes />
-    </HabitsProvider>
+    <UserProvider>
+      <ThemeProvider>
+        <HabitsProvider>
+          <Routes />
+        </HabitsProvider>
+      </ThemeProvider>
+    </UserProvider>
   )
 }

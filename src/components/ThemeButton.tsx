@@ -6,23 +6,27 @@ import { ThemeContext } from '../contexts/themes';
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
-interface WeekDayButton extends TouchableOpacityProps {
-    title: string;
-    active?: boolean;
+interface ThemeButtonProps extends TouchableOpacityProps {
+    title: string,
+    selected?: boolean
 }
 
-export function WeekDayButton({ title, active = false, ...rest }: WeekDayButton) {
+export function ThemeButton({ title, selected = false, ...rest }: ThemeButtonProps) {
     const { theme } = useContext(ThemeContext);
+
     return (
         <TouchableOpacity
             style={[
                 styles(theme).container,
-                active && { backgroundColor: themes[theme].blue }
+                selected && { backgroundColor: themes[theme].blue }
             ]}
-            activeOpacity={0.7}
-            {...rest}
-        >
-            <Text style={[styles(theme).text, active && { color: themes[theme].textSecundary }]}>
+            activeOpacity={.7}
+            {...rest}>
+            <Text
+                style={[
+                    styles(theme).text,
+                    selected && { color: themes[theme].textSecundary }
+                ]}>
                 {title}
             </Text>
         </TouchableOpacity>
@@ -31,16 +35,16 @@ export function WeekDayButton({ title, active = false, ...rest }: WeekDayButton)
 
 const styles = (theme: string) => StyleSheet.create({
     container: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: '30%',
+        padding: 10,
         backgroundColor: themes[theme].backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: 2.5
+        marginLeft: 2.5,
+        borderRadius: 10
     },
     text: {
-        fontSize: 12,
+        fontSize: 14,
         fontFamily: fonts.content,
         color: themes[theme].textPrimary
     }

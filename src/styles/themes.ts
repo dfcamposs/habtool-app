@@ -1,3 +1,20 @@
+export interface ThemeProps {
+    [theme: string]: {
+        gray: string,
+        blue: string,
+        blueDark: string,
+        green: string,
+        red: string,
+        textPrimary: string,
+        textSecundary: string,
+        textUnfocus: string,
+        backgroundPrimary: string,
+        backgroundSecundary: string,
+        backgroundTertiary: string,
+        backgroundPro: string,
+    };
+}
+
 const lightTheme = {
     gray: '#C3C9CE',
     blue: '#4985F9',
@@ -12,6 +29,8 @@ const lightTheme = {
     backgroundPrimary: '#F8F9FA',
     backgroundSecundary: '#E9ECEF',
     backgroundTertiary: '#FFFFFF',
+
+    backgroundPro: '#495057'
 };
 
 const darkTheme = {
@@ -25,9 +44,11 @@ const darkTheme = {
     textSecundary: '#F8F9FA',
     textUnfocus: '#C3C9CE',
 
-    backgroundPrimary: '#343A40',
+    backgroundPrimary: '#40474D',
     backgroundSecundary: '#495057',
     backgroundTertiary: '#495057',
+
+    backgroundPro: '#495057'
 };
 
-export default lightTheme;
+export default { light: lightTheme, dark: darkTheme } as ThemeProps;

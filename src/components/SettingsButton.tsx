@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 
-import colors from '../styles/colors';
+import { ThemeContext } from '../contexts/themes';
+
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 interface ButtonProps extends TouchableOpacityProps {
@@ -9,22 +11,23 @@ interface ButtonProps extends TouchableOpacityProps {
 }
 
 export function SettingsButton({ title, disabled, ...rest }: ButtonProps) {
+    const { theme } = useContext(ThemeContext);
     return (
         <TouchableOpacity
             activeOpacity={0.5}
-            style={styles.container}
+            style={styles(theme).container}
             {...rest}
         >
-            <Text style={[styles.text, disabled && { color: colors.textUnfocus }]}>
+            <Text style={[styles(theme).text, disabled && { color: themes[theme].textUnfocus }]}>
                 {title}
             </Text>
         </TouchableOpacity>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         justifyContent: 'center',
         padding: 20,
         marginBottom: 10,
@@ -34,6 +37,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 14,
         fontFamily: fonts.content,
-        color: colors.textPrimary
+        color: themes[theme].textPrimary
     }
 })

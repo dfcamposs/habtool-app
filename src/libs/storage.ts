@@ -1,6 +1,9 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { format, isAfter, isBefore } from 'date-fns';
 import * as Notifications from "expo-notifications";
+import { ColorEnum } from '../components/ColorTrackList';
+import { ThemeEnum } from '../contexts/themes';
+import { calculateSequence } from '../utils/date';
 
 //Models
 export interface FrequencyProps {
@@ -14,13 +17,22 @@ export interface HabitProps {
     frequency: FrequencyProps;
     startDate: number;
     endDate?: number;
-    notificationHour?: number;
+    notificationHours: number[];
     order: number;
+    trackColor?: ColorEnum,
+    notificationIds?: string[];
 }
 
 export interface HabitHistoryProps {
     habit: HabitProps,
     history: number[]
+}
+
+export interface HabitScoreProps {
+    currentSequence: number;
+    bestSequence: number;
+    doneCount: number;
+    amountPercentage: number;
 }
 
 export interface StorageHabitProps {
@@ -32,7 +44,8 @@ export interface StorageHistoryHabitProps {
 }
 
 export interface StorageUserProps {
-    [name: string]: string;
+    name: string;
+    isPro: boolean;
 }
 
 export interface StorageHabitSortProps {
@@ -53,64 +66,81 @@ export function formatWeekDay(weekDay: number): string | undefined {
 
 //Notifications
 export async function addSchedulePushNotification(habit: HabitProps): Promise<void> {
-    const schedule = habit.notificationHour;
+    const schedules = habit.notificationHours;
+    const newNotifications: string[] = [];
 
-    if (!schedule) return;
+    if (!schedules?.length) return;
+
+    if (habit.notificationIds) {
+        await cancelSchedulePushNotifications(habit.notificationIds);
+    }
 
     for (let i = 1; i <= 7; i++) {
-        await cancelSchedulePushNotification(habit.id + i);
         const weekDay = formatWeekDay(i);
         if (!weekDay) continue;
 
         if (habit.frequency[weekDay]) {
-            await Notifications.scheduleNotificationAsync({
-                identifier: habit.id + i,
-                content: {
-                    title: habit.name,
-                    body: habit.motivation ?? 'Já executou este hábito hoje?',
-                    sound: true,
-                    priority: Notifications.AndroidNotificationPriority.HIGH,
-                },
-                trigger: {
-                    hour: Number(format(schedule, "HH")),
-                    minute: Number(format(schedule, "mm")),
-                    repeats: true,
-                    weekday: i
-                },
-            });
+            for (const schedule of schedules) {
+                const notificationId = await Notifications.scheduleNotificationAsync({
+                    content: {
+                        title: habit.name,
+                        body: habit.motivation ?? 'Já executou este hábito hoje?',
+                        sound: true,
+                        priority: Notifications.AndroidNotificationPriority.HIGH,
+                    },
+                    trigger: {
+                        hour: Number(format(schedule, "HH")),
+                        minute: Number(format(schedule, "mm")),
+                        repeats: true,
+                        weekday: i
+                    },
+                });
+
+                newNotifications.push(notificationId);
+            }
         }
     }
+
+    const data = await AsyncStorage.getItem('@habtool:habits');
+    const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
+
+    await AsyncStorage
+        .setItem('@habtool:habits',
+            JSON.stringify({
+                [habit.id]: {
+                    ...habits[habit.id],
+                    notificationIds: newNotifications
+                },
+                ...habits
+            })
+        );
 }
 
-export async function cancelSchedulePushNotification(scheduleId: string) {
-    await Notifications.cancelScheduledNotificationAsync(scheduleId);
+export async function cancelSchedulePushNotifications(notificationIds: string[]) {
+    notificationIds.forEach(notification => Notifications.cancelScheduledNotificationAsync(notification));
 }
 
 
 //User
-export async function saveUserName(name: string): Promise<void> {
+export async function setUser(user: StorageUserProps): Promise<void> {
     try {
-        await AsyncStorage
-            .setItem('@habtool:user',
-                JSON.stringify({
-                    name: name.trim()
-                })
-            );
-
+        await AsyncStorage.setItem('@habtool:user', JSON.stringify(user));
     } catch (error) {
         throw new Error(error);
     }
 }
 
-export async function getUserName(): Promise<string> {
+export async function getUser(): Promise<StorageUserProps> {
     try {
         const data = await AsyncStorage.getItem('@habtool:user');
-        const user = data ? (JSON.parse(data) as StorageUserProps) : {};
+        const user = data && JSON.parse(data) as StorageUserProps;
 
         if (user) {
-            return user.name;
+            return user;
         } else {
-            throw new Error("Nome do usuário não encontrado");
+            const newUser = { name: '', isPro: false };
+            await setUser(newUser);
+            return newUser;
         }
 
     } catch (error) {
@@ -118,6 +148,22 @@ export async function getUserName(): Promise<string> {
     }
 }
 
+//Theme
+export async function getCurrentTheme(): Promise<ThemeEnum | null> {
+    try {
+        return await AsyncStorage.getItem('@habtool:currentTheme') as ThemeEnum;
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function setCurrentTheme(theme: ThemeEnum): Promise<void> {
+    try {
+        await AsyncStorage.setItem('@habtool:currentTheme', theme);
+    } catch (error) {
+        throw new Error(error);
+    }
+}
 
 //Habit
 export async function saveHabit(habit: HabitProps): Promise<void> {
@@ -190,7 +236,7 @@ export async function loadHabits(): Promise<HabitProps[]> {
             .keys(habits)
             .map((habit) => {
                 if (habits[habit].endDate && isBefore(Number(habits[habit].endDate), Date.now())) {
-                    Array.of(1, 2, 3, 4, 5, 6, 7).forEach(dayWeek => cancelSchedulePushNotification(habits[habit].id + dayWeek));
+                    cancelSchedulePushNotifications(habits[habit].notificationIds ?? []);
                 }
                 return {
                     ...habits[habit],
@@ -207,6 +253,7 @@ export async function deleteHabit(habitId: string): Promise<void> {
     try {
         const data = await AsyncStorage.getItem('@habtool:habits');
         const habits = data ? (JSON.parse(data) as StorageHabitProps) : {};
+        const notificationIds = habits[habitId].notificationIds ?? [];
 
         delete habits[habitId];
 
@@ -216,7 +263,7 @@ export async function deleteHabit(habitId: string): Promise<void> {
             );
 
         await deleteHabitHistory(habitId);
-        Array.of(1, 2, 3, 4, 5, 6, 7).forEach(dayWeek => cancelSchedulePushNotification(habitId + dayWeek));
+        cancelSchedulePushNotifications(notificationIds);
 
     } catch (error) {
         throw new Error(error);
@@ -445,5 +492,47 @@ export async function getProgressStars(): Promise<number> {
 
     } catch (error) {
         throw new Error();
+    }
+}
+
+//Habit Score
+export async function getHabitScore(habit: HabitProps): Promise<HabitScoreProps> {
+    try {
+        const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
+        const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
+
+        const { currentSequence, bestSequence, amountPercentage } = calculateSequence(habit, habitsHistory[habit.id]);
+
+        return {
+            currentSequence,
+            bestSequence,
+            amountPercentage,
+            doneCount: habitsHistory[habit.id].length ?? 0,
+        }
+
+    } catch (error) {
+        throw new Error(error);
+    }
+}
+
+export async function getHabitHistoryCountByMonths(habit: HabitProps): Promise<number[]> {
+    try {
+        const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
+        const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
+
+        const currentDate = new Date(), y = currentDate.getFullYear(), m = currentDate.getMonth();
+        const firstDay = new Date(y, m - 11, 1).getTime();
+
+        const dates = habitsHistory[habit.id].filter(date => date > firstDay);
+        const monthsCount = Array.from({ length: 12 }, () => 0);
+
+        for (const date of dates) {
+            const monthDate = new Date(date).getMonth();
+            monthsCount[monthDate] = monthsCount[monthDate] + 1;
+        }
+
+        return monthsCount;
+    } catch (error) {
+        throw new Error(error);
     }
 }

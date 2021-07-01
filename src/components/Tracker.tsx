@@ -3,9 +3,12 @@ import { View, StyleSheet, TouchableOpacityProps, TouchableOpacity } from 'react
 import * as Haptics from 'expo-haptics';
 
 import { updateHabitHistory } from '../libs/storage';
-import { HabitsContext } from '../context/habits';
+import { HabitsContext } from '../contexts/habits';
+import { ThemeContext } from '../contexts/themes';
 
-import colors from '../styles/colors';
+import { ColorEnum } from './ColorTrackList';
+
+import themes from '../styles/themes';
 
 interface TrackerProps extends TouchableOpacityProps {
     data: {
@@ -14,11 +17,13 @@ interface TrackerProps extends TouchableOpacityProps {
     };
     enabled?: boolean;
     checked?: boolean;
+    color?: ColorEnum;
 }
 
-export function Tracker({ data, checked = false, enabled = true, ...rest }: TrackerProps) {
+export function Tracker({ data, checked = false, enabled = true, color = ColorEnum.default, ...rest }: TrackerProps) {
     const { handleUpdatePercentageCheck, handleRefreshHistoryCalendar } = useContext(HabitsContext)
     const [trackerChecked, setTrackerChecked] = useState(checked);
+    const { theme } = useContext(ThemeContext);
 
     async function handleTrackerChecked() {
         setTrackerChecked((oldValue) => !oldValue);
@@ -33,13 +38,13 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
     }
 
     return (
-        <View style={styles.container}>
+        <View style={styles(theme).container}>
             <TouchableOpacity
                 activeOpacity={.7}
                 style={[
-                    styles.dayCicle,
-                    enabled && { backgroundColor: colors.backgroundPrimary },
-                    trackerChecked && { backgroundColor: colors.green },
+                    styles(theme).dayCicle,
+                    enabled && { backgroundColor: themes[theme].backgroundPrimary },
+                    trackerChecked && { backgroundColor: color },
                 ]}
                 disabled={!enabled}
                 onPress={handleTrackerChecked}
@@ -49,9 +54,9 @@ export function Tracker({ data, checked = false, enabled = true, ...rest }: Trac
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
-        marginLeft: 7,
+        marginLeft: 10,
         alignItems: 'center',
         justifyContent: 'space-between'
     },
@@ -59,7 +64,7 @@ const styles = StyleSheet.create({
         height: 30,
         width: 30,
         borderRadius: 15,
-        backgroundColor: colors.gray,
+        backgroundColor: themes[theme].gray,
         alignItems: 'center',
         justifyContent: 'center',
     }

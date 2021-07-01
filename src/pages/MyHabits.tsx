@@ -8,14 +8,18 @@ import pt from 'date-fns/locale/pt';
 
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
-import { HabitsContext } from '../context/habits';
-import { getUserName } from '../libs/storage';
 
-import colors from '../styles/colors';
+import { HabitsContext } from '../contexts/habits';
+import { ThemeContext } from '../contexts/themes';
+import { UserContext } from '../contexts/user';
+
+import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 
 export function MyHabits() {
-    const { userName, myHabits, motivationalPhrase } = useContext(HabitsContext);
+    const { myHabits, motivationalPhrase } = useContext(HabitsContext);
+    const { userName } = useContext(UserContext);
+    const { theme } = useContext(ThemeContext);
     const navigation = useNavigation();
 
     function handleOpenSettings() {
@@ -28,12 +32,12 @@ export function MyHabits() {
     }
 
     return (
-        <SafeAreaView style={styles.container}>
-            <View style={styles.header}>
-                <View style={styles.headerContent}>
+        <SafeAreaView style={styles(theme).container}>
+            <View style={styles(theme).header}>
+                <View style={styles(theme).headerContent}>
                     <View>
-                        <Text style={styles.title}>Olá, {userName}!</Text>
-                        <Text style={styles.subtitle}>
+                        <Text style={styles(theme).title}>Olá, {userName}!</Text>
+                        <Text style={styles(theme).subtitle}>
                             {motivationalPhrase}
                         </Text>
 
@@ -43,26 +47,26 @@ export function MyHabits() {
                         <MaterialIcons
                             name="tune"
                             size={30}
-                            color={colors.textUnfocus}
+                            color={themes[theme].textUnfocus}
                         />
                     </TouchableOpacity>
                 </View>
             </View>
-            <View style={styles.content}>
+            <View style={styles(theme).content}>
                 {myHabits.length ?
                     <>
-                        <View style={styles.weekLegendContainer}>
-                            <View style={styles.weekLegend}>
-                                <Text style={styles.weekLegendText}>{getLegendDayTracker(6)}</Text>
-                                <Text style={styles.weekLegendText}>{getLegendDayTracker(5)}</Text>
-                                <Text style={styles.weekLegendText}>{getLegendDayTracker(4)}</Text>
-                                <Text style={styles.weekLegendText}>{getLegendDayTracker(3)}</Text>
-                                <Text style={styles.weekLegendText}>{getLegendDayTracker(2)}</Text>
-                                <Text style={styles.weekLegendText}>{getLegendDayTracker(1)}</Text>
-                                <Text style={[styles.weekLegendText, { fontFamily: fonts.legendBold }]}>{getLegendDayTracker(0)}</Text>
+                        <View style={styles(theme).weekLegendContainer}>
+                            <View style={styles(theme).weekLegend}>
+                                <Text style={styles(theme).weekLegendText}>{getLegendDayTracker(6)}</Text>
+                                <Text style={styles(theme).weekLegendText}>{getLegendDayTracker(5)}</Text>
+                                <Text style={styles(theme).weekLegendText}>{getLegendDayTracker(4)}</Text>
+                                <Text style={styles(theme).weekLegendText}>{getLegendDayTracker(3)}</Text>
+                                <Text style={styles(theme).weekLegendText}>{getLegendDayTracker(2)}</Text>
+                                <Text style={styles(theme).weekLegendText}>{getLegendDayTracker(1)}</Text>
+                                <Text style={[styles(theme).weekLegendText, { fontFamily: fonts.legendBold }]}>{getLegendDayTracker(0)}</Text>
                             </View>
                         </View>
-                        <View style={styles.habitList}>
+                        <View style={styles(theme).habitList}>
                             <FlatList
                                 data={myHabits}
                                 keyExtractor={(item) => String(item.id)}
@@ -74,11 +78,11 @@ export function MyHabits() {
                         </View>
                     </>
                     :
-                    <View style={styles.habitListEmpty}>
+                    <View style={styles(theme).habitListEmpty}>
                         <TouchableOpacity activeOpacity={0.7} onPress={() => navigation.navigate('adicionar')}>
-                            <MaterialIcons name="add-circle" size={50} color={colors.textUnfocus} />
+                            <MaterialIcons name="add-circle" size={50} color={themes[theme].textUnfocus} />
                         </TouchableOpacity>
-                        <Text style={styles.habitListEmptyText}>Comece adicionando {'\n'} um novo hábito</Text>
+                        <Text style={styles(theme).habitListEmptyText}>Comece adicionando {'\n'} um novo hábito</Text>
                     </View>
                 }
             </View>
@@ -86,11 +90,11 @@ export function MyHabits() {
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
         width: '100%',
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
     },
     header: {
         height: 170,
@@ -109,9 +113,9 @@ const styles = StyleSheet.create({
         paddingBottom: 15
     },
     weekLegend: {
-        width: 272,
+        width: 290,
         height: 20,
-        backgroundColor: colors.backgroundSecundary,
+        backgroundColor: themes[theme].backgroundSecundary,
         borderBottomRightRadius: 10,
         borderBottomLeftRadius: 10,
         flexDirection: 'row',
@@ -119,16 +123,16 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
     },
     weekLegendText: {
-        color: colors.textPrimary,
+        color: themes[theme].textPrimary,
         fontSize: 10,
         fontFamily: fonts.legend,
         minWidth: 30,
-        marginHorizontal: 3.5,
+        marginHorizontal: 5,
         textAlign: 'center'
     },
     content: {
         flex: 1,
-        backgroundColor: colors.backgroundPrimary,
+        backgroundColor: themes[theme].backgroundPrimary,
     },
     habitListEmpty: {
         flex: 1,
@@ -137,7 +141,7 @@ const styles = StyleSheet.create({
     },
     habitListEmptyText: {
         fontSize: 16,
-        color: colors.textUnfocus,
+        color: themes[theme].textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 10,
         textAlign: 'center'
@@ -147,12 +151,12 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 24,
-        color: colors.textPrimary,
+        color: themes[theme].textPrimary,
         fontFamily: fonts.title
     },
     subtitle: {
-        fontSize: 15,
-        color: colors.textUnfocus,
+        fontSize: 13,
+        color: themes[theme].textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 5,
         paddingBottom: 20

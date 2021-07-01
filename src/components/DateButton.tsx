@@ -1,10 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
-import colors from '../styles/colors';
-import fonts from '../styles/fonts';
+import { ThemeContext } from '../contexts/themes';
 
+import themes from '../styles/themes';
+import fonts from '../styles/fonts';
 
 interface DateButtonProps extends TouchableOpacityProps {
     name: string;
@@ -13,40 +14,44 @@ interface DateButtonProps extends TouchableOpacityProps {
 }
 
 export function DateButton({ name, date, clear, ...rest }: DateButtonProps) {
+    const { theme } = useContext(ThemeContext);
+
     return (
-        <View style={styles.container}>
-            <TouchableOpacity style={styles.button} activeOpacity={0.3} {...rest}>
+        <View style={styles(theme).container}>
+            <TouchableOpacity style={styles(theme).button} activeOpacity={0.3} {...rest}>
                 <MaterialIcons
-                    style={styles.icon}
+                    style={styles(theme).icon}
                     name="event"
                     size={28}
-                    color={date ? colors.blue : colors.textUnfocus}
+                    color={date ? themes[theme].blue : themes[theme].textUnfocus}
                 />
-                <Text style={[styles.text, !!date && { color: colors.textPrimary }]}>
+                <Text style={[styles(theme).text, !!date && { color: themes[theme].textPrimary }]}>
                     {date || "selecionar data fim"}
                 </Text>
             </TouchableOpacity>
             {!!clear && !!date && (
-                <TouchableOpacity style={styles.button} activeOpacity={0.3} onPress={clear}>
-                    <Text style={[styles.text, !!date && { color: colors.textPrimary }]}>
-                        clear
-                    </Text>
+                <TouchableOpacity style={styles(theme).button} activeOpacity={0.3} onPress={clear}>
+                    <MaterialIcons
+                        style={styles(theme).icon}
+                        name="clear"
+                        size={15}
+                        color={themes[theme].textPrimary}
+                    />
                 </TouchableOpacity>
             )}
         </View>
     )
 }
 
-const styles = StyleSheet.create({
+const styles = (theme: string) => StyleSheet.create({
     container: {
-        width: '100%',
+        width: '50%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         borderBottomWidth: 1,
-        borderColor: colors.textUnfocus,
+        borderColor: themes[theme].textUnfocus,
         marginVertical: 15,
         paddingVertical: 10,
-
     },
     button: {
         flexDirection: 'row',
@@ -58,6 +63,6 @@ const styles = StyleSheet.create({
     text: {
         fontSize: 15,
         fontFamily: fonts.content,
-        color: colors.textUnfocus
+        color: themes[theme].textUnfocus
     }
 })
