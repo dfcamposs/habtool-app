@@ -179,150 +179,147 @@ export function HabitManager() {
     }
 
     return (
-        <SafeAreaView style={styles(theme).container}>
-            <KeyboardAvoidingView
-                style={styles(theme).container}
-                behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
-            >
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <View style={styles(theme).header}>
-                        <Text style={styles(theme).title}>
-                            criar um hábito
-                        </Text>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+            <SafeAreaView style={styles(theme).container}>
+                <View style={styles(theme).header}>
+                    <Text style={styles(theme).title}>
+                        criar um hábito
+                    </Text>
+
+                    <Input
+                        name="habitName"
+                        icon="loop"
+                        placeholder="digite o nome do hábito"
+                        defaultValue={habitName}
+                        onChangeText={(text: string) => setHabitName(text)}
+                    />
+                </View>
+                <ScrollView
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                        backgroundColor: themes[theme].backgroundPrimary,
+                        padding: 20
+                    }}
+                >
+                    <View>
+                        <Text style={styles(theme).subtitle}>frequencia</Text>
+
+                        <View style={styles(theme).week}>
+                            <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+                                <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
+                                <WeekDayButton title="sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
+                            </ScrollView>
+                        </View>
 
                         <Input
-                            name="habitName"
-                            icon="loop"
-                            placeholder="digite o nome do hábito"
-                            defaultValue={habitName}
-                            onChangeText={(text: string) => setHabitName(text)}
+                            name="habitMotivation"
+                            icon="flag"
+                            placeholder="digite sua motivação"
+                            defaultValue={habitMotivation}
+                            onChangeText={(text: string) => setHabitMotivation(text)}
                         />
-                    </View>
-                </TouchableWithoutFeedback>
-                <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-                    <ScrollView
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={styles(theme).form}
-                    >
-                        <View>
-                            <Text style={styles(theme).subtitle}>frequencia</Text>
-
-                            <View style={styles(theme).week}>
-                                <ScrollView horizontal showsHorizontalScrollIndicator={false}>
-                                    <WeekDayButton title="dom" active={sundayEnabled} onPress={() => setSundayEnabled((oldValue) => !oldValue)} />
-                                    <WeekDayButton title="seg" active={mondayEnabled} onPress={() => setMondayEnabled((oldValue) => !oldValue)} />
-                                    <WeekDayButton title="ter" active={tuesdayEnabled} onPress={() => setTuesdayEnabled((oldValue) => !oldValue)} />
-                                    <WeekDayButton title="qua" active={wednesdayEnabled} onPress={() => setWednesdayEnabled((oldValue) => !oldValue)} />
-                                    <WeekDayButton title="qui" active={thrusdayEnabled} onPress={() => setThursdayEnabled((oldValue) => !oldValue)} />
-                                    <WeekDayButton title="sex" active={fridayEnabled} onPress={() => setFridayEnabled((oldValue) => !oldValue)} />
-                                    <WeekDayButton title="sab" active={saturdayEnabled} onPress={() => setSaturdayEnabled((oldValue) => !oldValue)} />
-                                </ScrollView>
-                            </View>
-
-                            <Input
-                                name="habitMotivation"
-                                icon="flag"
-                                placeholder="digite sua motivação"
-                                defaultValue={habitMotivation}
-                                onChangeText={(text: string) => setHabitMotivation(text)}
+                        <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
+                            <DateButton
+                                name="habitStartDate"
+                                date={format(selectedStartDateTime, "dd 'de' LLL',' yyyy", { locale: pt })}
+                                onPress={() => setShowStartDate((oldValue) => !oldValue)}
                             />
-                            <View style={{ flexDirection: 'row', justifyContent: 'space-between' }}>
-                                <DateButton
-                                    name="habitStartDate"
-                                    date={format(selectedStartDateTime, "dd 'de' LLL',' yyyy", { locale: pt })}
-                                    onPress={() => setShowStartDate((oldValue) => !oldValue)}
-                                />
-                                <DateTimePickerModal
-                                    isVisible={showStartDate}
-                                    mode="date"
-                                    date={selectedStartDateTime}
-                                    onConfirm={handleChangeStartDate}
-                                    onCancel={() => setShowStartDate(false)}
-                                    style={styles(theme).dateTimePickerIos}
-                                    textColor={themes[theme].textPrimary}
-                                    cancelTextIOS="cancelar"
-                                    confirmTextIOS="confirmar"
-                                />
-
-                                <DateButton
-                                    name="habitStartDate"
-                                    date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLL',' yyyy", { locale: pt })}
-                                    onPress={() => setShowEndDate((oldValue) => !oldValue)}
-                                    clear={() => setSelectedEndDateTime(undefined)}
-                                />
-                                <DateTimePickerModal
-                                    isVisible={showEndDate}
-                                    mode="date"
-                                    date={selectedEndDateTime ?? new Date()}
-                                    onConfirm={handleChangeEndDate}
-                                    onCancel={() => setShowEndDate(false)}
-                                    style={styles(theme).dateTimePickerIos}
-                                    textColor={themes[theme].textPrimary}
-                                    cancelTextIOS="cancelar"
-                                    confirmTextIOS="confirmar"
-                                />
-                            </View>
-                            <View style={{ paddingTop: 10 }}>
-                                <Text style={styles(theme).subtitle}>cor</Text>
-                                <ColorTrackList colorSelected={colorSelected} handleColorChange={setColorSelected} />
-                            </View>
-
-                            <View style={styles(theme).scheduleLabel}>
-                                <Text style={styles(theme).subtitle}> lembrete </Text>
-                                <Switch
-                                    thumbColor={themes[theme].textSecundary}
-                                    trackColor={{ true: themes[theme].blue, false: themes[theme].backgroundSecundary }}
-                                    ios_backgroundColor={themes[theme].backgroundSecundary}
-                                    onValueChange={changeScheduleSwitch}
-                                    value={scheduleEnabled}
-                                />
-                            </View>
-
-                            {scheduleEnabled &&
-                                <View style={styles(theme).scheduleContainer}>
-                                    {selectedScheduleDateTime.length ?
-                                        <FlatList
-                                            data={selectedScheduleDateTime}
-                                            keyExtractor={(item) => String(item)}
-                                            renderItem={({ item }) => (
-                                                <View style={styles(theme).scheduleCard}>
-                                                    <Text style={styles(theme).dateTimePickerText}>
-                                                        {format(item, 'HH:mm')}
-                                                    </Text>
-                                                    <TouchableOpacity onPress={() => handleDeleteSchedule(item)}>
-                                                        <MaterialIcons name="clear" size={16} color={themes[theme].textPrimary} />
-                                                    </TouchableOpacity>
-                                                </View>
-                                            )}
-                                            showsHorizontalScrollIndicator={false}
-                                            horizontal
-                                        />
-                                        : <Text style={styles(theme).scheduleLegend}>adicione um horário</Text>}
-                                    <TouchableOpacity style={styles(theme).addScheduleButton} onPress={handleAddNewSchedule}>
-                                        <MaterialIcons name="add" size={20} color={themes[theme].textSecundary} />
-                                    </TouchableOpacity>
-                                </View>
-                            }
-
                             <DateTimePickerModal
-                                isVisible={scheduleEnabled && showDatePicker}
-                                mode="time"
-                                onConfirm={handleAddTimeSchedule}
-                                onCancel={() => setShowDatePicker(false)}
+                                isVisible={showStartDate}
+                                mode="date"
+                                date={selectedStartDateTime}
+                                onConfirm={handleChangeStartDate}
+                                onCancel={() => setShowStartDate(false)}
                                 style={styles(theme).dateTimePickerIos}
                                 textColor={themes[theme].textPrimary}
                                 cancelTextIOS="cancelar"
                                 confirmTextIOS="confirmar"
                             />
 
+                            <DateButton
+                                name="habitStartDate"
+                                date={selectedEndDateTime && format(selectedEndDateTime, "dd 'de' LLL',' yyyy", { locale: pt })}
+                                onPress={() => setShowEndDate((oldValue) => !oldValue)}
+                                clear={() => setSelectedEndDateTime(undefined)}
+                            />
+                            <DateTimePickerModal
+                                isVisible={showEndDate}
+                                mode="date"
+                                date={selectedEndDateTime ?? new Date()}
+                                onConfirm={handleChangeEndDate}
+                                onCancel={() => setShowEndDate(false)}
+                                style={styles(theme).dateTimePickerIos}
+                                textColor={themes[theme].textPrimary}
+                                cancelTextIOS="cancelar"
+                                confirmTextIOS="confirmar"
+                            />
                         </View>
-                        <View style={styles(theme).footer}>
-                            <Button title="salvar" onPress={handleSaveHabit} />
+                        <View style={{ paddingTop: 10 }}>
+                            <Text style={styles(theme).subtitle}>cor</Text>
+                            <ColorTrackList colorSelected={colorSelected} handleColorChange={setColorSelected} />
                         </View>
-                    </ScrollView>
-                </TouchableWithoutFeedback>
-            </KeyboardAvoidingView>
-        </SafeAreaView >
+
+                        <View style={styles(theme).scheduleLabel}>
+                            <Text style={styles(theme).subtitle}> lembrete </Text>
+                            <Switch
+                                thumbColor={themes[theme].textSecundary}
+                                trackColor={{ true: themes[theme].blue, false: themes[theme].backgroundSecundary }}
+                                ios_backgroundColor={themes[theme].backgroundSecundary}
+                                onValueChange={changeScheduleSwitch}
+                                value={scheduleEnabled}
+                            />
+                        </View>
+
+                        {scheduleEnabled &&
+                            <View style={styles(theme).scheduleContainer}>
+                                {selectedScheduleDateTime.length ?
+                                    <FlatList
+                                        data={selectedScheduleDateTime}
+                                        keyExtractor={(item) => String(item)}
+                                        renderItem={({ item }) => (
+                                            <View style={styles(theme).scheduleCard}>
+                                                <Text style={styles(theme).dateTimePickerText}>
+                                                    {format(item, 'HH:mm')}
+                                                </Text>
+                                                <TouchableOpacity onPress={() => handleDeleteSchedule(item)}>
+                                                    <MaterialIcons name="clear" size={16} color={themes[theme].textPrimary} />
+                                                </TouchableOpacity>
+                                            </View>
+                                        )}
+                                        showsHorizontalScrollIndicator={false}
+                                        horizontal
+                                    />
+                                    : <Text style={styles(theme).scheduleLegend}>adicione um horário</Text>}
+                                <TouchableOpacity style={styles(theme).addScheduleButton} onPress={handleAddNewSchedule}>
+                                    <MaterialIcons name="add" size={20} color={themes[theme].textSecundary} />
+                                </TouchableOpacity>
+                            </View>
+                        }
+
+                        <DateTimePickerModal
+                            isVisible={scheduleEnabled && showDatePicker}
+                            mode="time"
+                            onConfirm={handleAddTimeSchedule}
+                            onCancel={() => setShowDatePicker(false)}
+                            style={styles(theme).dateTimePickerIos}
+                            textColor={themes[theme].textPrimary}
+                            cancelTextIOS="cancelar"
+                            confirmTextIOS="confirmar"
+                        />
+
+                    </View>
+                </ScrollView>
+                <View style={styles(theme).footer}>
+                    <Button title="salvar" onPress={handleSaveHabit} />
+                </View>
+            </SafeAreaView>
+        </TouchableWithoutFeedback>
     )
 }
 
@@ -345,12 +342,6 @@ const styles = (theme: string) => StyleSheet.create({
         color: themes[theme].textPrimary,
         paddingBottom: 25
     },
-    form: {
-        flexGrow: 1,
-        backgroundColor: themes[theme].backgroundPrimary,
-        padding: 20,
-        justifyContent: 'space-between'
-    },
     subtitle: {
         fontSize: 16,
         fontFamily: fonts.content,
@@ -358,8 +349,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingRight: 20
     },
     week: {
-        paddingTop: 15,
-        paddingBottom: 5
+        marginVertical: 10
     },
     scheduleContainer: {
         flex: 1,
@@ -407,6 +397,7 @@ const styles = (theme: string) => StyleSheet.create({
         fontFamily: fonts.content,
     },
     footer: {
-        paddingTop: 10
+        padding: 20,
+        backgroundColor: themes[theme].backgroundPrimary,
     }
 })

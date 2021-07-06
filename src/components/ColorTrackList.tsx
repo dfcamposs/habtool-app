@@ -77,17 +77,16 @@ export function ColorTrackList({ colorSelected, handleColorChange }: ColorTrackL
 const styles = (theme: string) => StyleSheet.create({
     container: {
         flex: 1,
-        alignItems: 'center',
-        paddingVertical: 20
+        marginVertical: 10
     },
     tracker: {
         alignItems: 'center',
-        paddingHorizontal: 7
+        paddingRight: 10
     },
     color: {
         height: 40,
         width: 40,
-        borderRadius: 25,
+        borderRadius: 20,
         alignItems: 'center',
         justifyContent: 'center',
     }

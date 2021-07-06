@@ -223,7 +223,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                 {isPro ?
                     <View>
                         <Text style={styles(theme).subtitle}>score</Text>
-                        <ScrollView style={styles(theme).cards} horizontal>
+                        <ScrollView style={styles(theme).cards} showsHorizontalScrollIndicator={false} horizontal>
                             <View style={styles(theme).card}>
                                 <Text style={styles(theme).score}>{score.currentSequence}</Text>
                                 <Text style={styles(theme).cardLegend}>seq. atual</Text>
@@ -244,7 +244,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                                 segments={3}
                                 fromZero
                                 data={{
-                                    labels: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dec"],
+                                    labels: ["jan", "fev", "mar", "abr", "mai", "jun", "jul", "ago", "set", "out", "nov", "dez"],
                                     datasets: [
                                         {
                                             data: progressByMonth,
@@ -334,7 +334,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     card: {
         width: 120,
-        height: 60,
+        height: 70,
         backgroundColor: themes[theme].backgroundSecundary,
         borderRadius: 10,
         marginRight: 10,
@@ -342,10 +342,9 @@ const styles = (theme: string) => StyleSheet.create({
         justifyContent: 'center'
     },
     score: {
-        fontSize: 20,
+        fontSize: 16,
         fontFamily: fonts.contentBold,
         color: themes[theme].textPrimary,
-        paddingBottom: 3
     },
     cardLegend: {
         fontSize: 12,

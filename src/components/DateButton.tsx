@@ -26,7 +26,7 @@ export function DateButton({ name, date, clear, ...rest }: DateButtonProps) {
                     color={date ? themes[theme].blue : themes[theme].textUnfocus}
                 />
                 <Text style={[styles(theme).text, !!date && { color: themes[theme].textPrimary }]}>
-                    {date || "selecionar data fim"}
+                    {date || "data fim"}
                 </Text>
             </TouchableOpacity>
             {!!clear && !!date && (

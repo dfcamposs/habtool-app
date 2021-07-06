@@ -31,13 +31,13 @@ export function WeekDayButton({ title, active = false, ...rest }: WeekDayButton)
 
 const styles = (theme: string) => StyleSheet.create({
     container: {
-        width: 50,
-        height: 50,
-        borderRadius: 25,
+        width: 48,
+        height: 48,
+        borderRadius: 24,
         backgroundColor: themes[theme].backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center',
-        marginHorizontal: 2.5
+        marginRight: 7
     },
     text: {
         fontSize: 12,
