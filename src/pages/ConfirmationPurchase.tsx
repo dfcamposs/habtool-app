@@ -1,7 +1,8 @@
 import React, { useContext } from 'react';
-import { SafeAreaView, Text, StyleSheet, View, Image } from 'react-native';
+import { ScrollView, Text, StyleSheet, View, Image, Platform } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
+import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 
 import { Button } from '../components/Button';
 
@@ -29,7 +30,13 @@ export function ConfirmationPurchase() {
     }
 
     return (
-        <SafeAreaView style={styles(theme).container}>
+        <ScrollView contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: 20,
+            paddingHorizontal: 40,
+            paddingTop: getStatusBarHeight(),
+            alignItems: 'center'
+        }}>
             <Image style={styles(theme).logo} source={Logo} />
             <Text style={styles(theme).title}>Obrigado por ser Pro!</Text>
             <View style={styles(theme).features}>
@@ -45,22 +52,16 @@ export function ConfirmationPurchase() {
             <View style={styles(theme).footer}>
                 <Button title="explorar" onPress={handleNavigate} />
             </View>
-        </SafeAreaView>
+        </ScrollView>
     )
 }
 
 const styles = (theme: string) => StyleSheet.create({
-    container: {
-        flex: 1,
-        width: '100%',
-        alignItems: 'center',
-        paddingHorizontal: 40,
-    },
     logo: {
         width: 120,
         height: 60,
         marginBottom: 20,
-        marginTop: '40%',
+        marginTop: '25%',
     },
     title: {
         fontFamily: fonts.title,

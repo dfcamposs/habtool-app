@@ -22,7 +22,7 @@ export interface CalendarMarkedProps {
 interface HabitCalendar {
     calendarMarked: CalendarMarkedProps,
     handleChangeSelectedDay: (date: number) => void;
-    color: string;
+    color?: string;
 }
 
 export function HabitCalendar({ calendarMarked, handleChangeSelectedDay, color }: HabitCalendar) {
@@ -37,9 +37,9 @@ export function HabitCalendar({ calendarMarked, handleChangeSelectedDay, color }
             theme={{
                 calendarBackground: themes[theme].backgroundPrimary,
                 arrowColor: themes[theme].textPrimary,
-                todayTextColor: color,
+                todayTextColor: color ?? themes[theme].blue,
                 dayTextColor: themes[theme].textPrimary,
-                dotColor: color,
+                dotColor: color ?? themes[theme].blue,
                 monthTextColor: themes[theme].textPrimary,
                 indicatorColor: themes[theme].textPrimary,
                 textDisabledColor: themes[theme].textUnfocus,

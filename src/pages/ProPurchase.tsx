@@ -1,7 +1,7 @@
 import React, { useContext, useEffect, useState } from 'react';
 import {
     StyleSheet,
-    SafeAreaView,
+    ScrollView,
     View,
     TouchableOpacity,
     Text,
@@ -99,7 +99,11 @@ export function ProPurchase() {
     }, [])
 
     return (
-        <SafeAreaView style={styles(theme).container}>
+        <ScrollView contentContainerStyle={{
+            flexGrow: 1,
+            padding: 20,
+            paddingTop: getStatusBarHeight() + 10,
+        }}>
             <TouchableOpacity activeOpacity={.7} onPress={navigation.goBack}>
                 <MaterialIcons style={styles(theme).close} name="close" size={30} color={themes[theme].textUnfocus} />
             </TouchableOpacity>
@@ -152,16 +156,11 @@ export function ProPurchase() {
             <View style={styles(theme).footer}>
                 <Button title="continuar" onPress={handlePurchase} />
             </View>
-        </SafeAreaView>
+        </ScrollView >
     )
 }
 
 const styles = (theme: string) => StyleSheet.create({
-    container: {
-        flex: 1,
-        marginHorizontal: 20,
-        paddingTop: Platform.OS === 'android' ? getStatusBarHeight() : 0
-    },
     content: {
         width: '100%',
         backgroundColor: themes[theme].backgroundPro,
@@ -234,15 +233,15 @@ const styles = (theme: string) => StyleSheet.create({
         color: themes[theme].textPrimary
     },
     legend: {
+        width: '100%',
         backgroundColor: themes[theme].backgroundPro,
         alignItems: 'center',
         justifyContent: 'center',
-        borderRadius: 50
+        borderRadius: 50,
+        paddingVertical: 5
     },
     legendText: {
         fontFamily: fonts.content,
-        paddingVertical: 5,
-        paddingHorizontal: 10,
         fontSize: 10,
         color: themes[theme].textSecundary
     },

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { Text, StyleSheet, SafeAreaView, View, Platform, Image, TouchableOpacity } from 'react-native';
+import { Text, StyleSheet, ScrollView, View, Platform, Image, TouchableOpacity } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
@@ -56,7 +56,12 @@ export function Settings() {
 
 
     return (
-        <SafeAreaView style={styles(theme).container}>
+        <ScrollView contentContainerStyle={{
+            flexGrow: 1,
+            paddingBottom: 20,
+            paddingTop: getStatusBarHeight(),
+            alignItems: 'center'
+        }}>
             <Text style={styles(theme).title}>configurações</Text>
             <View style={styles(theme).menu}>
                 {!isPro &&
@@ -97,17 +102,11 @@ export function Settings() {
             <RectButton style={styles(theme).button} onPress={() => navigation.goBack()}>
                 <Text style={styles(theme).textButton}>cancelar</Text>
             </RectButton>
-        </SafeAreaView >
+        </ScrollView >
     )
 }
 
 const styles = (theme: string) => StyleSheet.create({
-    container: {
-        flex: 1,
-        alignItems: 'center',
-        justifyContent: 'space-between',
-        marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
-    },
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
@@ -122,7 +121,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingVertical: 20
     },
     button: {
-        width: 100,
+        width: 120,
         height: 40,
         backgroundColor: themes[theme].backgroundSecundary,
         borderRadius: 10,
