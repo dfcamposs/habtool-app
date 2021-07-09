@@ -10,7 +10,8 @@ import { Button } from '../components/Button';
 
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
-import { HabitProps, StorageHabitSortProps, updateHabitsSort } from '../libs/storage';
+import { updateHabitsSort } from '../libs/habit.storage';
+import { HabitProps, StorageHabitSortProps } from '../libs/schema.storage';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';

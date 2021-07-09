@@ -18,23 +18,26 @@ import { MaterialIcons } from '@expo/vector-icons';
 
 import { LightenDarkenColor } from '../utils/colors';
 import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
+import { ColorEnum } from './ColorTrackList';
 
+import { HabitProps } from '../libs/schema.storage';
 import {
-    loadHabitHistoryByHabitId,
-    updateHabitHistory,
-    HabitProps,
     getHabitScore,
     HabitScoreProps,
     getHabitHistoryCountByMonths
-} from '../libs/storage';
+} from '../libs/report.storage';
+import {
+    loadHabitHistoryByHabitId,
+    updateHabitHistory,
+} from '../libs/habitHistory.storage';
+
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
 import { UserContext } from '../contexts/user';
 
-import { ColorEnum } from './ColorTrackList';
-
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
+import { addDaysDate, removeDaysDate } from '../utils/date';
 
 interface ProgressModalProps extends ModalProps {
     data: HabitProps,
@@ -43,6 +46,15 @@ interface ProgressModalProps extends ModalProps {
 }
 
 export function ProgressModal({ data: habit, visible = false, closeModal, ...rest }: ProgressModalProps) {
+    const [score, setScore] = useState<HabitScoreProps>({
+        currentSequence: 0,
+        bestSequence: 0,
+        amountPercentage: 0,
+        doneCount: 0,
+    });
+    const [progressByMonth, setProgressByMonth] = useState(Array.from({ length: 12 }, () => 0));
+    const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>({} as CalendarMarkedProps);
+
     const { theme } = useContext(ThemeContext);
     const { isPro } = useContext(UserContext);
     const { refreshHistoryCalendar } = useContext(HabitsContext);
@@ -54,26 +66,9 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
             )
             : themes[theme].blue;
 
-    const [score, setScore] = useState<HabitScoreProps>({
-        currentSequence: 0,
-        bestSequence: 0,
-        amountPercentage: 0,
-        doneCount: 0,
-    });
-    const [progressByMonth, setProgressByMonth] = useState(Array.from({ length: 12 }, () => 0));
-    const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>({
-        [format(new Date(), 'yyyy-MM-dd')]: {
-            selected: true,
-            color: principalColor,
-            textColor: themes[theme].textSecundary
-        }
-    });
-
     async function handleChangeSelectedDay(date: number) {
-
-        const dateSelected = new Date(date);
-        const dateFormatted = dateSelected.setDate(dateSelected.getDate() + 1);
-        const weekDay = format(dateFormatted, 'E').toLocaleLowerCase();
+        const dateSelected = addDaysDate(date, 1);
+        const weekDay = format(dateSelected, 'E').toLocaleLowerCase();
 
         if ((isBefore(dateSelected, Date.now()) ||
             format(dateSelected, 'yyyy-MM-dd') === format(Date.now(), 'yyyy-MM-dd'))
@@ -90,8 +85,8 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                         text: 'sim',
                         onPress: async () => {
                             try {
-                                await updateHabitHistory(habit.id, dateFormatted);
-                                await handleMarkedDate(dateFormatted);
+                                await updateHabitHistory(habit, dateSelected);
+                                await handleMarkedDate(dateSelected);
                             } catch (error) {
                                 Alert.alert(
                                     'algo deu errado',
@@ -109,7 +104,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
             }
         }
 
-        await handleMarkedDate(dateFormatted);
+        await handleMarkedDate(dateSelected);
     }
 
     async function handleMarkedDate(dateSelected: number): Promise<void> {
@@ -129,14 +124,11 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
         }
 
         history.sort().forEach((day, index) => {
-            const newDateLastDay = new Date(day);
-            const newDateLastDayFormatted = format(newDateLastDay.setDate(newDateLastDay.getDate() - 1), 'yyyy-MM-dd');
+            const newDateLastDay = format(removeDaysDate(day, 1), 'yyyy-MM-dd');
+            const newDateNextDay = format(addDaysDate(day, 1), 'yyyy-MM-dd');
 
-            const newDateNextDay = new Date(day);
-            const newDateNextDayFormatted = format(newDateNextDay.setDate(newDateNextDay.getDate() + 1), 'yyyy-MM-dd');
-
-            const lastDay = history.find(item => format(item, 'yyyy-MM-dd') === newDateLastDayFormatted);
-            const nextDay = history.find(item => format(item, 'yyyy-MM-dd') === newDateNextDayFormatted);
+            const lastDay = history.find(item => format(item, 'yyyy-MM-dd') === newDateLastDay);
+            const nextDay = history.find(item => format(item, 'yyyy-MM-dd') === newDateNextDay);
 
             let startingDate = false;
             let endingDate = false;
@@ -195,6 +187,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
             <ScrollView
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={{
+                    flexGrow: 1,
                     paddingTop: getStatusBarHeight(),
                     paddingBottom: getBottomSpace() + 20,
                     backgroundColor: themes[theme].backgroundPrimary
@@ -362,7 +355,6 @@ const styles = (theme: string) => StyleSheet.create({
     },
     proPurchaseContainer: {
         flex: 1,
-        height: 200,
         alignItems: 'center',
         justifyContent: 'center',
         paddingHorizontal: 50

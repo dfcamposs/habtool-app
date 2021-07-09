@@ -1,5 +1,8 @@
 import React, { createContext, useEffect, useState } from 'react';
-import { getProgressStars, HabitProps, loadHabits } from '../libs/storage';
+
+import { loadHabits } from '../libs/habit.storage';
+import { HabitProps } from '../libs/schema.storage';
+import { getProgressStars } from '../libs/report.storage';
 
 interface HabitsContextProps {
     myHabits: HabitProps[];

@@ -1,6 +1,6 @@
 import React, { createContext, useEffect, useState } from 'react';
 
-import { getUser, setUser } from '../libs/storage';
+import { getUser, setUser } from '../libs/user.storage';
 
 interface UserContextProps {
     isPro: boolean;

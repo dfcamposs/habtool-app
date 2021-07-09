@@ -6,9 +6,10 @@ import { format } from 'date-fns';
 import { CalendarMarkedProps, HabitCalendar } from '../components/HabitCalendar';
 import { ColorEnum } from '../components/ColorTrackList';
 
-import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/storage';
+import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/habitHistory.storage';
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
+import { addDaysDate, removeDaysDate } from '../utils/date';
 
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
@@ -23,40 +24,29 @@ interface HabitHistoryDayProps {
 }
 
 export function Progress() {
-    const { theme } = useContext(ThemeContext);
-    const initialCalendarMarked = {
-        [format(new Date(), 'yyyy-MM-dd')]: {
-            selected: true,
-            color: themes[theme].blue,
-            textColor: themes[theme].textSecundary
-        }
-    }
-    const { myHabits } = useContext(HabitsContext);
     const [historyDay, setHistoryDay] = useState<HabitHistoryDayProps[]>();
     const [daySelected, setDaySelected] = useState<number>();
-    const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>(initialCalendarMarked);
+    const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>({} as CalendarMarkedProps);
     const [activeHabitsCount, setActiveHabitsCount] = useState<number>(0);
     const [currentSequenceCount, setCurrentSequenceCount] = useState<number>(0);
     const [maxSequenceCount, setMaxSequenceCount] = useState<number>(0);
 
+    const { theme } = useContext(ThemeContext);
+    const { myHabits } = useContext(HabitsContext);
 
     useEffect(() => {
-        const currentDate = new Date();
-        const dateFormatted = currentDate.setDate(currentDate.getDate() - 1);
-
         setActiveHabitsCount(myHabits.filter(item => !item.endDate).length);
-        handleHabitsHistoryDay(dateFormatted);
+        handleHabitsHistoryDay(removeDaysDate(Date.now(), 1));
     }, []);
 
     async function handleHabitsHistoryDay(date: number): Promise<void> {
         const result: HabitHistoryDayProps[] = [];
-        const newDate = new Date(date);
-        const dateFormatted = newDate.setDate(newDate.getDate() + 1);
-        const weekDay = format(dateFormatted, 'EEE').toLowerCase();
+        const currentDate = addDaysDate(date, 1);
+        const weekDay = format(currentDate, 'EEE').toLowerCase();
 
-        handleMarkedDate(dateFormatted);
+        handleMarkedDate(currentDate);
 
-        const history = await loadHabitsHistoryCheckedByDay(dateFormatted);
+        const history = await loadHabitsHistoryCheckedByDay(currentDate);
         myHabits.forEach(habit => {
             if (habit.frequency[weekDay]) {
                 result.push({
@@ -69,7 +59,7 @@ export function Progress() {
         });
 
         setHistoryDay(result);
-        setDaySelected(dateFormatted);
+        setDaySelected(currentDate);
     }
 
     async function handleMarkedDate(dateSelected: number): Promise<void> {
@@ -182,7 +172,6 @@ export function Progress() {
                                     </View>
                                 )}
                                 showsVerticalScrollIndicator={false}
-
                             />
                         </View>
                     </>

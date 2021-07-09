@@ -17,7 +17,9 @@ import { useNavigation } from '@react-navigation/core';
 import { Tracker } from './Tracker';
 import { ProgressModal } from './ProgressModal';
 
-import { deleteHabit, getHabitWeekHistory, HabitProps } from '../libs/storage';
+import { deleteHabit } from '../libs/habit.storage';
+import { HabitProps } from '../libs/schema.storage';
+import { getHabitWeekHistory } from '../libs/habitHistory.storage';
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
 
@@ -174,7 +176,7 @@ export function Habit({ data: habit, ...rest }: HabitComponentProps) {
                         keyExtractor={(item) => String(item.position)}
                         renderItem={({ item }) => (
                             <Tracker
-                                data={{ habitId: habit.id, position: item.position }}
+                                data={{ habit: habit, position: item.position }}
                                 enabled={verifyEnabledTracker(item.position)}
                                 checked={verifyEnabledTracker(item.position) && item.checked}
                                 color={habit.trackColor}

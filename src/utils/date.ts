@@ -1,5 +1,7 @@
-import { addDays, format } from "date-fns";
-import { HabitProps } from "../libs/storage";
+import { addDays, format, subDays } from "date-fns";
+import { eachDayOfInterval } from "date-fns/esm";
+
+import { HabitProps } from "../libs/schema.storage";
 
 interface SequenceProps {
     currentSequence: number;
@@ -7,36 +9,23 @@ interface SequenceProps {
     amountPercentage: number;
 }
 
-export function addDaysDate(date: number, days: number): Date {
-    var newDate = new Date(date);
-    newDate.setDate(newDate.getDate() + days);
-    return newDate;
+export function addDaysDate(date: number, days: number): number {
+    return addDays(date, days).getTime();
 }
 
-export function removeDaysDate(date: number, days: number): Date {
-    var newDate = new Date(date);
-    newDate.setDate(newDate.getDate() - days);
-    return newDate;
+export function removeDaysDate(date: number, days: number): number {
+    return subDays(date, days).getTime();
 }
-
-export function getDates(start: number, end: number): string[] {
-    const result: string[] = [];
-
-    for (let i = start; i <= end; i = addDays(i, 1).getTime()) {
-        result.push(format(new Date(i), 'yyyy-MM-dd'));
-    }
-
-    return result;
-};
 
 export function calculateSequence(habit: HabitProps, data: number[]): SequenceProps {
     const dates = data
         .sort()
         .map(date => format(date, 'yyyy-MM-dd'));
-    const sequeceDates = getDates(
-        new Date(dates[0]).getTime(),
-        addDays(new Date(dates[dates.length - 1]), 1).getTime(),
-    );
+
+    const sequeceDates = eachDayOfInterval({
+        start: new Date(dates[0]),
+        end: addDaysDate(new Date(dates[dates.length - 1]).getTime(), 1),
+    }).map(date => format(date, 'yyyy-MM-dd'));
 
     let bestSequence = 0;
     let currentSequence = 0;

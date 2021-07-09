@@ -2,7 +2,8 @@ import React, { useContext, useState } from 'react';
 import { View, StyleSheet, TouchableOpacityProps, TouchableOpacity } from 'react-native';
 import * as Haptics from 'expo-haptics';
 
-import { updateHabitHistory } from '../libs/storage';
+import { updateHabitHistory } from '../libs/habitHistory.storage';
+import { HabitProps } from '../libs/schema.storage';
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
 
@@ -12,7 +13,7 @@ import themes from '../styles/themes';
 
 interface TrackerProps extends TouchableOpacityProps {
     data: {
-        habitId: string;
+        habit: HabitProps;
         position: number;
     };
     enabled?: boolean;
@@ -32,7 +33,7 @@ export function Tracker({ data, checked = false, enabled = true, color = ColorEn
         const currentDate = new Date();
         const habitDate = currentDate.setDate(currentDate.getDate() - data.position);
 
-        await updateHabitHistory(data.habitId, habitDate);
+        await updateHabitHistory(data.habit, habitDate);
         handleUpdatePercentageCheck();
         handleRefreshHistoryCalendar();
     }

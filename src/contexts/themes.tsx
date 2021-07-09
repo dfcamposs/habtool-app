@@ -2,8 +2,8 @@ import { StatusBar } from 'expo-status-bar';
 import React, { createContext, useContext, useEffect, useState } from 'react';
 import { useColorScheme } from 'react-native';
 
-import { getCurrentTheme, getUser, setCurrentTheme } from '../libs/storage';
-import { UserContext } from './user';
+import { getCurrentTheme, setCurrentTheme } from '../libs/theme.storage';
+import { getUser } from '../libs/user.storage';
 
 export enum ThemeEnum {
     default = "default",

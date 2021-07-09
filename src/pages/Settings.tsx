@@ -8,7 +8,7 @@ import * as Linking from 'expo-linking';
 import { SettingsButton } from '../components/SettingsButton';
 import { ThemeButton } from '../components/ThemeButton';
 
-import { getCurrentTheme } from '../libs/storage';
+import { getCurrentTheme } from '../libs/theme.storage';
 
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext, ThemeEnum } from '../contexts/themes';

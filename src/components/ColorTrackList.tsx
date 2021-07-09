@@ -8,7 +8,6 @@ import { UserContext } from '../contexts/user';
 
 import themes from '../styles/themes';
 
-
 export enum ColorEnum {
     default = '#00d95a',
     blue = '#00bbff',

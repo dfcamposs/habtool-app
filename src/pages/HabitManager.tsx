@@ -28,7 +28,8 @@ import { WeekDayButton } from '../components/WeekDayButton';
 import { DateButton } from '../components/DateButton';
 import { ColorEnum, ColorTrackList } from '../components/ColorTrackList';
 
-import { getHabitByName, HabitProps, saveHabit } from '../libs/storage';
+import { getHabitByName, saveHabit } from '../libs/habit.storage';
+import { HabitProps } from '../libs/schema.storage';
 import { HabitsContext } from '../contexts/habits';
 import { ThemeContext } from '../contexts/themes';
 import { UserContext } from '../contexts/user';
