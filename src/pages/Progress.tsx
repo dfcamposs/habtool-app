@@ -5,6 +5,7 @@ import { format } from 'date-fns';
 
 import { CalendarMarkedProps, HabitCalendar } from '../components/HabitCalendar';
 import { ColorEnum } from '../components/ColorTrackList';
+import { ScoreCard } from '../components/ScoreCard';
 
 import { loadHabitsHistory, loadHabitsHistoryCheckedByDay } from '../libs/habitHistory.storage';
 import { HabitsContext } from '../contexts/habits';
@@ -24,6 +25,7 @@ interface HabitHistoryDayProps {
 }
 
 export function Progress() {
+    const [isLoading, setIsLoading] = useState(true);
     const [historyDay, setHistoryDay] = useState<HabitHistoryDayProps[]>();
     const [daySelected, setDaySelected] = useState<number>();
     const [calendarMarked, setCalendarMarked] = useState<CalendarMarkedProps>({} as CalendarMarkedProps);
@@ -63,38 +65,31 @@ export function Progress() {
     }
 
     async function handleMarkedDate(dateSelected: number): Promise<void> {
-        const history = await loadHabitsHistory();
-        const daysChecked: number[] = [];
+        const daysChecked = await loadHabitsHistory();
         let result: CalendarMarkedProps = {};
         let currentSequence = 0;
         let maxSequence = 0;
 
-        history.forEach(item => {
-            daysChecked.push(...item.history);
-        });
-
-        daysChecked.sort().forEach((day, index) => {
+        daysChecked.forEach((day, index) => {
             if (result[format(day, 'yyyy-MM-dd')]) {
                 return;
             }
-            const newDateLastDay = new Date(day);
-            const newDateLastDayFormatted = format(newDateLastDay.setDate(newDateLastDay.getDate() - 1), 'yyyy-MM-dd');
 
-            const newDateNextDay = new Date(day);
-            const newDateNextDayFormatted = format(newDateNextDay.setDate(newDateNextDay.getDate() + 1), 'yyyy-MM-dd');
+            const dateLastDay = format(removeDaysDate(day, 1), 'yyyy-MM-dd');
+            const dateNextDay = format(addDaysDate(day, 1), 'yyyy-MM-dd');
 
-            const lastDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === newDateLastDayFormatted);
-            const nextDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === newDateNextDayFormatted);
+            const isLastDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === dateLastDay);
+            const isNextDay = daysChecked.find(item => format(item, 'yyyy-MM-dd') === dateNextDay);
 
             let startingDate = false;
             let endingDate = false;
 
-            if (index === 0 || !lastDay) {
+            if (index === 0 || !isLastDay) {
                 startingDate = true;
                 maxSequence = currentSequence > maxSequence ? currentSequence : maxSequence;
                 currentSequence = 0;
             }
-            if (index === daysChecked.length - 1 || !nextDay) {
+            if (index === daysChecked.length - 1 || !isNextDay) {
                 endingDate = true;
             }
 
@@ -128,6 +123,7 @@ export function Progress() {
         setCalendarMarked(result);
         setCurrentSequenceCount(currentSequence);
         setMaxSequenceCount(maxSequence);
+        setIsLoading(false);
     }
 
     return (
@@ -138,21 +134,19 @@ export function Progress() {
                 </Text>
 
                 <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-                    <View style={styles(theme).card}>
-                        <Text style={styles(theme).score}>{maxSequenceCount}</Text>
-                        <Text style={styles(theme).legend}>seq. máxima (dias)</Text>
-                    </View>
-                    <View style={styles(theme).card}>
-                        <Text style={styles(theme).score}>{activeHabitsCount}</Text>
-                        <Text style={styles(theme).legend}>hábitos ativos</Text>
-                    </View>
-                    <View style={styles(theme).card}>
-                        <Text style={styles(theme).score}>{currentSequenceCount}</Text>
-                        <Text style={styles(theme).legend}>seq. atual (dias)</Text>
-                    </View>
+                    <ScoreCard score={maxSequenceCount} legend="seq. máxima (dias)" isLoading={isLoading} />
+                    <ScoreCard score={activeHabitsCount} legend="hábitos ativos" isLoading={isLoading} />
+                    <ScoreCard score={currentSequenceCount} legend="seq. atual (dias)" isLoading={isLoading} />
                 </ScrollView>
             </View>
-            <ScrollView style={styles(theme).content} showsVerticalScrollIndicator={false}>
+            <ScrollView
+                contentContainerStyle={{
+                    flexGrow: 1,
+                    paddingVertical: 20,
+                    backgroundColor: themes[theme].backgroundPrimary
+                }}
+                showsVerticalScrollIndicator={false}
+            >
                 <HabitCalendar calendarMarked={calendarMarked} handleChangeSelectedDay={handleHabitsHistoryDay} />
 
                 {historyDay?.length ?
@@ -161,19 +155,27 @@ export function Progress() {
                             <Text style={styles(theme).subtitle}>histórico</Text>
                             <Text style={styles(theme).selectedDate}>{daySelected && format(daySelected, 'dd-MM-yyyy')}</Text>
                         </View>
-                        <View style={styles(theme).history}>
-                            <FlatList
-                                data={historyDay}
-                                keyExtractor={(item) => String(item.id)}
-                                renderItem={({ item: habit }) => (
-                                    <View style={styles(theme).historyLine}>
-                                        <View style={[styles(theme).circle, { backgroundColor: habit.checked ? (habit.trackColor ?? ColorEnum.default) : themes[theme].backgroundPrimary }]} />
-                                        <Text style={styles(theme).historyLineText}>{habit.name}</Text>
-                                    </View>
-                                )}
-                                showsVerticalScrollIndicator={false}
-                            />
-                        </View>
+                        <ScrollView
+                            showsVerticalScrollIndicator={false}
+                            style={styles(theme).history}
+                            contentContainerStyle={{
+                                paddingVertical: 10
+                            }}
+                        >
+                            {historyDay.map(habit => (
+                                <View key={habit.id} style={styles(theme).historyLine}>
+                                    <View style={[
+                                        styles(theme).circle,
+                                        {
+                                            backgroundColor: habit.checked
+                                                ? (habit.trackColor ?? ColorEnum.default)
+                                                : themes[theme].backgroundPrimary
+                                        }
+                                    ]} />
+                                    <Text style={styles(theme).historyLineText}>{habit.name}</Text>
+                                </View>
+                            ))}
+                        </ScrollView>
                     </>
                     : <Text style={styles(theme).emptyText}>nenhum hábito nesta data.</Text>
                 }
@@ -195,39 +197,11 @@ const styles = (theme: string) => StyleSheet.create({
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
         paddingVertical: 20
     },
-    content: {
-        flexGrow: 1,
-        backgroundColor: themes[theme].backgroundPrimary,
-        paddingBottom: 20,
-    },
     title: {
         fontSize: 20,
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         paddingBottom: 30
-    },
-    card: {
-        width: 120,
-        height: 70,
-        backgroundColor: themes[theme].backgroundPrimary,
-        borderRadius: 10,
-        marginHorizontal: 7,
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: 10
-    },
-    score: {
-        fontSize: 24,
-        color: themes[theme].textPrimary,
-        fontFamily: fonts.content,
-        alignSelf: 'center',
-        lineHeight: 30
-    },
-    legend: {
-        fontSize: 10,
-        color: themes[theme].textUnfocus,
-        fontFamily: fonts.legend,
-        alignSelf: 'center'
     },
     calendar: {
         marginHorizontal: 10,
@@ -256,7 +230,7 @@ const styles = (theme: string) => StyleSheet.create({
         backgroundColor: themes[theme].backgroundSecundary,
         marginHorizontal: 20,
         borderRadius: 10,
-        padding: 10,
+        paddingHorizontal: 10,
         height: 150,
         marginBottom: 20,
     },

@@ -6,7 +6,6 @@ import {
     SafeAreaView,
     Platform,
     Switch,
-    KeyboardAvoidingView,
     TouchableWithoutFeedback,
     Keyboard,
     ScrollView,

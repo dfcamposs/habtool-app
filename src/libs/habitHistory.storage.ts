@@ -5,26 +5,20 @@ import { addSchedulePushNotification } from "./notification.storage";
 import {
     StorageHistoryHabitProps,
     StorageHabitProps,
-    HabitHistoryProps,
     HabitProps
 } from "./schema.storage";
 
-export async function loadHabitsHistory(): Promise<HabitHistoryProps[]> {
+export async function loadHabitsHistory(): Promise<number[]> {
     try {
-        const dataHabits = await AsyncStorage.getItem('@habtool:habits');
-        const habits = dataHabits ? (JSON.parse(dataHabits) as StorageHabitProps) : {};
-
         const dataHistory = await AsyncStorage.getItem('@habtool:habitsHistory');
         const habitsHistory = dataHistory ? (JSON.parse(dataHistory) as StorageHistoryHabitProps) : {};
+        const daysChecked: number[] = [];
 
-        return Object
-            .keys(habits)
-            .map((habit) => {
-                return {
-                    habit: { ...habits[habit] },
-                    history: [...habitsHistory[habit]]
-                }
-            });
+        Object
+            .keys(habitsHistory)
+            .forEach((habitId) => daysChecked.push(...habitsHistory[habitId]));
+
+        return daysChecked.sort();
 
     } catch (error) {
         throw new Error(error);

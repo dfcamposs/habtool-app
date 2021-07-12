@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { StyleSheet, TextInput, TextInputProps, View } from 'react-native';
+import { Platform, StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
 
 import { ThemeContext } from '../contexts/themes';
@@ -56,7 +56,8 @@ const styles = (theme: string) => StyleSheet.create({
         alignItems: 'center',
         borderBottomWidth: 1,
         borderColor: themes[theme].textUnfocus,
-        marginVertical: 15
+        marginVertical: 15,
+        paddingBottom: Platform.OS === 'ios' ? 10 : 5
     },
     icon: {
         paddingRight: 10
@@ -65,6 +66,6 @@ const styles = (theme: string) => StyleSheet.create({
         width: '90%',
         fontSize: 15,
         fontFamily: fonts.content,
-        color: themes[theme].textPrimary
+        color: themes[theme].textPrimary,
     }
 })
