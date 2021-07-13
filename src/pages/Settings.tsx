@@ -4,6 +4,7 @@ import { RectButton } from 'react-native-gesture-handler';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import * as Linking from 'expo-linking';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { SettingsButton } from '../components/SettingsButton';
 import { ThemeButton } from '../components/ThemeButton';
@@ -108,13 +109,13 @@ export function Settings() {
 
 const styles = (theme: string) => StyleSheet.create({
     title: {
-        fontSize: 20,
+        fontSize: RFValue(20),
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         paddingTop: 20
     },
     subtitle: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
         paddingRight: 20,
@@ -130,7 +131,7 @@ const styles = (theme: string) => StyleSheet.create({
         marginBottom: 20
     },
     textButton: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         fontFamily: fonts.contentBold,
         color: themes[theme].textPrimary
     },
@@ -157,7 +158,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingLeft: 20
     },
     menuProText: {
-        fontSize: 14,
+        fontSize: RFValue(14),
         fontFamily: fonts.content,
         color: themes[theme].textSecundary,
         paddingRight: 20

@@ -20,6 +20,7 @@ import { v4 as uuid } from 'uuid';
 import { useNavigation, useRoute } from '@react-navigation/native';
 import { MaterialIcons } from '@expo/vector-icons';
 import DateTimePickerModal from "react-native-modal-datetime-picker";
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -337,13 +338,13 @@ const styles = (theme: string) => StyleSheet.create({
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },
     title: {
-        fontSize: 20,
+        fontSize: RFValue(20),
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         paddingBottom: 25
     },
     subtitle: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
         paddingRight: 20
@@ -370,7 +371,7 @@ const styles = (theme: string) => StyleSheet.create({
         marginLeft: 10
     },
     scheduleLegend: {
-        fontSize: 13,
+        fontSize: RFValue(13),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
         paddingRight: 10
@@ -393,7 +394,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     dateTimePickerText: {
         color: themes[theme].textPrimary,
-        fontSize: 15,
+        fontSize: RFValue(15),
         fontFamily: fonts.content,
     },
     footer: {

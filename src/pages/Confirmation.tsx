@@ -3,6 +3,7 @@ import { SafeAreaView, Text, StyleSheet } from 'react-native';
 import { RectButton } from 'react-native-gesture-handler';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { ThemeContext } from '../contexts/themes';
 
@@ -35,7 +36,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     title: {
         fontFamily: fonts.title,
-        fontSize: 24,
+        fontSize: RFValue(24),
         color: themes[theme].textPrimary,
         textAlign: 'center',
         marginHorizontal: 30,

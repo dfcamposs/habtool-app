@@ -20,6 +20,7 @@ import {
     setPurchaseListener,
     finishTransactionAsync
 } from 'expo-in-app-purchases';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { ThemeContext } from '../contexts/themes';
 import { UserContext } from '../contexts/user';
@@ -174,12 +175,12 @@ const styles = (theme: string) => StyleSheet.create({
     title: {
         fontFamily: fonts.subtitle,
         textAlign: 'center',
-        fontSize: 24,
+        fontSize: RFValue(24),
         color: themes[theme].textSecundary
     },
     subtitle: {
         fontFamily: fonts.content,
-        fontSize: 18,
+        fontSize: RFValue(18),
         color: themes[theme].textPrimary,
         paddingVertical: 20
     },
@@ -198,7 +199,7 @@ const styles = (theme: string) => StyleSheet.create({
         fontFamily: fonts.contentBold,
         paddingVertical: 30,
         textAlign: 'center',
-        fontSize: 14,
+        fontSize: RFValue(14),
         color: themes[theme].textSecundary
     },
     featureContainer: {
@@ -209,7 +210,7 @@ const styles = (theme: string) => StyleSheet.create({
     featureText: {
         fontFamily: fonts.content,
         padding: 10,
-        fontSize: 15,
+        fontSize: RFValue(15),
         color: themes[theme].textSecundary
     },
     purchaseContainer: {
@@ -229,7 +230,7 @@ const styles = (theme: string) => StyleSheet.create({
     price: {
         fontFamily: fonts.subtitle,
         textAlign: 'center',
-        fontSize: 20,
+        fontSize: RFValue(20),
         color: themes[theme].textPrimary
     },
     legend: {
@@ -242,7 +243,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     legendText: {
         fontFamily: fonts.content,
-        fontSize: 10,
+        fontSize: RFValue(10),
         color: themes[theme].textSecundary
     },
     footer: {

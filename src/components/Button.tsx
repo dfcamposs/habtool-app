@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Text } from 'react-native';
 import { RectButton, RectButtonProps } from 'react-native-gesture-handler';
+import { RFValue } from "react-native-responsive-fontsize";
 
 import { ThemeContext } from '../contexts/themes';
 
@@ -36,7 +37,7 @@ const styles = (theme: string) => StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         color: themes[theme].textSecundary,
         fontFamily: fonts.contentBold
     }

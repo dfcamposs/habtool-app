@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from 'react';
 import { View, StyleSheet, SafeAreaView, Platform, Text, FlatList, ScrollView } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { format } from 'date-fns';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { CalendarMarkedProps, HabitCalendar } from '../components/HabitCalendar';
 import { ColorEnum } from '../components/ColorTrackList';
@@ -133,10 +134,18 @@ export function Progress() {
                     progresso geral
                 </Text>
 
-                <ScrollView showsHorizontalScrollIndicator={false} horizontal>
-                    <ScoreCard score={maxSequenceCount} legend="seq. máxima (dias)" isLoading={isLoading} />
-                    <ScoreCard score={activeHabitsCount} legend="hábitos ativos" isLoading={isLoading} />
-                    <ScoreCard score={currentSequenceCount} legend="seq. atual (dias)" isLoading={isLoading} />
+                <ScrollView
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{
+                        flexGrow: 1,
+                        alignItems: 'center',
+                        justifyContent: 'center'
+                    }}
+                    horizontal
+                >
+                    <ScoreCard score={String(maxSequenceCount)} legend="seq. máxima (dias)" isLoading={isLoading} />
+                    <ScoreCard score={String(activeHabitsCount)} legend="hábitos ativos" isLoading={isLoading} />
+                    <ScoreCard score={String(currentSequenceCount)} legend="seq. atual (dias)" isLoading={isLoading} />
                 </ScrollView>
             </View>
             <ScrollView
@@ -198,7 +207,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingVertical: 20
     },
     title: {
-        fontSize: 20,
+        fontSize: RFValue(20),
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         paddingBottom: 30
@@ -209,12 +218,12 @@ const styles = (theme: string) => StyleSheet.create({
         backgroundColor: themes[theme].backgroundPrimary,
     },
     subtitle: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary
     },
     selectedDate: {
-        fontSize: 15,
+        fontSize: RFValue(15),
         fontFamily: fonts.content,
         color: themes[theme].textUnfocus,
         paddingLeft: 10
@@ -248,13 +257,13 @@ const styles = (theme: string) => StyleSheet.create({
     },
     historyLineText: {
         flex: 1,
-        fontSize: 15,
+        fontSize: RFValue(15),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary
     },
     emptyText: {
         paddingLeft: 40,
-        fontSize: 15,
+        fontSize: RFValue(15),
         fontFamily: fonts.content,
         color: themes[theme].textUnfocus
     }

@@ -5,6 +5,7 @@ import DraggableFlatList, { DragEndParams } from 'react-native-draggable-flatlis
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { isBefore } from 'date-fns';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { Button } from '../components/Button';
 
@@ -88,7 +89,7 @@ const styles = (theme: string) => StyleSheet.create({
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },
     title: {
-        fontSize: 20,
+        fontSize: RFValue(20),
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         paddingTop: 20
@@ -109,7 +110,7 @@ const styles = (theme: string) => StyleSheet.create({
         borderRadius: 10
     },
     habitName: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
         paddingLeft: 10

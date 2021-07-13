@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Text, View, TouchableOpacity, TouchableOpacityProps } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { ThemeContext } from '../contexts/themes';
 
@@ -61,7 +62,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingRight: 10
     },
     text: {
-        fontSize: 15,
+        fontSize: RFValue(16),
         fontFamily: fonts.content,
         color: themes[theme].textUnfocus
     }

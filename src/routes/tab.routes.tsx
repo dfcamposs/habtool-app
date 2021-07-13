@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { MaterialIcons } from '@expo/vector-icons';
 import { Platform } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { MyHabits } from '../pages/MyHabits';
 import { HabitManager } from '../pages/HabitManager';
@@ -25,7 +26,7 @@ const AuthRoutes = () => {
                 inactiveTintColor: themes[theme].textUnfocus,
                 labelPosition: 'beside-icon',
                 labelStyle: {
-                    fontSize: 15,
+                    fontSize: RFValue(15),
                     fontFamily: fonts.complement
                 },
                 style: {

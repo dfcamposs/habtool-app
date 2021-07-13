@@ -1,6 +1,7 @@
 import React, { useState, useContext } from 'react';
 import { Platform, StyleSheet, TextInput, TextInputProps, View } from 'react-native';
 import { MaterialIcons } from '@expo/vector-icons';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { ThemeContext } from '../contexts/themes';
 
@@ -64,7 +65,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     input: {
         width: '90%',
-        fontSize: 15,
+        fontSize: RFValue(15),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
     }

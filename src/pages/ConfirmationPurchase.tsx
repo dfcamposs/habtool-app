@@ -3,6 +3,7 @@ import { ScrollView, Text, StyleSheet, View, Image, Platform } from 'react-nativ
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { Button } from '../components/Button';
 
@@ -65,14 +66,14 @@ const styles = (theme: string) => StyleSheet.create({
     },
     title: {
         fontFamily: fonts.title,
-        fontSize: 24,
+        fontSize: RFValue(24),
         color: themes[theme].textPrimary,
         textAlign: 'center',
         marginHorizontal: 30,
     },
     subtitle: {
         fontFamily: fonts.contentBold,
-        fontSize: 15,
+        fontSize: RFValue(15),
         color: themes[theme].textPrimary,
         alignSelf: 'flex-start',
         marginBottom: 10
@@ -92,7 +93,7 @@ const styles = (theme: string) => StyleSheet.create({
     featureText: {
         fontFamily: fonts.content,
         padding: 10,
-        fontSize: 15,
+        fontSize: RFValue(15),
         color: themes[theme].textPrimary
     },
     button: {
@@ -105,7 +106,7 @@ const styles = (theme: string) => StyleSheet.create({
         marginBottom: 20
     },
     textButton: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         fontFamily: fonts.contentBold,
         color: themes[theme].textPrimary
     },

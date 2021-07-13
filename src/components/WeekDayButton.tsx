@@ -1,5 +1,6 @@
 import React, { useContext } from 'react';
 import { StyleSheet, Text, TouchableOpacity, TouchableOpacityProps } from 'react-native';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { ThemeContext } from '../contexts/themes';
 
@@ -37,10 +38,10 @@ const styles = (theme: string) => StyleSheet.create({
         backgroundColor: themes[theme].backgroundSecundary,
         alignItems: 'center',
         justifyContent: 'center',
-        marginRight: 7
+        marginRight: 6
     },
     text: {
-        fontSize: 12,
+        fontSize: RFValue(12),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary
     }

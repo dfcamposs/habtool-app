@@ -15,6 +15,7 @@ import { format, isAfter, isBefore } from 'date-fns';
 import * as Haptics from 'expo-haptics';
 import { LineChart } from "react-native-chart-kit";
 import { MaterialIcons } from '@expo/vector-icons';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { LightenDarkenColor } from '../utils/colors';
 import { CalendarMarkedProps, HabitCalendar } from './HabitCalendar';
@@ -38,6 +39,7 @@ import { UserContext } from '../contexts/user';
 import themes from '../styles/themes';
 import fonts from '../styles/fonts';
 import { addDaysDate, removeDaysDate } from '../utils/date';
+import { ScoreCard } from './ScoreCard';
 
 interface ProgressModalProps extends ModalProps {
     data: HabitProps,
@@ -213,22 +215,34 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                         <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
                     }
                 </View>
-                {isPro ?
+                {!isPro ?
                     <View>
                         <Text style={styles(theme).subtitle}>score</Text>
-                        <ScrollView style={styles(theme).cards} showsHorizontalScrollIndicator={false} horizontal>
-                            <View style={styles(theme).card}>
-                                <Text style={styles(theme).score}>{score.currentSequence}</Text>
-                                <Text style={styles(theme).cardLegend}>seq. atual</Text>
-                            </View>
-                            <View style={styles(theme).card}>
-                                <Text style={styles(theme).score}>{score.doneCount}x</Text>
-                                <Text style={styles(theme).cardLegend}>realizado</Text>
-                            </View>
-                            <View style={styles(theme).card}>
-                                <Text style={styles(theme).score}>{score.bestSequence}</Text>
-                                <Text style={styles(theme).cardLegend}>melhor seq.</Text>
-                            </View>
+                        <ScrollView
+                            contentContainerStyle={{
+                                flexGrow: 1,
+                                paddingHorizontal: 20,
+                                paddingVertical: 20,
+                                marginRight: 20
+                            }}
+                            showsHorizontalScrollIndicator={false}
+                            horizontal
+                        >
+                            <ScoreCard
+                                score={String(score.currentSequence)}
+                                legend="seq. atual"
+                                color={themes[theme].backgroundSecundary}
+                            />
+                            <ScoreCard
+                                score={`${score.doneCount}x`}
+                                legend="realizado"
+                                color={themes[theme].backgroundSecundary}
+                            />
+                            <ScoreCard
+                                score={String(score.currentSequence)}
+                                legend="melhor seq."
+                                color={themes[theme].backgroundSecundary}
+                            />
                         </ScrollView>
 
                         <Text style={styles(theme).subtitle}>progresso</Text>
@@ -283,7 +297,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingHorizontal: 20
     },
     modalTitle: {
-        fontSize: 20,
+        fontSize: RFValue(20),
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         marginRight: 10,
@@ -297,7 +311,7 @@ const styles = (theme: string) => StyleSheet.create({
         borderRadius: 10
     },
     scoreCountText: {
-        fontSize: 14,
+        fontSize: RFValue(14),
         fontFamily: fonts.contentBold,
         color: themes[theme].textSecundary
     },
@@ -305,44 +319,19 @@ const styles = (theme: string) => StyleSheet.create({
         width: '100%'
     },
     subtitle: {
-        fontSize: 18,
+        fontSize: RFValue(18),
         fontFamily: fonts.subtitle,
         color: themes[theme].textUnfocus,
         alignSelf: 'flex-start',
         paddingHorizontal: 20
     },
     disabledText: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         fontFamily: fonts.content,
         color: themes[theme].textUnfocus,
         paddingLeft: 20,
         alignSelf: 'flex-start',
         paddingBottom: 10
-    },
-    cards: {
-        flexGrow: 1,
-        paddingHorizontal: 20,
-        paddingVertical: 20,
-        marginRight: 20
-    },
-    card: {
-        width: 120,
-        height: 70,
-        backgroundColor: themes[theme].backgroundSecundary,
-        borderRadius: 10,
-        marginRight: 10,
-        alignItems: 'center',
-        justifyContent: 'center'
-    },
-    score: {
-        fontSize: 16,
-        fontFamily: fonts.contentBold,
-        color: themes[theme].textPrimary,
-    },
-    cardLegend: {
-        fontSize: 12,
-        fontFamily: fonts.content,
-        color: themes[theme].textPrimary,
     },
     chart: {
         marginTop: 20
@@ -360,7 +349,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingHorizontal: 50
     },
     proPurchaseText: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         fontFamily: fonts.subtitle,
         color: themes[theme].textUnfocus,
         textAlign: 'center'

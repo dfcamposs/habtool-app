@@ -13,6 +13,7 @@ import {
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { Button } from '../components/Button';
 import { Input } from '../components/Input';
@@ -115,14 +116,14 @@ const styles = (theme: string) => StyleSheet.create({
     },
     title: {
         fontFamily: fonts.title,
-        fontSize: 24,
+        fontSize: RFValue(24),
         color: themes[theme].textPrimary,
         alignSelf: 'center',
         paddingBottom: 50
     },
     subtitle: {
         fontFamily: fonts.subtitle,
-        fontSize: 20,
+        fontSize: RFValue(20),
         color: themes[theme].textPrimary,
         alignSelf: 'center',
         paddingBottom: 30
@@ -132,7 +133,7 @@ const styles = (theme: string) => StyleSheet.create({
         borderColor: themes[theme].textUnfocus,
         color: themes[theme].textPrimary,
         width: '100%',
-        fontSize: 15,
+        fontSize: RFValue(15),
         padding: 10,
         textAlign: 'center'
     },

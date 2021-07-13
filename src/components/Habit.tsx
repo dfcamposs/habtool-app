@@ -13,6 +13,7 @@ import { RectButton, Swipeable, } from 'react-native-gesture-handler';
 import { format } from 'date-fns';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { Tracker } from './Tracker';
 import { ProgressModal } from './ProgressModal';
@@ -225,7 +226,7 @@ const styles = (theme: string) => StyleSheet.create({
     text: {
         color: themes[theme].textUnfocus,
         fontFamily: fonts.content,
-        fontSize: 16
+        fontSize: RFValue(16)
     },
     tracker: {
         flex: 1,

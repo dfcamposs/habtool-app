@@ -1,10 +1,11 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useContext } from 'react';
 import { View, Text, StyleSheet, SafeAreaView, Platform, FlatList, TouchableOpacity } from 'react-native';
 import { getStatusBarHeight } from 'react-native-iphone-x-helper';
 import { MaterialIcons } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/core';
 import { format } from 'date-fns';
 import pt from 'date-fns/locale/pt';
+import { RFValue } from 'react-native-responsive-fontsize';
 
 import { Habit } from '../components/Habit';
 import { Stars } from '../components/Stars';
@@ -124,7 +125,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     weekLegendText: {
         color: themes[theme].textPrimary,
-        fontSize: 10,
+        fontSize: RFValue(10),
         fontFamily: fonts.legend,
         minWidth: 30,
         marginHorizontal: 5,
@@ -140,7 +141,7 @@ const styles = (theme: string) => StyleSheet.create({
         justifyContent: 'center'
     },
     habitListEmptyText: {
-        fontSize: 16,
+        fontSize: RFValue(16),
         color: themes[theme].textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 10,
@@ -150,12 +151,12 @@ const styles = (theme: string) => StyleSheet.create({
         flex: 1
     },
     title: {
-        fontSize: 24,
+        fontSize: RFValue(24),
         color: themes[theme].textPrimary,
         fontFamily: fonts.title
     },
     subtitle: {
-        fontSize: 13,
+        fontSize: RFValue(13),
         color: themes[theme].textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 5,
