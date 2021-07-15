@@ -123,7 +123,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     subtitle: {
         fontFamily: fonts.subtitle,
-        fontSize: RFValue(20),
+        fontSize: RFValue(18),
         color: themes[theme].textPrimary,
         alignSelf: 'center',
         paddingBottom: 30
@@ -133,7 +133,7 @@ const styles = (theme: string) => StyleSheet.create({
         borderColor: themes[theme].textUnfocus,
         color: themes[theme].textPrimary,
         width: '100%',
-        fontSize: RFValue(15),
+        fontSize: RFValue(13),
         padding: 10,
         textAlign: 'center'
     },

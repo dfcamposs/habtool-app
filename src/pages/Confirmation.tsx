@@ -39,9 +39,6 @@ const styles = (theme: string) => StyleSheet.create({
         fontSize: RFValue(24),
         color: themes[theme].textPrimary,
         textAlign: 'center',
-        marginHorizontal: 30,
-        paddingTop: '40%',
-        paddingBottom: '30%',
         paddingVertical: '30%'
     },
     button: {

@@ -215,7 +215,7 @@ export function ProgressModal({ data: habit, visible = false, closeModal, ...res
                         <Text style={styles(theme).disabledText}>este hábito está desabilitado.</Text>
                     }
                 </View>
-                {!isPro ?
+                {isPro ?
                     <View>
                         <Text style={styles(theme).subtitle}>score</Text>
                         <ScrollView
@@ -297,7 +297,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingHorizontal: 20
     },
     modalTitle: {
-        fontSize: RFValue(20),
+        fontSize: RFValue(18),
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         marginRight: 10,
@@ -319,14 +319,14 @@ const styles = (theme: string) => StyleSheet.create({
         width: '100%'
     },
     subtitle: {
-        fontSize: RFValue(18),
+        fontSize: RFValue(16),
         fontFamily: fonts.subtitle,
         color: themes[theme].textUnfocus,
         alignSelf: 'flex-start',
         paddingHorizontal: 20
     },
     disabledText: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(14),
         fontFamily: fonts.content,
         color: themes[theme].textUnfocus,
         paddingLeft: 20,
@@ -349,7 +349,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingHorizontal: 50
     },
     proPurchaseText: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(14),
         fontFamily: fonts.subtitle,
         color: themes[theme].textUnfocus,
         textAlign: 'center'

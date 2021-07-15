@@ -103,7 +103,7 @@ export function ProPurchase() {
         <ScrollView contentContainerStyle={{
             flexGrow: 1,
             padding: 20,
-            paddingTop: getStatusBarHeight() + 10,
+            paddingTop: getStatusBarHeight() + 20,
         }}>
             <TouchableOpacity activeOpacity={.7} onPress={navigation.goBack}>
                 <MaterialIcons style={styles(theme).close} name="close" size={30} color={themes[theme].textUnfocus} />
@@ -180,7 +180,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     subtitle: {
         fontFamily: fonts.content,
-        fontSize: RFValue(18),
+        fontSize: RFValue(16),
         color: themes[theme].textPrimary,
         paddingVertical: 20
     },
@@ -210,7 +210,7 @@ const styles = (theme: string) => StyleSheet.create({
     featureText: {
         fontFamily: fonts.content,
         padding: 10,
-        fontSize: RFValue(15),
+        fontSize: RFValue(13),
         color: themes[theme].textSecundary
     },
     purchaseContainer: {
@@ -230,7 +230,7 @@ const styles = (theme: string) => StyleSheet.create({
     price: {
         fontFamily: fonts.subtitle,
         textAlign: 'center',
-        fontSize: RFValue(20),
+        fontSize: RFValue(18),
         color: themes[theme].textPrimary
     },
     legend: {

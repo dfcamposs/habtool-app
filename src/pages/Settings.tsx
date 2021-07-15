@@ -109,13 +109,13 @@ export function Settings() {
 
 const styles = (theme: string) => StyleSheet.create({
     title: {
-        fontSize: RFValue(20),
+        fontSize: RFValue(18),
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         paddingTop: 20
     },
     subtitle: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(12),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
         paddingRight: 20,
@@ -131,7 +131,7 @@ const styles = (theme: string) => StyleSheet.create({
         marginBottom: 20
     },
     textButton: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(12),
         fontFamily: fonts.contentBold,
         color: themes[theme].textPrimary
     },
@@ -158,7 +158,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingLeft: 20
     },
     menuProText: {
-        fontSize: RFValue(14),
+        fontSize: RFValue(12),
         fontFamily: fonts.content,
         color: themes[theme].textSecundary,
         paddingRight: 20

@@ -185,11 +185,7 @@
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				13B07FBD1A68108700A75B9A /* LaunchScreen.xib in Resources */,
 				3E461D99554A48A4959DE609 /* SplashScreen.storyboard in Resources */,
-<<<<<<< HEAD
-				D747AE0562BA4226A8D5726A /* HabTool-Bridging-Header.h in Resources */,
-=======
 				106E6B139A9742D4961E2504 /* HabTool-Bridging-Header.h in Resources */,
->>>>>>> 3158f9cc2c53a3698bf5fc4e800c111eeb3e2c7b
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -321,11 +317,7 @@
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
-<<<<<<< HEAD
-				TARGETED_DEVICE_FAMILY = "1";
-=======
 				TARGETED_DEVICE_FAMILY = "1,2";
->>>>>>> 3158f9cc2c53a3698bf5fc4e800c111eeb3e2c7b
 				SWIFT_OBJC_BRIDGING_HEADER = HabTool/HabTool-Bridging-Header.h;
 				CODE_SIGN_ENTITLEMENTS = HabTool/habtool.entitlements;
 			};
@@ -350,11 +342,7 @@
 				PRODUCT_NAME = habtool;
 				SWIFT_VERSION = 5.0;
 				VERSIONING_SYSTEM = "apple-generic";
-<<<<<<< HEAD
-				TARGETED_DEVICE_FAMILY = "1";
-=======
 				TARGETED_DEVICE_FAMILY = "1,2";
->>>>>>> 3158f9cc2c53a3698bf5fc4e800c111eeb3e2c7b
 				SWIFT_OBJC_BRIDGING_HEADER = HabTool/HabTool-Bridging-Header.h;
 				CODE_SIGN_ENTITLEMENTS = HabTool/habtool.entitlements;
 			};

@@ -226,7 +226,7 @@ const styles = (theme: string) => StyleSheet.create({
     text: {
         color: themes[theme].textUnfocus,
         fontFamily: fonts.content,
-        fontSize: RFValue(16)
+        fontSize: RFValue(14)
     },
     tracker: {
         flex: 1,

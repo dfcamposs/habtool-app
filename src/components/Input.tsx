@@ -65,7 +65,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     input: {
         width: '90%',
-        fontSize: RFValue(15),
+        fontSize: RFValue(13),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
     }

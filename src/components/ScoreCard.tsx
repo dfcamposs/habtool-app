@@ -42,17 +42,17 @@ const styles = (theme: string) => StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         padding: 5,
-        marginRight: 10
+        marginHorizontal: 5
     },
     score: {
-        fontSize: RFValue(24),
+        fontSize: RFValue(20),
         color: themes[theme].textPrimary,
         fontFamily: fonts.content,
         textAlign: 'center',
     },
     legend: {
         fontSize: RFValue(10),
-        color: themes[theme].textUnfocus,
+        color: themes[theme].textPrimary,
         fontFamily: fonts.legend,
         textAlign: 'center'
     },

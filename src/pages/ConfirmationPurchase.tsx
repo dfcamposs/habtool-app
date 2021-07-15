@@ -73,7 +73,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     subtitle: {
         fontFamily: fonts.contentBold,
-        fontSize: RFValue(15),
+        fontSize: RFValue(13),
         color: themes[theme].textPrimary,
         alignSelf: 'flex-start',
         marginBottom: 10
@@ -93,7 +93,7 @@ const styles = (theme: string) => StyleSheet.create({
     featureText: {
         fontFamily: fonts.content,
         padding: 10,
-        fontSize: RFValue(15),
+        fontSize: RFValue(13),
         color: themes[theme].textPrimary
     },
     button: {
@@ -106,7 +106,7 @@ const styles = (theme: string) => StyleSheet.create({
         marginBottom: 20
     },
     textButton: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(14),
         fontFamily: fonts.contentBold,
         color: themes[theme].textPrimary
     },

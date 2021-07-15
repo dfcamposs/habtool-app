@@ -26,7 +26,7 @@ const AuthRoutes = () => {
                 inactiveTintColor: themes[theme].textUnfocus,
                 labelPosition: 'beside-icon',
                 labelStyle: {
-                    fontSize: RFValue(15),
+                    fontSize: RFValue(13),
                     fontFamily: fonts.complement
                 },
                 style: {

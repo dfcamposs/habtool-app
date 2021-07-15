@@ -62,7 +62,7 @@ const styles = (theme: string) => StyleSheet.create({
         paddingRight: 10
     },
     text: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(14),
         fontFamily: fonts.content,
         color: themes[theme].textUnfocus
     }

@@ -141,7 +141,7 @@ const styles = (theme: string) => StyleSheet.create({
         justifyContent: 'center'
     },
     habitListEmptyText: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(14),
         color: themes[theme].textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 10,
@@ -151,12 +151,12 @@ const styles = (theme: string) => StyleSheet.create({
         flex: 1
     },
     title: {
-        fontSize: RFValue(24),
+        fontSize: RFValue(22),
         color: themes[theme].textPrimary,
         fontFamily: fonts.title
     },
     subtitle: {
-        fontSize: RFValue(13),
+        fontSize: RFValue(12),
         color: themes[theme].textUnfocus,
         fontFamily: fonts.subtitle,
         paddingTop: 5,

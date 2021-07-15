@@ -338,13 +338,13 @@ const styles = (theme: string) => StyleSheet.create({
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
     },
     title: {
-        fontSize: RFValue(20),
+        fontSize: RFValue(18),
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         paddingBottom: 25
     },
     subtitle: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(14),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary,
         paddingRight: 20
@@ -394,7 +394,7 @@ const styles = (theme: string) => StyleSheet.create({
     },
     dateTimePickerText: {
         color: themes[theme].textPrimary,
-        fontSize: RFValue(15),
+        fontSize: RFValue(13),
         fontFamily: fonts.content,
     },
     footer: {

@@ -112,13 +112,13 @@ const AppRoutes: React.FC = () => {
                 component={AuthRoutes}
             />
 
-            {/* <stackRoutes.Screen
+            <stackRoutes.Screen
                 name="ProPurchase"
                 component={ProPurchase}
                 options={{
                     ...TransitionPresets.ModalTransition
                 }}
-            /> */}
+            />
 
             <stackRoutes.Screen
                 name="ConfirmationPurchase"

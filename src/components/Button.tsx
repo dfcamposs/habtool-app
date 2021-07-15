@@ -37,7 +37,7 @@ const styles = (theme: string) => StyleSheet.create({
         alignItems: 'center'
     },
     text: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(14),
         color: themes[theme].textSecundary,
         fontFamily: fonts.contentBold
     }

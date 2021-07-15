@@ -143,9 +143,9 @@ export function Progress() {
                     }}
                     horizontal
                 >
-                    <ScoreCard score={String(maxSequenceCount)} legend="seq. máxima (dias)" isLoading={isLoading} />
+                    <ScoreCard score={String(maxSequenceCount)} legend="seq. máxima" isLoading={isLoading} />
                     <ScoreCard score={String(activeHabitsCount)} legend="hábitos ativos" isLoading={isLoading} />
-                    <ScoreCard score={String(currentSequenceCount)} legend="seq. atual (dias)" isLoading={isLoading} />
+                    <ScoreCard score={String(currentSequenceCount)} legend="seq. atual" isLoading={isLoading} />
                 </ScrollView>
             </View>
             <ScrollView
@@ -202,12 +202,11 @@ const styles = (theme: string) => StyleSheet.create({
     header: {
         height: Platform.OS === 'ios' ? 170 : 180,
         alignItems: 'center',
-        paddingHorizontal: 10,
         marginTop: Platform.OS === 'android' ? getStatusBarHeight() : 0,
         paddingVertical: 20
     },
     title: {
-        fontSize: RFValue(20),
+        fontSize: RFValue(18),
         fontFamily: fonts.title,
         color: themes[theme].textPrimary,
         paddingBottom: 30
@@ -218,12 +217,12 @@ const styles = (theme: string) => StyleSheet.create({
         backgroundColor: themes[theme].backgroundPrimary,
     },
     subtitle: {
-        fontSize: RFValue(16),
+        fontSize: RFValue(14),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary
     },
     selectedDate: {
-        fontSize: RFValue(15),
+        fontSize: RFValue(13),
         fontFamily: fonts.content,
         color: themes[theme].textUnfocus,
         paddingLeft: 10
@@ -257,13 +256,13 @@ const styles = (theme: string) => StyleSheet.create({
     },
     historyLineText: {
         flex: 1,
-        fontSize: RFValue(15),
+        fontSize: RFValue(13),
         fontFamily: fonts.content,
         color: themes[theme].textPrimary
     },
     emptyText: {
         paddingLeft: 40,
-        fontSize: RFValue(15),
+        fontSize: RFValue(13),
         fontFamily: fonts.content,
         color: themes[theme].textUnfocus
     }
